@@ -1,16 +1,29 @@
-@import 'partials/_variables';
+@import 'mixins/spacing';
+@import 'mixins/clearfix';
+
+@import 'colours/palette';
+// WCGA 2.1 https://design-system.service.gov.uk/styles/colour/
+@import 'govuk-colours-override';
+
 @import 'partials/_base';
-
-@import 'partials/_template';
-@import 'partials/_page';
-
 @import 'partials/_forms';
 @import 'partials/_typography';
-
 @import 'partials/_utilities';
-
 @import 'partials/_shame';
-
-// WCGA 2.1
-@import 'partials/_palette';
+@import 'partials/heading';
 @import 'partials/_focus';
+@import 'partials/_clearfix';
+
+@import 'patterns/task-list';
+@import 'patterns/tag';
+@import 'patterns/add-to-a-list';
+@import 'patterns/symbol-input';
+@import 'patterns/check-your-answers';
+@import 'patterns/warning';
+@import 'patterns/signout-modal';
+@import 'patterns/confirmation';
+@import 'patterns/print';
+
+@import 'conditionals';
+
+@import 'location-autocomplete.min';

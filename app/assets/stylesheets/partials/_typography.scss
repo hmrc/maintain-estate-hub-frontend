@@ -13,16 +13,16 @@ p.lede {
 }
 /*replicate font-xsmall due to ".content p" rule*/
 p.font-xsmall{
-font-family:"nta",Arial,sans-serif;
-font-size:16px;
-line-height:1.25;
-font-weight:300;
-text-transform:none
+  font-family:"nta",Arial,sans-serif;
+  font-size:16px;
+  line-height:1.25;
+  font-weight:300;
+  text-transform:none
 }
 @media (max-width: 640px){
-p.font-xsmall{
-  font-size:14px;
-  line-height:1.14286
+  p.font-xsmall{
+    font-size:14px;
+    line-height:1.14286
   }
 }
 
@@ -36,6 +36,30 @@ p.font-xsmall{
   display: block;
 }
 
+.bullet-list {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.govuk-caption-xl {
+  font-family: "nta", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.11111;
+  display: block;
+  margin-top: 1.25em;
+  margin-bottom: 5px;
+  color: $grey-1;
+}
+
+@media (min-width: 40.0625em) {
+  .govuk-caption-xl {
+    font-size: 27px;
+    line-height: 1.11111;
+  }
+}
 
 /* CYA padding in line with current GDS */
 @media screen and (min-width: 769px) {
@@ -43,4 +67,21 @@ p.font-xsmall{
     padding-top: 0.53em;
     padding-bottom: 0.53em;
   }
+}
+
+.heading-no-top-margin {
+  margin-top: 0;
+}
+
+.label-as-heading, .legend-as-heading {
+  margin-top: 0;
+}
+
+.heading-large, .heading-medium {
+  margin-top: 0;
+  word-break: break-word;
+}
+
+.heading-with-top-margin {
+  margin-top: .625em;
 }
