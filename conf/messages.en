@@ -54,7 +54,7 @@ utrDoesNotMatchRecords.p3.link = register here (opens in new window or tab)
 utrDoesNotMatchRecords.p4 = If you need help with the service
 utrDoesNotMatchRecords.p4.link = contact the deceased estate helpline
 utrDoesNotMatchRecords.p5 = You can
-utrDoesNotMatchRecords.p5.link = return to register and maintain a estate for a client
+utrDoesNotMatchRecords.p5.link = return to register and maintain an estate for a client
 
 inProcessing.title = Sorry, you cannot access this estate
 inProcessing.heading = Sorry, you cannot access this estate
@@ -64,7 +64,7 @@ inProcessing.p2 = Try again later.
 inProcessing.p3 = If you need help with the service
 inProcessing.p3.link = contact the deceased estate helpline
 inProcessing.p4 = You can
-inProcessing.p4.link = return to register and maintain a estate for a client
+inProcessing.p4.link = return to register and maintain an estate for a client
 
 closed.title = Sorry, you cannot access this estate
 closed.heading = Sorry, you cannot access this estate
@@ -75,16 +75,16 @@ closed.p2.link = Estate Registration Service here (opens in new window or tab)
 closed.p3 = If you need help with the service
 closed.p3.link = contact the deceased estate helpline
 closed.p4 = You can
-closed.p4.link = return to register and maintain a estate for a client
+closed.p4.link = return to register and maintain an estate for a client
 
 problemWithService.title = Sorry, there is a problem with the service
 problemWithService.heading = Sorry, there is a problem with the service
 problemWithService.p1 = Try again later.
 problemWithService.p2.beforeLink = You can
-problemWithService.p2.link = contact the trusts helpline (opens in a new window or tab)
-problemWithService.p2.afterLink = if you need to speak to someone about registering and maintaining a trust.
+problemWithService.p2.link = contact the estates helpline (opens in a new window or tab)
+problemWithService.p2.afterLink = if you need to speak to someone about registering and maintaining an estate.
 problemWithService.p3 = You can
-problemWithService.p3.link = return to register a trust for a client
+problemWithService.p3.link = return to register an estate for a client
 
 accountNotLinked.title = Your Government Gateway account is not linked to this Estate
 accountNotLinked.heading = Your Government Gateway account is not linked to this Estate

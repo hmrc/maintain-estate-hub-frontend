@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(id: Option[String] = None, messageKey: String = "", href: String)(implicit messages: Messages)
+package views
 
-<div class="section">
-    <a id=@id.getOrElse("button") href="@href" role="button" class="button">@messages(messageKey)</a>
-</div>
+import views.behaviours.ViewBehaviours
+import views.html.UtrDoesNotMatchRecordsView
+
+class UtrDoesNotMatchRecordsViewSpec extends ViewBehaviours {
+
+  "UtrDoesNotMatchRecords view" must {
+
+    val application = applicationBuilder().build()
+
+    val view = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
+
+    val applyView = view.apply()(fakeRequest, messages)
+
+    behave like pageWithBackLink(applyView)
+
+    behave like normalPage(applyView,
+      "utrDoesNotMatchRecords",
+      "p1", "p2", "p3", "p3.link", "p4", "p4.link", "p5", "p5.link"
+    )
+
+  }
+}

@@ -74,4 +74,28 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
   }
+
+  def pageWithSignOutButton(view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with a sign out button" must {
+
+      "have a sign out button" in {
+
+        val doc = asDocument(view)
+        assertRenderedById(doc, "sign-out")
+      }
+    }
+  }
+
+  def pageWithSubHeading(view: HtmlFormat.Appendable, text: String): Unit = {
+
+    "behave like a page with a sub-heading" must {
+
+      "have a sub-heading" in {
+
+        val doc = asDocument(view)
+        assertContainsText(doc, text)
+      }
+    }
+  }
 }

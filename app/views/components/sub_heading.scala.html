@@ -14,8 +14,6 @@
  * limitations under the License.
  *@
 
-@(id: Option[String] = None, messageKey: String = "", href: String)(implicit messages: Messages)
+@(key: String, param: String)(implicit messages: Messages)
 
-<div class="section">
-    <a id=@id.getOrElse("button") href="@href" role="button" class="button">@messages(messageKey)</a>
-</div>
+<span class="govuk-caption-xl">@messages(key, param)</span>
