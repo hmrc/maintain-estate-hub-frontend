@@ -167,6 +167,7 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
       }
 
       "must return playback data inside a Processed estate" in {
+
         val utr = "2000000000"
         val payload = Source.fromFile(getClass.getResource("/display-estate.json").getPath).mkString
 

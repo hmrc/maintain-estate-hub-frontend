@@ -28,7 +28,7 @@ sealed trait EstateStatus extends EstateResponse
 
 case object Processing extends EstateStatus
 case object Closed extends EstateStatus
-case class Processed(playback: GetEstate, formBundleNumber : String) extends EstateStatus
+case class Processed(estate: GetEstate, formBundleNumber: String) extends EstateStatus
 case object SorryThereHasBeenAProblem extends EstateStatus
 case object UtrNotFound extends EstateResponse
 case object EstatesServiceUnavailable extends EstateResponse
@@ -36,7 +36,7 @@ case object EstatesServiceUnavailable extends EstateResponse
 object EstateStatusReads {
 
   implicit object StatusReads extends Reads[EstateStatus] {
-    override def reads(json:JsValue): JsResult[EstateStatus] = json("responseHeader")("dfmcaReturnUserStatus") match {
+    override def reads(json: JsValue): JsResult[EstateStatus] = json("responseHeader")("dfmcaReturnUserStatus") match {
       case JsString("Processed") =>
         json("trustOrEstateDisplay").validate[GetEstate] match {
           case JsSuccess(estate, _) =>

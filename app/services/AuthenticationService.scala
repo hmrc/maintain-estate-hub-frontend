@@ -39,7 +39,7 @@ class AuthenticationServiceImpl @Inject()(authConnector: EstatesAuthConnector) e
         Future.successful(Left(Redirect(redirectUrl)))
       case _ =>
         Logger.warn(s"Unable to authenticate agent with estates-auth")
-        Future.successful(Left(InternalServerError))
+        Future.successful(Left(Unauthorized))
     }
   }
 
@@ -53,7 +53,7 @@ class AuthenticationServiceImpl @Inject()(authConnector: EstatesAuthConnector) e
         Future.successful(Left(Redirect(redirectUrl)))
       case _ =>
         Logger.warn(s"Unable to authenticate for utr with estates-auth")
-        Future.successful(Left(InternalServerError))
+        Future.successful(Left(Unauthorized))
     }
   }
 

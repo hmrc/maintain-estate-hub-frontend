@@ -17,12 +17,13 @@
 package services
 
 import models.requests.DataRequest
+import play.api.mvc.Results.Redirect
 import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class FakeAuthenticationService extends AuthenticationService {
+class FakeAllowedAuthenticationService extends AuthenticationService {
 
   override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] =
     Future.successful(Right("SomeARN"))
@@ -30,6 +31,17 @@ class FakeAuthenticationService extends AuthenticationService {
   override def authenticateForUtr[A](utr: String)
                                     (implicit request: DataRequest[A], hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]] =
     Future.successful(Right(request))
+
+}
+
+class FakeDeniedAuthenticationService extends AuthenticationService {
+
+  override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] =
+    Future.successful(Left(Redirect("redirect-url")))
+
+  override def authenticateForUtr[A](utr: String)
+                                    (implicit request: DataRequest[A], hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]] =
+    Future.successful(Left(Redirect("redirect-url")))
 
 }
 

@@ -18,8 +18,8 @@ package controllers
 
 import base.SpecBase
 import connectors.EstatesConnector
-import models.{NormalMode, UserAnswers}
 import models.http._
+import models.{GetEstate, NormalMode, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
@@ -27,12 +27,15 @@ import pages.UTRPage
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.{JsPath, JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.{ClosedView, InProcessingView, ProblemWithServiceView, UtrDoesNotMatchRecordsView}
+import services.{AuthenticationService, FakeDeniedAuthenticationService, FakeFailingAuthenticationService}
+import views.html._
 
 import scala.concurrent.Future
+import scala.io.Source
 
 class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
@@ -59,65 +62,82 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
   "Estate Status Controller" must {
 
-    "return OK and the correct view for GET ../status/closed" in new LocalSetup {
+    "return OK and the correct view for GET" when {
 
-      override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.closed().url)
+      "../status/closed" in new LocalSetup {
 
-      val view: ClosedView = application.injector.instanceOf[ClosedView]
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.closed().url)
 
-      status(result) mustEqual OK
+        val view: ClosedView = application.injector.instanceOf[ClosedView]
 
-      contentAsString(result) mustEqual
-        view(fakeUtr)(fakeRequest, messages).toString
+        status(result) mustEqual OK
 
-      application.stop()
-    }
+        contentAsString(result) mustEqual
+          view(fakeUtr)(fakeRequest, messages).toString
 
-    "return OK and the correct view for GET ../status/processing" in new LocalSetup {
+        application.stop()
+      }
 
-      override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.inProcessing().url)
+      "../status/processing" in new LocalSetup {
 
-      val view: InProcessingView = application.injector.instanceOf[InProcessingView]
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.inProcessing().url)
 
-      status(result) mustEqual OK
+        val view: InProcessingView = application.injector.instanceOf[InProcessingView]
 
-      contentAsString(result) mustEqual
-        view(fakeUtr)(fakeRequest, messages).toString
+        status(result) mustEqual OK
 
-      application.stop()
-    }
+        contentAsString(result) mustEqual
+          view(fakeUtr)(fakeRequest, messages).toString
 
-    "return OK and the correct view for GET ../status/not-found" in new LocalSetup {
+        application.stop()
+      }
 
-      override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.utrDoesNotMatchRecords().url)
+      "../status/not-found" in new LocalSetup {
 
-      val view: UtrDoesNotMatchRecordsView = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.utrDoesNotMatchRecords().url)
 
-      status(result) mustEqual OK
+        val view: UtrDoesNotMatchRecordsView = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
 
-      contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+        status(result) mustEqual OK
 
-      application.stop()
-    }
+        contentAsString(result) mustEqual
+          view()(fakeRequest, messages).toString
 
-    "return OK and the correct view for GET ../status/sorry-there-has-been-a-problem" in new LocalSetup {
+        application.stop()
+      }
 
-      override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
+      "../status/sorry-there-has-been-a-problem" in new LocalSetup {
 
-      val view: ProblemWithServiceView = application.injector.instanceOf[ProblemWithServiceView]
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
 
-      status(result) mustEqual OK
+        val view: ProblemWithServiceView = application.injector.instanceOf[ProblemWithServiceView]
 
-      contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+        status(result) mustEqual OK
 
-      application.stop()
+        contentAsString(result) mustEqual
+          view()(fakeRequest, messages).toString
+
+        application.stop()
+      }
+
+      "../status/already-claimed" in new LocalSetup {
+
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.accountNotLinked().url)
+
+        val view: AccountNotLinkedView = application.injector.instanceOf[AccountNotLinkedView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(fakeUtr)(fakeRequest, messages).toString
+
+        application.stop()
+      }
     }
 
     "redirect to the correct route for GET ../status/onPageLoad" when {
 
-      "a Closed status is received from the estate connector" in new LocalSetup {
+      "a Closed status is received from the estates connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
@@ -130,7 +150,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
-      "a Processing status is received from the estate connector" in new LocalSetup {
+      "a Processing status is received from the estates connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
@@ -143,7 +163,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
-      "a NotFound status is received from the estate connector" in new LocalSetup {
+      "a NotFound status is received from the estates connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
@@ -156,7 +176,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
-      "a ServiceUnavailable status is received from the estate connector" in new LocalSetup {
+      "a ServiceUnavailable status is received from the estates connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
@@ -167,6 +187,50 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         redirectLocation(result).value mustEqual "/maintain-an-estate/status/sorry-there-has-been-a-problem"
 
         application.stop()
+      }
+
+      "a Processed status is received from the estates connector" when {
+
+        val payload: String = Source.fromFile(getClass.getResource("/display-estate.json").getPath).mkString
+        val json: JsValue = Json.parse(payload)
+
+        val estate: GetEstate = json.transform(
+          (JsPath \ 'trustOrEstateDisplay).json.pick
+        ).get.as[GetEstate]
+
+        "auth denied for UTR" in new LocalSetup {
+          
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+
+          override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
+            bind[EstatesConnector].to(fakeConnector),
+            bind[AuthenticationService].to(new FakeDeniedAuthenticationService())
+          ).build()
+
+          when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual "redirect-url"
+
+          application.stop()
+        }
+
+        "auth fails" in new LocalSetup {
+
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+
+          override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
+            bind[EstatesConnector].to(fakeConnector),
+            bind[AuthenticationService].to(new FakeFailingAuthenticationService())
+          ).build()
+
+          when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
+
+          status(result) mustEqual UNAUTHORIZED
+
+          application.stop()
+        }
       }
     }
 
