@@ -46,6 +46,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
   
   lazy val estatesUrl: String = configuration.get[Service]("microservice.services.estates").baseUrl
+  lazy val estatesAuthUrl: String = configuration.get[Service]("microservice.services.estates-auth").baseUrl
 
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")

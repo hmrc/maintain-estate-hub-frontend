@@ -26,6 +26,7 @@ import pages.UTRPage
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import services.AuthenticationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html._
 
@@ -39,7 +40,8 @@ class EstateStatusController @Inject()(
                                         inProcessingView: InProcessingView,
                                         closedView: ClosedView,
                                         problemWithServiceView: ProblemWithServiceView,
-                                        accountNotLinkedView: AccountNotLinkedView
+                                        accountNotLinkedView: AccountNotLinkedView,
+                                        authenticationService: AuthenticationService
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = actions.authWithData.async {
@@ -112,7 +114,19 @@ class EstateStatusController @Inject()(
     }
   }
 
-  private def authenticateForUtrAndExtract(utr: String, estate: GetEstate): Future[Result] = {
-    ???
+  private def authenticateForUtrAndExtract(utr: String, estate: GetEstate)
+                                          (implicit request: DataRequest[AnyContent]): Future[Result] = {
+
+    authenticationService.authenticateForUtr(utr) flatMap {
+      case Left(failure) =>
+        val location = failure.header.headers.getOrElse(LOCATION, "no location header")
+        val failureStatus = failure.header.status
+        Logger.info(s"[EstateStatusController] unable to authenticate user for $utr, " +
+          s"due to $failureStatus status, sending user to $location")
+
+        Future.successful(failure)
+      case Right(_) =>
+        ???
+    }
   }
 }
