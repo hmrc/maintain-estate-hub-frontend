@@ -21,7 +21,7 @@ import views.html.ProblemWithServiceView
 
 class ProblemWithServiceViewSpec extends ViewBehaviours {
 
-  "ProblemWithService view" must {
+  "Problem With Service view" must {
 
     val application = applicationBuilder().build()
 

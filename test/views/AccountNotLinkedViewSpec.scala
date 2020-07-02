@@ -23,7 +23,7 @@ class AccountNotLinkedViewSpec extends ViewBehaviours {
 
   private val fakeUtr: String = "1234567890"
 
-  "AccountNotLinked view" must {
+  "Account Not Linked view" must {
 
     val application = applicationBuilder().build()
 

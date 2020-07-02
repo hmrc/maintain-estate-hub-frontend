@@ -21,7 +21,7 @@ import views.html.UtrDoesNotMatchRecordsView
 
 class UtrDoesNotMatchRecordsViewSpec extends ViewBehaviours {
 
-  "UtrDoesNotMatchRecords view" must {
+  "Utr Does Not Match Records view" must {
 
     val application = applicationBuilder().build()
 

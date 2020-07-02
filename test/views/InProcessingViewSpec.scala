@@ -23,7 +23,7 @@ class InProcessingViewSpec extends ViewBehaviours {
 
   private val fakeUtr: String = "1234567890"
 
-  "InProcessing view" must {
+  "In Processing view" must {
 
     val application = applicationBuilder().build()
 
