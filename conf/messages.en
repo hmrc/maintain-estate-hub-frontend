@@ -77,6 +77,13 @@ closed.p3.link = contact the deceased estate helpline
 closed.p4 = You can
 closed.p4.link = return to register and maintain an estate for a client
 
+locked.title = We are unable to match the information you gave to the estate register
+locked.heading = We are unable to match the information you gave to the estate register
+locked.p1 = Try again in 30 minutes.
+locked.p2 = If you need help with the service
+locked.link1 = contact the deceased estate helpline (opens in a new window or tab)
+locked.subheading = This estate’s UTR: {0}
+
 problemWithService.title = Sorry, there is a problem with the service
 problemWithService.heading = Sorry, there is a problem with the service
 problemWithService.p1 = Try again later.

@@ -17,6 +17,7 @@ GET        /logout                                      controllers.LogoutContro
 GET        /status                                      controllers.EstateStatusController.onPageLoad()
 GET        /status/processing                           controllers.EstateStatusController.inProcessing()
 GET        /status/closed                               controllers.EstateStatusController.closed()
+GET        /status/locked                               controllers.EstateStatusController.locked()
 GET        /status/sorry-there-has-been-a-problem       controllers.EstateStatusController.problemWithService()
 GET        /status/not-found                            controllers.EstateStatusController.utrDoesNotMatchRecords()
 GET        /status/already-claimed                      controllers.EstateStatusController.accountNotLinked()

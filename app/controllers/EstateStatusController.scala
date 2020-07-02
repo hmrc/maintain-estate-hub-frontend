@@ -16,7 +16,7 @@
 
 package controllers
 
-import connectors.EstatesConnector
+import connectors.{EstatesConnector, EstatesStoreConnector}
 import controllers.actions.Actions
 import javax.inject.Inject
 import models.http._
@@ -36,9 +36,11 @@ class EstateStatusController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
                                         actions: Actions,
                                         connector: EstatesConnector,
+                                        estateStoreConnector: EstatesStoreConnector,
                                         utrDoesNotMatchRecordsView: UtrDoesNotMatchRecordsView,
                                         inProcessingView: InProcessingView,
                                         closedView: ClosedView,
+                                        lockedView: LockedView,
                                         problemWithServiceView: ProblemWithServiceView,
                                         accountNotLinkedView: AccountNotLinkedView,
                                         authenticationService: AuthenticationService
@@ -46,24 +48,15 @@ class EstateStatusController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
-      
+
       enforceUtr() { utr =>
-        connector.getEstate(utr) flatMap {
-          case Processed(estate, _) =>
-            Logger.info(s"[EstateStatusController] $utr estate is in a processed state")
-            authenticateForUtrAndExtract(utr, estate)
-          case Processing =>
-            Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being in processing")
-            Future.successful(Redirect(controllers.routes.EstateStatusController.inProcessing()))
-          case Closed =>
-            Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being closed")
-            Future.successful(Redirect(controllers.routes.EstateStatusController.closed()))
-          case UtrNotFound =>
-            Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due to UTR not being found")
-            Future.successful(Redirect(controllers.routes.EstateStatusController.utrDoesNotMatchRecords()))
+        estateStoreConnector.get(utr).flatMap {
+          case Some(lock) if lock.estateLocked =>
+            Logger.info(s"[EstateStatusController] $utr user has failed IV 3 times, locked out for 30 minutes")
+            Future.successful(Redirect(controllers.routes.EstateStatusController.locked()))
           case _ =>
-            Logger.warn(s"[EstateStatusController] $utr unable to retrieve estate due to an error")
-            Future.successful(Redirect(controllers.routes.EstateStatusController.problemWithService()))
+            Logger.info(s"[EstateStatusController] $utr user has not been locked out from IV")
+            tryToPlayback(utr)
         }
       }
   }
@@ -103,6 +96,33 @@ class EstateStatusController @Inject()(
       }
   }
 
+  def locked(): Action[AnyContent] = actions.authWithData.async {
+    implicit request =>
+      enforceUtr() { utr =>
+        Future.successful(Ok(lockedView(utr)))
+      }
+  }
+
+  private def tryToPlayback(utr: String)(implicit request: DataRequest[AnyContent]): Future[Result] = {
+    connector.getEstate(utr) flatMap {
+      case Processed(estate, _) =>
+        Logger.info(s"[EstateStatusController] $utr estate is in a processed state")
+        authenticateForUtrAndExtract(utr, estate)
+      case Processing =>
+        Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being in processing")
+        Future.successful(Redirect(controllers.routes.EstateStatusController.inProcessing()))
+      case Closed =>
+        Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being closed")
+        Future.successful(Redirect(controllers.routes.EstateStatusController.closed()))
+      case UtrNotFound =>
+        Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due to UTR not being found")
+        Future.successful(Redirect(controllers.routes.EstateStatusController.utrDoesNotMatchRecords()))
+      case _ =>
+        Logger.warn(s"[EstateStatusController] $utr unable to retrieve estate due to an error")
+        Future.successful(Redirect(controllers.routes.EstateStatusController.problemWithService()))
+    }
+  }
+  
   private def enforceUtr()(block: String => Future[Result])(implicit request: DataRequest[AnyContent]): Future[Result] = {
     request.userAnswers.get(UTRPage) match {
       case None =>

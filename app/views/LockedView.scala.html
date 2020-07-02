@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package base
+@this(
+    main_template: MainTemplate
+)
 
-import connectors.{EstatesConnector, EstatesStoreConnector}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import repositories.SessionRepository
+@(utr: String)(implicit request: Request[_], messages: Messages)
 
-import scala.concurrent.Future
+@main_template(
+    title = messages("locked.title")
+    ) {
 
-trait Mocked extends MockitoSugar {
-
-  val fakeConnector: EstatesConnector = mock[EstatesConnector]
-
-  val fakeEstateStoreConnector: EstatesStoreConnector = mock[EstatesStoreConnector]
-
-  val fakeRepository: SessionRepository = mock[SessionRepository]
-
-  when(fakeRepository.set(any())).thenReturn(Future.successful(true))
+    <span class="govuk-caption-xl">@messages("locked.subheading", utr)</span>
+    @components.heading("locked.heading", headingSize = "heading-large govuk-fieldset__heading")
+    <p>@messages("locked.p1")</p>
+    <p>@messages("locked.p2") <a target="_blank" href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/bereavement-and-deceased-estate">@messages("locked.link1")</a>.</p>
 }

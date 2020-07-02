@@ -17,9 +17,9 @@
 package controllers
 
 import base.SpecBase
-import connectors.EstatesConnector
+import connectors.{EstatesConnector, EstatesStoreConnector}
 import models.http._
-import models.{GetEstate, NormalMode, UserAnswers}
+import models.{EstateLock, GetEstate, NormalMode, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
@@ -52,7 +52,8 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
     def result: Future[Result] = route(application, request).value
 
     lazy val application: Application = builder.overrides(
-      bind[EstatesConnector].to(fakeConnector)
+      bind[EstatesConnector].to(fakeConnector),
+      bind[EstatesStoreConnector].to(fakeEstateStoreConnector)
     ).build()
   }
 
@@ -83,6 +84,20 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.inProcessing().url)
 
         val view: InProcessingView = application.injector.instanceOf[InProcessingView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(fakeUtr)(fakeRequest, messages).toString
+
+        application.stop()
+      }
+
+      "../status/locked" in new LocalSetup {
+
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.locked().url)
+
+        val view: LockedView = application.injector.instanceOf[LockedView]
 
         status(result) mustEqual OK
 
@@ -137,11 +152,16 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     "redirect to the correct route for GET ../status/onPageLoad" when {
 
+      val utr: String = "1234567890"
+
       "a Closed status is received from the estates connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Closed))
+
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
         status(result) mustEqual SEE_OTHER
 
@@ -156,9 +176,26 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processing))
 
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
+
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual "/maintain-an-estate/status/processing"
+
+        application.stop()
+      }
+
+      "a Locked status is received from the estate store connector" in new LocalSetup {
+
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = true))))
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual "/maintain-an-estate/status/locked"
 
         application.stop()
       }
@@ -168,6 +205,9 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(UtrNotFound))
+
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
         status(result) mustEqual SEE_OTHER
 
@@ -181,6 +221,9 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(EstatesServiceUnavailable))
+
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
         status(result) mustEqual SEE_OTHER
 
@@ -197,6 +240,9 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         val estate: GetEstate = json.transform(
           (JsPath \ 'trustOrEstateDisplay).json.pick
         ).get.as[GetEstate]
+
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
         "auth denied for UTR" in new LocalSetup {
           

@@ -14,23 +14,28 @@
  * limitations under the License.
  */
 
-package base
+package views
 
-import connectors.{EstatesConnector, EstatesStoreConnector}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import repositories.SessionRepository
+import views.behaviours.ViewBehaviours
+import views.html.LockedView
 
-import scala.concurrent.Future
+class LockedViewSpec extends ViewBehaviours {
 
-trait Mocked extends MockitoSugar {
+  val utr = "0987654321"
 
-  val fakeConnector: EstatesConnector = mock[EstatesConnector]
+  "TrustLocked view" must {
 
-  val fakeEstateStoreConnector: EstatesStoreConnector = mock[EstatesStoreConnector]
+    val view = viewFor[LockedView](Some(emptyUserAnswers))
 
-  val fakeRepository: SessionRepository = mock[SessionRepository]
+    val applyView = view.apply(utr)(fakeRequest, messages)
 
-  when(fakeRepository.set(any())).thenReturn(Future.successful(true))
+    behave like normalPage(applyView, "locked","p1", "p2", "link1")
+
+    "display the correct subheading" in {
+      val doc = asDocument(applyView)
+      assertContainsText(doc, messages("locked.subheading", utr))
+    }
+
+  }
+
 }
