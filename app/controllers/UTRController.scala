@@ -34,9 +34,7 @@ class UTRController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         sessionRepository: SessionRepository,
                                         navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
+                                        actions: Actions,
                                         formProvider: UTRFormProvider,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: UTRView
@@ -44,7 +42,7 @@ class UTRController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = actions.authWithData {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(UTRPage) match {
@@ -55,7 +53,7 @@ class UTRController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
 
       form.bindFromRequest().fold(

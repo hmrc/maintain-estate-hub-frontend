@@ -44,8 +44,12 @@ site.sign_out = Sign out
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
-uTR.title = uTR
-uTR.heading = uTR
-uTR.checkYourAnswersLabel = uTR
-uTR.error.required = Enter uTR
-uTR.error.length = UTR must be 100 characters or less
+UTR.title = What is the estates’s Unique Taxpayer Reference (UTR)?
+UTR.heading = What is the estates’s Unique Taxpayer Reference (UTR)?
+UTR.hint = This is 10 numbers, for example 1234567890. It will be on the estates’s Self Assessment notice to file (SA316). It may be called ‘reference’, ‘UTR’ or ‘official use’.
+UTR.checkYourAnswersLabel = What is the estates’s Unique Taxpayer Reference (UTR)?
+UTR.error.required = Enter the estates’s Unique Taxpayer Reference
+UTR.error.length = Unique Taxpayer Reference must be a 10 digit number
+UTR.error.invalidCharacters = Enter the estate’s Unique Taxpayer Reference in the correct format
+UTR.linkMessage = You can
+UTR.linkText = find a lost UTR (opens in a new window or tab)

@@ -21,9 +21,9 @@ import play.api.data.FormError
 
 class UTRFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "uTR.error.required"
-  val lengthKey = "uTR.error.length"
-  val maxLength = 100
+  val requiredKey = "UTR.error.required"
+  val lengthKey = "UTR.error.length"
+  val minLength, maxLength = 10
 
   val form = new UTRFormProvider()()
 
@@ -35,6 +35,13 @@ class UTRFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMinLength(
+      form,
+      fieldName,
+      minLength = minLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(minLength))
     )
 
     behave like fieldWithMaxLength(

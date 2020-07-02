@@ -26,7 +26,7 @@ import views.html.UTRView
 
 class UTRViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "uTR"
+  val messageKeyPrefix = "UTR"
 
   val form = new UTRFormProvider()()
 
@@ -42,5 +42,8 @@ class UTRViewSpec extends StringViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like stringPage(form, applyView, messageKeyPrefix, routes.UTRController.onSubmit(NormalMode).url)
+
+    behave like pageWithASubmitButton(applyView(form))
+
   }
 }

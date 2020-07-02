@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package forms
+package controllers.actions
 
-import javax.inject.Inject
-import forms.mappings.Mappings
-import play.api.data.Form
+import com.google.inject.Inject
+import models.requests.{DataRequest, OptionalDataRequest}
+import play.api.mvc.{ActionBuilder, AnyContent}
 
-class UTRFormProvider @Inject() extends Mappings {
+class Actions @Inject()(
+                         identify: IdentifierAction,
+                         getData: DataRetrievalAction,
+                         requireData: DataRequiredAction
+                       ) {
 
-  def apply(): Form[String] =
-    Form(
-      "value" -> text("UTR.error.required")
-        .verifying(
-          firstError(
-            maxLength(10, "UTR.error.length"),
-            minLength(10, "UTR.error.length"),
-            regexp(Validation.utrRegex, "UTR.error.invalidCharacters"),
-            isNotEmpty("value", "UTR.error.required")
-          ))
-    )
+  def authWithSession: ActionBuilder[OptionalDataRequest, AnyContent] =
+    identify andThen getData
+
+  def authWithData: ActionBuilder[DataRequest, AnyContent] =
+    authWithSession andThen requireData
 }
