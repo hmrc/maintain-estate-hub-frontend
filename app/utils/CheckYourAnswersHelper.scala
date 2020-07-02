@@ -28,6 +28,15 @@ import CheckYourAnswersHelper._
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def uTR: Option[AnswerRow] = userAnswers.get(UTRPage) map {
+    x =>
+      AnswerRow(
+        HtmlFormat.escape(messages("UTR.checkYourAnswersLabel")),
+        HtmlFormat.escape(x),
+        routes.UTRController.onPageLoad(CheckMode).url
+      )
+  }
+
   private def yesOrNo(answer: Boolean)(implicit messages: Messages): Html =
     if (answer) {
       HtmlFormat.escape(messages("site.yes"))

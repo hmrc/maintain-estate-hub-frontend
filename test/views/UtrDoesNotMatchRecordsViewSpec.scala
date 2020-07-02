@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package generators
+package views
 
-import models._
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
-import pages._
-import play.api.libs.json.{JsValue, Json}
+import views.behaviours.ViewBehaviours
+import views.html.UtrDoesNotMatchRecordsView
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+class UtrDoesNotMatchRecordsViewSpec extends ViewBehaviours {
 
-  implicit lazy val arbitraryUTRUserAnswersEntry: Arbitrary[(UTRPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[UTRPage.type]
-        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
-      } yield (page, value)
-    }
+  "Utr Does Not Match Records view" must {
+
+    val application = applicationBuilder().build()
+
+    val view = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
+
+    val applyView = view.apply()(fakeRequest, messages)
+
+    behave like pageWithBackLink(applyView)
+
+    behave like normalPage(applyView,
+      "utrDoesNotMatchRecords",
+      "p1", "p2", "p3", "p3.link", "p4", "p4.link", "p5", "p5.link"
+    )
+
+  }
 }

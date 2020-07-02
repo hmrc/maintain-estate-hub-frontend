@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package generators
+package controllers.actions
 
-import models._
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
-import pages._
-import play.api.libs.json.{JsValue, Json}
+import com.google.inject.Inject
+import models.requests.{DataRequest, OptionalDataRequest}
+import play.api.mvc.{ActionBuilder, AnyContent}
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+class Actions @Inject()(
+                         identify: IdentifierAction,
+                         getData: DataRetrievalAction,
+                         requireData: DataRequiredAction
+                       ) {
 
-  implicit lazy val arbitraryUTRUserAnswersEntry: Arbitrary[(UTRPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[UTRPage.type]
-        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
-      } yield (page, value)
-    }
+  def authWithSession: ActionBuilder[OptionalDataRequest, AnyContent] =
+    identify andThen getData
+
+  def authWithData: ActionBuilder[DataRequest, AnyContent] =
+    authWithSession andThen requireData
 }

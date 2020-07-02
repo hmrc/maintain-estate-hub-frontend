@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import models._
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
-import pages._
-import play.api.libs.json.{JsValue, Json}
+import javax.inject.Inject
+import forms.mappings.Mappings
+import play.api.data.Form
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+class UTRFormProvider @Inject() extends Mappings {
 
-  implicit lazy val arbitraryUTRUserAnswersEntry: Arbitrary[(UTRPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[UTRPage.type]
-        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
-      } yield (page, value)
-    }
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("UTR.error.required")
+        .verifying(
+          firstError(
+            maxLength(10, "UTR.error.length"),
+            minLength(10, "UTR.error.length"),
+            regexp(Validation.utrRegex, "UTR.error.invalidCharacters"),
+            isNotEmpty("value", "UTR.error.required")
+          ))
+    )
 }

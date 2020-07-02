@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package generators
+package base
 
-import models._
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
-import pages._
-import play.api.libs.json.{JsValue, Json}
+import connectors.EstatesConnector
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.json.Json
+import repositories.SessionRepository
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+import scala.concurrent.Future
 
-  implicit lazy val arbitraryUTRUserAnswersEntry: Arbitrary[(UTRPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[UTRPage.type]
-        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
-      } yield (page, value)
-    }
+trait Mocked extends MockitoSugar {
+
+  val fakeConnector: EstatesConnector = mock[EstatesConnector]
+
+  val fakeRepository: SessionRepository = mock[SessionRepository]
+
+  when(fakeRepository.set(any())).thenReturn(Future.successful(true))
 }
