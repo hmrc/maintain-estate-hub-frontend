@@ -17,8 +17,8 @@
 package controllers
 
 import base.SpecBase
-import connectors.EstatesConnector
-import models.{NormalMode, UserAnswers}
+import connectors.{EstatesConnector, EstatesStoreConnector}
+import models.{EstateLock, NormalMode, UserAnswers}
 import models.http._
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -30,7 +30,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.{ClosedView, InProcessingView, ProblemWithServiceView, UtrDoesNotMatchRecordsView}
+import views.html.{ClosedView, InProcessingView, LockedView, ProblemWithServiceView, UtrDoesNotMatchRecordsView}
 
 import scala.concurrent.Future
 
@@ -49,7 +49,8 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
     def result: Future[Result] = route(application, request).value
 
     lazy val application: Application = builder.overrides(
-      bind[EstatesConnector].to(fakeConnector)
+      bind[EstatesConnector].to(fakeConnector),
+      bind[EstatesStoreConnector].to(fakeEstateStoreConnector)
     ).build()
   }
 
@@ -64,6 +65,20 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
       override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.closed().url)
 
       val view: ClosedView = application.injector.instanceOf[ClosedView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(fakeUtr)(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct view for GET ../status/locked" in new LocalSetup {
+
+      override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.locked().url)
+
+      val view: LockedView = application.injector.instanceOf[LockedView]
 
       status(result) mustEqual OK
 
@@ -117,11 +132,16 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     "redirect to the correct route for GET ../status/onPageLoad" when {
 
+      val utr = "1234567890"
+
       "a Closed status is received from the estate connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Closed))
+
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
         status(result) mustEqual SEE_OTHER
 
@@ -130,11 +150,27 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
+      "a Locked status is received from the estate store connector" in new LocalSetup {
+
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = true))))
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual "/maintain-an-estate/status/locked"
+
+        application.stop()
+      }
       "a Processing status is received from the estate connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processing))
+
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
         status(result) mustEqual SEE_OTHER
 
@@ -149,6 +185,9 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(UtrNotFound))
 
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
+
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual "/maintain-an-estate/status/utr-does-not-match-records"
@@ -161,6 +200,9 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(EstatesServiceUnavailable))
+
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
         status(result) mustEqual SEE_OTHER
 
