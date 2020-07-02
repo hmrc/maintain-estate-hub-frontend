@@ -43,3 +43,9 @@ site.sign_out = Sign out
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+uTR.title = uTR
+uTR.heading = uTR
+uTR.checkYourAnswersLabel = uTR
+uTR.error.required = Enter uTR
+uTR.error.length = UTR must be 100 characters or less

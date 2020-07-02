@@ -13,3 +13,8 @@ GET        /check-your-answers                          controllers.CheckYourAns
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
 GET        /logout                                      controllers.LogoutController.logout()
+
+GET        /uTR                        controllers.UTRController.onPageLoad(mode: Mode = NormalMode)
+POST       /uTR                        controllers.UTRController.onSubmit(mode: Mode = NormalMode)
+GET        /changeUTR                  controllers.UTRController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeUTR                  controllers.UTRController.onSubmit(mode: Mode = CheckMode)
