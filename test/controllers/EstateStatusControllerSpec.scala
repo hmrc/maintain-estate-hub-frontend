@@ -113,7 +113,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     "must redirect to the correct route for GET ../status/onPageLoad" when {
 
-      "a Closed status is received from the trust connector" in new LocalSetup {
+      "a Closed status is received from the estate connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
@@ -126,7 +126,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
-      "a Processing status is received from the trust connector" in new LocalSetup {
+      "a Processing status is received from the estate connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
@@ -139,7 +139,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
-      "a NotFound status is received from the trust connector" in new LocalSetup {
+      "a NotFound status is received from the estate connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 
@@ -152,7 +152,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
-      "a ServiceUnavailable status is received from the trust connector" in new LocalSetup {
+      "a ServiceUnavailable status is received from the estate connector" in new LocalSetup {
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
 

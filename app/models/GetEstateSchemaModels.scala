@@ -141,7 +141,7 @@ case class IdentificationOrgType(utr: Option[String],
                                  address: Option[AddressType])
 
 object IdentificationOrgType {
-  implicit val trustBeneficiaryIdentificationFormat: Format[IdentificationOrgType] = Json.format[IdentificationOrgType]
+  implicit val identificationOrgTypeFormat: Format[IdentificationOrgType] = Json.format[IdentificationOrgType]
 }
 
 case class IdentificationType(nino: Option[String],
