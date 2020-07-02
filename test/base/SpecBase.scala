@@ -31,7 +31,7 @@ import play.api.test.FakeRequest
 
 import scala.concurrent.ExecutionContext
 
-trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with ScalaFutures with IntegrationPatience {
+trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Mocked with ScalaFutures with IntegrationPatience {
 
   val userAnswersId = "id"
 

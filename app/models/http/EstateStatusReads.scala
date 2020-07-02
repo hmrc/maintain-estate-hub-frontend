@@ -31,26 +31,25 @@ case object Closed extends EstateStatus
 case class Processed(playback: GetEstate, formBundleNumber : String) extends EstateStatus
 case object SorryThereHasBeenAProblem extends EstateStatus
 case object UtrNotFound extends EstateResponse
-case object ServiceUnavailable extends EstateResponse
-case object ServerError extends EstateResponse
+case object EstatesServiceUnavailable extends EstateResponse
 
 object EstateStatusReads {
 
   implicit object StatusReads extends Reads[EstateStatus] {
     override def reads(json:JsValue): JsResult[EstateStatus] = json("responseHeader")("dfmcaReturnUserStatus") match {
-      case JsString("In Processing") => JsSuccess(Processing)
-      case JsString("Closed") => JsSuccess(Closed)
-      case JsString("Pending Closure") => JsSuccess(Closed)
       case JsString("Processed") =>
-         json("trustOrEstateDisplay").validate[GetEstate] match {
+        json("trustOrEstateDisplay").validate[GetEstate] match {
           case JsSuccess(estate, _) =>
             val formBundle = json("responseHeader")("formBundleNo").as[String]
             JsSuccess(Processed(estate, formBundle))
           case JsError(errors) => JsError(s"Can not parse as GetEstate due to $errors")
         }
+      case JsString("In Processing") => JsSuccess(Processing)
+      case JsString("Pending Closure") => JsSuccess(Closed)
+      case JsString("Closed") => JsSuccess(Closed)
+      case JsString("Suspended") => JsSuccess(SorryThereHasBeenAProblem)
       case JsString("Parked") => JsSuccess(SorryThereHasBeenAProblem)
       case JsString("Obsoleted") => JsSuccess(SorryThereHasBeenAProblem)
-      case JsString("Suspended") => JsSuccess(SorryThereHasBeenAProblem)
       case _ => JsError("Unexpected Status")
     }
   }
@@ -67,10 +66,8 @@ object EstateStatusReads {
             SorryThereHasBeenAProblem
           case NOT_FOUND =>
             UtrNotFound
-          case SERVICE_UNAVAILABLE =>
-            ServiceUnavailable
           case _ =>
-            ServerError
+            EstatesServiceUnavailable
         }
       }
     }

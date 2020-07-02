@@ -161,7 +161,7 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
         )
 
         val result  = Await.result(connector.getEstate(utr), Duration.Inf)
-        result mustBe ServiceUnavailable
+        result mustBe EstatesServiceUnavailable
 
         application.stop()
       }

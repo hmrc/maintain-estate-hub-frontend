@@ -13,3 +13,10 @@ GET        /check-your-answers                          controllers.CheckYourAns
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
 GET        /logout                                      controllers.LogoutController.logout()
+
+GET        /status                                      controllers.EstateStatusController.onPageLoad()
+GET        /status/in-processing                        controllers.EstateStatusController.inProcessing()
+GET        /status/closed                               controllers.EstateStatusController.closed()
+GET        /status/problem-with-service                 controllers.EstateStatusController.problemWithService()
+GET        /status/utr-does-not-match-records           controllers.EstateStatusController.utrDoesNotMatchRecords()
+GET        /status/account-not-linked                   controllers.EstateStatusController.accountNotLinked()
