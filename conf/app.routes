@@ -21,7 +21,7 @@ GET        /status/problem-with-service                 controllers.EstateStatus
 GET        /status/utr-does-not-match-records           controllers.EstateStatusController.utrDoesNotMatchRecords()
 GET        /status/account-not-linked                   controllers.EstateStatusController.accountNotLinked()
 
-GET        /UTR                                         controllers.UTRController.onPageLoad(mode: Mode = NormalMode)
-POST       /UTR                                         controllers.UTRController.onSubmit(mode: Mode = NormalMode)
-GET        /change-UTR                                  controllers.UTRController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-UTR                                  controllers.UTRController.onSubmit(mode: Mode = CheckMode)
+GET        /unique-tax-reference-number                 controllers.UTRController.onPageLoad(mode: Mode = NormalMode)
+POST       /unique-tax-reference-number                 controllers.UTRController.onSubmit(mode: Mode = NormalMode)
+GET        /change-unique-tax-reference-number          controllers.UTRController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-unique-tax-reference-number          controllers.UTRController.onSubmit(mode: Mode = CheckMode)
