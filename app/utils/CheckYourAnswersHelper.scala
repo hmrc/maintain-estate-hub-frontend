@@ -31,7 +31,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def uTR: Option[AnswerRow] = userAnswers.get(UTRPage) map {
     x =>
       AnswerRow(
-        HtmlFormat.escape(messages("uTR.checkYourAnswersLabel")),
+        HtmlFormat.escape(messages("UTR.checkYourAnswersLabel")),
         HtmlFormat.escape(x),
         routes.UTRController.onPageLoad(CheckMode).url
       )
