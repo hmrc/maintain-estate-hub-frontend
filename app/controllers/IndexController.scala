@@ -16,18 +16,37 @@
 
 package controllers
 
+import controllers.actions.Actions
 import javax.inject.Inject
+import models.{NormalMode, UserAnswers}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.IndexView
 
+import scala.concurrent.{ExecutionContext, Future}
+
 class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
-                                 view: IndexView
-                               ) extends FrontendBaseController with I18nSupport {
+                                 actions: Actions,
+                                 view: IndexView,
+                                 repository: SessionRepository
+                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(view())
+  def onPageLoad: Action[AnyContent] = actions.authWithSession.async {
+    implicit request =>
+
+      val mode = NormalMode
+
+      request.userAnswers match {
+        case Some(_) =>
+          Future.successful(Redirect(controllers.routes.UTRController.onPageLoad(mode)))
+        case None =>
+          val userAnswers: UserAnswers = UserAnswers(request.internalId)
+          repository.set(userAnswers).map { _ =>
+            Redirect(controllers.routes.UTRController.onPageLoad(mode))
+          }
+      }
   }
 }
