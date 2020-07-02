@@ -15,11 +15,11 @@ GET        /unauthorised                                controllers.Unauthorised
 GET        /logout                                      controllers.LogoutController.logout()
 
 GET        /status                                      controllers.EstateStatusController.onPageLoad()
-GET        /status/in-processing                        controllers.EstateStatusController.inProcessing()
+GET        /status/processing                           controllers.EstateStatusController.inProcessing()
 GET        /status/closed                               controllers.EstateStatusController.closed()
-GET        /status/problem-with-service                 controllers.EstateStatusController.problemWithService()
-GET        /status/utr-does-not-match-records           controllers.EstateStatusController.utrDoesNotMatchRecords()
-GET        /status/account-not-linked                   controllers.EstateStatusController.accountNotLinked()
+GET        /status/sorry-there-has-been-a-problem       controllers.EstateStatusController.problemWithService()
+GET        /status/not-found                            controllers.EstateStatusController.utrDoesNotMatchRecords()
+GET        /status/already-claimed                      controllers.EstateStatusController.accountNotLinked()
 
 GET        /unique-tax-reference-number                 controllers.UTRController.onPageLoad(mode: Mode = NormalMode)
 POST       /unique-tax-reference-number                 controllers.UTRController.onSubmit(mode: Mode = NormalMode)
