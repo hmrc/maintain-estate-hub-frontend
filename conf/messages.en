@@ -40,6 +40,55 @@ site.continue = Continue
 site.service_name = maintain-estate-hub-frontend
 site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
+site.sign_out_of_account = Sign out of this account
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+utrDoesNotMatchRecords.title = Sorry, you cannot access this estate
+utrDoesNotMatchRecords.heading = Sorry, you cannot access this estate
+utrDoesNotMatchRecords.p1 = The Unique Taxpayer Reference (UTR) entered does not match our records.
+utrDoesNotMatchRecords.p2 = Check you have entered the estate’s UTR correctly.
+utrDoesNotMatchRecords.p3 = If you do not have a UTR for the estate. You will need to register the estate first. You can
+utrDoesNotMatchRecords.p3.link = register here (opens in new window or tab)
+utrDoesNotMatchRecords.p4 = If you need help with the service
+utrDoesNotMatchRecords.p4.link = contact the deceased estate helpline
+utrDoesNotMatchRecords.p5 = You can
+utrDoesNotMatchRecords.p5.link = return to register and maintain an estate for a client
+
+inProcessing.title = Sorry, you cannot access this estate
+inProcessing.heading = Sorry, you cannot access this estate
+inProcessing.subHeading = This estate’s UTR: {0}
+inProcessing.p1 = HMRC is still processing changes recently made to this estate.
+inProcessing.p2 = Try again later.
+inProcessing.p3 = If you need help with the service
+inProcessing.p3.link = contact the deceased estate helpline
+inProcessing.p4 = You can
+inProcessing.p4.link = return to register and maintain an estate for a client
+
+closed.title = Sorry, you cannot access this estate
+closed.heading = Sorry, you cannot access this estate
+closed.subHeading = This estate’s UTR: {0}
+closed.p1 = You cannot make changes to this estate as it has been closed.
+closed.p2 = If the estate needs to be registered again, you can return to the
+closed.p2.link = Estate Registration Service here (opens in new window or tab)
+closed.p3 = If you need help with the service
+closed.p3.link = contact the deceased estate helpline
+closed.p4 = You can
+closed.p4.link = return to register and maintain an estate for a client
+
+problemWithService.title = Sorry, there is a problem with the service
+problemWithService.heading = Sorry, there is a problem with the service
+problemWithService.p1 = Try again later.
+problemWithService.p2.beforeLink = You can
+problemWithService.p2.link = contact the estates helpline (opens in a new window or tab)
+problemWithService.p2.afterLink = if you need to speak to someone about registering and maintaining an estate.
+problemWithService.p3 = You can
+problemWithService.p3.link = return to register an estate for a client
+
+accountNotLinked.title = Your Government Gateway account is not linked to this Estate
+accountNotLinked.heading = Your Government Gateway account is not linked to this Estate
+accountNotLinked.subHeading = This estate’s UTR: {0}
+accountNotLinked.p1 = Sign in with the Government Gateway account that is linked to this Estate.
+accountNotLinked.p2 = If you are unable to do so,
+accountNotLinked.p2.link = contact the estates helpline (opens in a new window or tab)

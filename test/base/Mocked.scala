@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(id: Option[String] = None, messageKey: String = "", href: String)(implicit messages: Messages)
+package base
 
-<div class="section">
-    <a id=@id.getOrElse("button") href="@href" role="button" class="button">@messages(messageKey)</a>
-</div>
+import connectors.EstatesConnector
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.json.Json
+import repositories.SessionRepository
+
+import scala.concurrent.Future
+
+trait Mocked extends MockitoSugar {
+
+  val fakeConnector: EstatesConnector = mock[EstatesConnector]
+
+  val fakeRepository: SessionRepository = mock[SessionRepository]
+
+  when(fakeRepository.set(any())).thenReturn(Future.successful(true))
+}
