@@ -19,8 +19,10 @@ package controllers
 import connectors.EstatesConnector
 import controllers.actions.Actions
 import javax.inject.Inject
-import models.GetEstate
 import models.http._
+import models.requests.DataRequest
+import models.{GetEstate, NormalMode}
+import pages.UTRPage
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -40,56 +42,77 @@ class EstateStatusController @Inject()(
                                         accountNotLinkedView: AccountNotLinkedView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val fakeUtr: String = "1234567890"
-
   def onPageLoad(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
-
-      connector.getEstate(fakeUtr) flatMap {
-        case Processed(estate, _) =>
-          Logger.info(s"[EstateStatusController] $fakeUtr estate is in a processed state")
-          authenticateForUtrAndExtract(fakeUtr, estate)
-        case Processing =>
-          Logger.info(s"[EstateStatusController] $fakeUtr unable to retrieve estate due it being in processing")
-          Future.successful(Redirect(controllers.routes.EstateStatusController.inProcessing()))
-        case Closed =>
-          Logger.info(s"[EstateStatusController] $fakeUtr unable to retrieve estate due it being closed")
-          Future.successful(Redirect(controllers.routes.EstateStatusController.closed()))
-        case UtrNotFound =>
-          Logger.info(s"[EstateStatusController] $fakeUtr unable to retrieve estate due to UTR not being found")
-          Future.successful(Redirect(controllers.routes.EstateStatusController.utrDoesNotMatchRecords()))
-        case _ =>
-          Logger.warn(s"[EstateStatusController] $fakeUtr unable to retrieve estate due to an error")
-          Future.successful(Redirect(controllers.routes.EstateStatusController.problemWithService()))
+      
+      enforceUtr() { utr =>
+        connector.getEstate(utr) flatMap {
+          case Processed(estate, _) =>
+            Logger.info(s"[EstateStatusController] $utr estate is in a processed state")
+            authenticateForUtrAndExtract(utr, estate)
+          case Processing =>
+            Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being in processing")
+            Future.successful(Redirect(controllers.routes.EstateStatusController.inProcessing()))
+          case Closed =>
+            Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being closed")
+            Future.successful(Redirect(controllers.routes.EstateStatusController.closed()))
+          case UtrNotFound =>
+            Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due to UTR not being found")
+            Future.successful(Redirect(controllers.routes.EstateStatusController.utrDoesNotMatchRecords()))
+          case _ =>
+            Logger.warn(s"[EstateStatusController] $utr unable to retrieve estate due to an error")
+            Future.successful(Redirect(controllers.routes.EstateStatusController.problemWithService()))
+        }
       }
+  }
+
+  def inProcessing(): Action[AnyContent] = actions.authWithData.async {
+    implicit request =>
+      enforceUtr() { utr =>
+        Future.successful(Ok(inProcessingView(utr)))
+      }
+  }
+
+  def closed(): Action[AnyContent] = actions.authWithData.async {
+    implicit request =>
+      enforceUtr() { utr =>
+        Future.successful(Ok(closedView(utr)))
+      }
+  }
+
+  def utrDoesNotMatchRecords(): Action[AnyContent] = actions.authWithData.async {
+    implicit request =>
+      enforceUtr() { _ =>
+        Future.successful(Ok(utrDoesNotMatchRecordsView()))
+      }
+  }
+
+  def problemWithService(): Action[AnyContent] = actions.authWithData.async {
+    implicit request =>
+      enforceUtr() { _ =>
+        Future.successful(Ok(problemWithServiceView()))
+      }
+  }
+
+  def accountNotLinked(): Action[AnyContent] = actions.authWithData.async {
+    implicit request =>
+      enforceUtr() { utr =>
+        Future.successful(Ok(accountNotLinkedView(utr)))
+      }
+  }
+
+  private def enforceUtr()(block: String => Future[Result])(implicit request: DataRequest[AnyContent]): Future[Result] = {
+    request.userAnswers.get(UTRPage) match {
+      case None =>
+        Logger.info(s"[EstateStatusController] no UTR in user answers, redirecting to ask for it")
+        Future.successful(Redirect(routes.UTRController.onPageLoad(NormalMode)))
+      case Some(utr) =>
+        Logger.info(s"[EstateStatusController] checking status of estate for $utr")
+        block(utr)
+    }
   }
 
   private def authenticateForUtrAndExtract(utr: String, estate: GetEstate): Future[Result] = {
     ???
-  }
-
-  def inProcessing(): Action[AnyContent] = actions.authWithData {
-    implicit request =>
-      Ok(inProcessingView(fakeUtr))
-  }
-
-  def closed(): Action[AnyContent] = actions.authWithData {
-    implicit request =>
-      Ok(closedView(fakeUtr))
-  }
-
-  def utrDoesNotMatchRecords(): Action[AnyContent] = actions.authWithData {
-    implicit request =>
-      Ok(utrDoesNotMatchRecordsView())
-  }
-
-  def problemWithService(): Action[AnyContent] = actions.authWithData {
-    implicit request =>
-      Ok(problemWithServiceView())
-  }
-
-  def accountNotLinked(): Action[AnyContent] = actions.authWithData {
-    implicit request =>
-      Ok(accountNotLinkedView(fakeUtr))
   }
 }

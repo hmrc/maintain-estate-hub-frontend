@@ -18,10 +18,12 @@ package controllers
 
 import base.SpecBase
 import connectors.EstatesConnector
+import models.{NormalMode, UserAnswers}
 import models.http._
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
+import pages.UTRPage
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -40,6 +42,8 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     val fakeUtr = "1234567890"
 
+    val userAnswers: UserAnswers = emptyUserAnswers.set(UTRPage, fakeUtr).success.value
+
     def request: FakeRequest[AnyContentAsEmpty.type]
 
     def result: Future[Result] = route(application, request).value
@@ -50,12 +54,12 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
   }
 
   trait LocalSetup extends BaseSetup {
-    override val builder: GuiceApplicationBuilder = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+    override val builder: GuiceApplicationBuilder = applicationBuilder(userAnswers = Some(userAnswers))
   }
 
-  "Estate Status Controller" when {
+  "Estate Status Controller" must {
 
-    "must return OK and the correct view for GET ../status/closed" in new LocalSetup {
+    "return OK and the correct view for GET ../status/closed" in new LocalSetup {
 
       override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.closed().url)
 
@@ -69,7 +73,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
       application.stop()
     }
 
-    "must return OK and the correct view for GET ../status/in-processing" in new LocalSetup {
+    "return OK and the correct view for GET ../status/in-processing" in new LocalSetup {
 
       override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.inProcessing().url)
 
@@ -83,7 +87,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
       application.stop()
     }
 
-    "must return OK and the correct view for GET ../status/utr-does-not-match-records" in new LocalSetup {
+    "return OK and the correct view for GET ../status/utr-does-not-match-records" in new LocalSetup {
 
       override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.utrDoesNotMatchRecords().url)
 
@@ -97,7 +101,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
       application.stop()
     }
 
-    "must return OK and the correct view for GET ../status/problem-with-service" in new LocalSetup {
+    "return OK and the correct view for GET ../status/problem-with-service" in new LocalSetup {
 
       override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
 
@@ -111,7 +115,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
       application.stop()
     }
 
-    "must redirect to the correct route for GET ../status/onPageLoad" when {
+    "redirect to the correct route for GET ../status/onPageLoad" when {
 
       "a Closed status is received from the estate connector" in new LocalSetup {
 
@@ -164,6 +168,19 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         application.stop()
       }
+    }
+
+    "redirect to UTR page when no UTR found" in new LocalSetup {
+
+      override val builder: GuiceApplicationBuilder = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+
+      override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.UTRController.onPageLoad(NormalMode).url
+
+      application.stop()
     }
   }
 }
