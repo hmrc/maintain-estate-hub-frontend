@@ -73,7 +73,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
       application.stop()
     }
 
-    "return OK and the correct view for GET ../status/in-processing" in new LocalSetup {
+    "return OK and the correct view for GET ../status/processing" in new LocalSetup {
 
       override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.inProcessing().url)
 
@@ -87,7 +87,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
       application.stop()
     }
 
-    "return OK and the correct view for GET ../status/utr-does-not-match-records" in new LocalSetup {
+    "return OK and the correct view for GET ../status/not-found" in new LocalSetup {
 
       override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.utrDoesNotMatchRecords().url)
 
@@ -101,7 +101,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
       application.stop()
     }
 
-    "return OK and the correct view for GET ../status/problem-with-service" in new LocalSetup {
+    "return OK and the correct view for GET ../status/sorry-there-has-been-a-problem" in new LocalSetup {
 
       override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
 
@@ -138,7 +138,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "/maintain-an-estate/status/in-processing"
+        redirectLocation(result).value mustEqual "/maintain-an-estate/status/processing"
 
         application.stop()
       }
@@ -151,7 +151,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "/maintain-an-estate/status/utr-does-not-match-records"
+        redirectLocation(result).value mustEqual "/maintain-an-estate/status/not-found"
 
         application.stop()
       }
@@ -164,7 +164,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "/maintain-an-estate/status/problem-with-service"
+        redirectLocation(result).value mustEqual "/maintain-an-estate/status/sorry-there-has-been-a-problem"
 
         application.stop()
       }
