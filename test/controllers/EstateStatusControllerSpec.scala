@@ -247,6 +247,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
           override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
             bind[EstatesConnector].to(fakeConnector),
+            bind[EstatesStoreConnector].to(fakeEstateStoreConnector),
             bind[AuthenticationService].to(new FakeDeniedAuthenticationService())
           ).build()
 
@@ -268,6 +269,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
           override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
             bind[EstatesConnector].to(fakeConnector),
+            bind[EstatesStoreConnector].to(fakeEstateStoreConnector),
             bind[AuthenticationService].to(new FakeFailingAuthenticationService())
           ).build()
 
