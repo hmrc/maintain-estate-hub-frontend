@@ -241,9 +241,6 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           (JsPath \ 'trustOrEstateDisplay).json.pick
         ).get.as[GetEstate]
 
-        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
-          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
-
         "auth denied for UTR" in new LocalSetup {
           
           override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
@@ -254,6 +251,9 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           ).build()
 
           when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
+
+          when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+            .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
           status(result) mustEqual SEE_OTHER
 
@@ -272,6 +272,9 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           ).build()
 
           when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
+
+          when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+            .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
           status(result) mustEqual UNAUTHORIZED
 
