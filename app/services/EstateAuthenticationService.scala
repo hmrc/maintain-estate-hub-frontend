@@ -28,7 +28,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AuthenticationServiceImpl @Inject()(authConnector: EstatesAuthConnector) extends AuthenticationService {
+class EstateAuthenticationServiceImpl @Inject()(authConnector: EstatesAuthConnector) extends EstateAuthenticationService {
 
   override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] = {
 
@@ -59,7 +59,7 @@ class AuthenticationServiceImpl @Inject()(authConnector: EstatesAuthConnector) e
 
 }
 
-trait AuthenticationService {
+trait EstateAuthenticationService {
 
   def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]]
 

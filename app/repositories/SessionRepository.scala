@@ -20,10 +20,10 @@ import java.time.LocalDateTime
 
 import akka.stream.Materializer
 import javax.inject.Inject
-import models.UserAnswers
-import play.api.Configuration
+import models.{MongoDateTimeFormats, UserAnswers}
 import play.api.libs.json._
-import play.modules.reactivemongo.ReactiveMongoApi
+import play.api.{Configuration, Logger}
+import reactivemongo.api.WriteConcern
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
@@ -32,7 +32,7 @@ import reactivemongo.play.json.collection.JSONCollection
 import scala.concurrent.{ExecutionContext, Future}
 
 class DefaultSessionRepository @Inject()(
-                                          mongo: ReactiveMongoApi,
+                                          mongo: MongoDriver,
                                           config: Configuration
                                         )(implicit ec: ExecutionContext, m: Materializer) extends SessionRepository {
 
@@ -42,7 +42,19 @@ class DefaultSessionRepository @Inject()(
   private val cacheTtl = config.get[Int]("mongodb.timeToLiveInSeconds")
 
   private def collection: Future[JSONCollection] =
-    mongo.database.map(_.collection[JSONCollection](collectionName))
+    for {
+      _ <- ensureIndexes
+      res <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+    } yield res
+
+  private lazy val ensureIndexes = {
+    for {
+      collection              <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+      createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
+      createdIdIndex          <- collection.indexesManager.ensure(internalAuthIdIndex)
+    } yield createdLastUpdatedIndex && createdIdIndex
+  }
+
 
   private val lastUpdatedIndex = Index(
     key     = Seq("lastUpdated" -> IndexType.Ascending),
@@ -50,18 +62,31 @@ class DefaultSessionRepository @Inject()(
     options = BSONDocument("expireAfterSeconds" -> cacheTtl)
   )
 
-  val started: Future[Unit] =
-    collection.flatMap {
-      _.indexesManager.ensure(lastUpdatedIndex)
-    }.map(_ => ())
+  private val internalAuthIdIndex = Index(
+    key = Seq("internalId" -> IndexType.Ascending),
+    name = Some("internal-auth-id-index")
+  )
 
-  override def get(id: String): Future[Option[UserAnswers]] =
-    collection.flatMap(_.find(Json.obj("_id" -> id), None).one[UserAnswers])
+  override def get(id: String): Future[Option[UserAnswers]] = {
+    val selector = Json.obj(
+      "internalId" -> id
+    )
+
+    val modifier = Json.obj(
+      "$set" -> Json.obj(
+        "updatedAt" -> MongoDateTimeFormats.localDateTimeWrite.writes(LocalDateTime.now)
+      )
+    )
+
+    collection.flatMap {
+      _.findAndUpdate(selector, modifier, fetchNewObject = true, upsert = false).map(_.result[UserAnswers])
+    }
+  }
 
   override def set(userAnswers: UserAnswers): Future[Boolean] = {
 
     val selector = Json.obj(
-      "_id" -> userAnswers.id
+      "internalId" -> userAnswers.id
     )
 
     val modifier = Json.obj(
@@ -69,20 +94,31 @@ class DefaultSessionRepository @Inject()(
     )
 
     collection.flatMap {
-      _.update(ordered = false)
-        .one(selector, modifier, upsert = true).map {
-          lastError =>
-            lastError.ok
+      _.update(ordered = false).one(selector, modifier, upsert = true, multi = false).map {
+        result => result.ok
       }
     }
+  }
+
+  override def resetCache(internalId: String): Future[Option[JsObject]] = {
+
+    Logger.debug(s"PlaybackRepository resetting cache for $internalId")
+
+    val selector = Json.obj(
+      "internalId" -> internalId
+    )
+
+    collection.flatMap(_.findAndRemove(selector, None, None, WriteConcern.Default, None, None, Seq.empty).map(
+      _.value
+    ))
   }
 }
 
 trait SessionRepository {
 
-  val started: Future[Unit]
-
   def get(id: String): Future[Option[UserAnswers]]
 
   def set(userAnswers: UserAnswers): Future[Boolean]
+
+  def resetCache(internalId: String): Future[Option[JsObject]]
 }

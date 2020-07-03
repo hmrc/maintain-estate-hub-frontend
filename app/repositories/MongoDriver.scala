@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package models.requests
+package repositories
 
-import play.api.mvc.{Request, WrappedRequest}
-import models.UserAnswers
+import com.google.inject.ImplementedBy
+import javax.inject.{Inject, Singleton}
+import play.modules.reactivemongo.ReactiveMongoApi
 
-case class OptionalDataRequest[A] (request: Request[A],
-                                   userAnswers: Option[UserAnswers],
-                                   user: User) extends WrappedRequest[A](request)
+@Singleton
+class EstateMongoDriver @Inject()(val api : ReactiveMongoApi) extends MongoDriver
 
-case class DataRequest[A] (request: Request[A],
-                           userAnswers: UserAnswers,
-                           user: User) extends WrappedRequest[A](request)
+@ImplementedBy(classOf[EstateMongoDriver])
+sealed trait MongoDriver {
+  val api : ReactiveMongoApi
+}

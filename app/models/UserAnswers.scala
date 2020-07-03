@@ -67,12 +67,14 @@ final case class UserAnswers(
 
 object UserAnswers {
 
+  def startNewSession(internalId: String) : UserAnswers = UserAnswers(internalId)
+
   implicit lazy val reads: Reads[UserAnswers] = {
 
     import play.api.libs.functional.syntax._
 
     (
-      (__ \ "_id").read[String] and
+      (__ \ "internalId").read[String] and
       (__ \ "data").read[JsObject] and
       (__ \ "lastUpdated").read(MongoDateTimeFormats.localDateTimeRead)
     ) (UserAnswers.apply _)
@@ -83,7 +85,7 @@ object UserAnswers {
     import play.api.libs.functional.syntax._
 
     (
-      (__ \ "_id").write[String] and
+      (__ \ "internalId").write[String] and
       (__ \ "data").write[JsObject] and
       (__ \ "lastUpdated").write(MongoDateTimeFormats.localDateTimeWrite)
     ) (unlift(UserAnswers.unapply))

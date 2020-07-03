@@ -63,7 +63,7 @@ class UTRController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UTRPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(controllers.routes.EstateStatusController.onPageLoad())
+          } yield Redirect(controllers.routes.EstateStatusController.checkStatus())
       )
   }
 }

@@ -17,30 +17,60 @@
 package controllers
 
 import base.SpecBase
-import models.NormalMode
+import models.{FakeUser, NormalMode}
+import models.requests.{AgentUser, OrganisationUser}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.IndexView
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
 class IndexControllerSpec extends SpecBase {
 
+  lazy val onPageLoad: String = routes.IndexController.onPageLoad().url
+
+  val utr: String = "1234567892"
+
   "Index Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "redirect to UTR controller when user is not enrolled (agent)" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilderForUser(
+        userAnswers = Some(emptyUserAnswers),
+        user = AgentUser("id", Enrolments(Set()), "arn")
+      ).build()
 
-      val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
+      val request = FakeRequest(GET, onPageLoad)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[IndexView]
-
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustBe routes.UTRController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustBe controllers.routes.UTRController.onPageLoad(NormalMode).url
 
       application.stop()
     }
+
+    "redirect to status controller when user is a returning user who is enrolled" in {
+
+      val application = applicationBuilderForUser(
+        userAnswers = Some(emptyUserAnswers),
+        user = FakeUser.organisation(
+          Enrolments(Set(Enrolment(
+            key = "HMRC-TERS-ORG",
+            identifiers = Seq(EnrolmentIdentifier(key = "SAUTR", value = utr)),
+            state = "Activated")
+          )))
+      ).build()
+
+      val request = FakeRequest(GET, onPageLoad)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustBe controllers.routes.EstateStatusController.checkStatus().url
+
+      application.stop()
+    }
+
   }
 }

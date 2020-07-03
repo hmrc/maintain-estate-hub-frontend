@@ -26,7 +26,7 @@ import pages.UTRPage
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import services.AuthenticationService
+import services.EstateAuthenticationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html._
 
@@ -43,10 +43,10 @@ class EstateStatusController @Inject()(
                                         lockedView: LockedView,
                                         problemWithServiceView: ProblemWithServiceView,
                                         accountNotLinkedView: AccountNotLinkedView,
-                                        authenticationService: AuthenticationService
+                                        authenticationService: EstateAuthenticationService
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = actions.authWithData.async {
+  def checkStatus(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
 
       enforceUtr() { utr =>

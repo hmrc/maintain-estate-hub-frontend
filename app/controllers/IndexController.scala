@@ -19,6 +19,8 @@ package controllers
 import controllers.actions.Actions
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
+import pages.UTRPage
+import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -35,16 +37,25 @@ class IndexController @Inject()(
   def onPageLoad: Action[AnyContent] = actions.authWithSession.async {
     implicit request =>
 
-      val mode = NormalMode
-
-      request.userAnswers match {
-        case Some(_) =>
-          Future.successful(Redirect(controllers.routes.UTRController.onPageLoad(mode)))
-        case None =>
-          val userAnswers: UserAnswers = UserAnswers(request.internalId)
-          repository.set(userAnswers).map { _ =>
-            Redirect(controllers.routes.UTRController.onPageLoad(mode))
-          }
-      }
+      request.user.enrolments.enrolments
+        .find(_.key equals "HMRC-TERS-ORG")
+        .flatMap(_.identifiers.find(_.key equals "SAUTR"))
+        .map(_.value)
+        .fold {
+          Logger.info(s"[IndexController] user ${request.user.affinityGroup} is not enrolled, redirect to ask for UTR")
+          Future.successful(Redirect(controllers.routes.UTRController.onPageLoad(NormalMode)))
+        } {
+          utr =>
+            for {
+              _ <- repository.resetCache(request.user.internalId)
+              newSessionWithUtr <- Future.fromTry {
+                UserAnswers.startNewSession(request.user.internalId).set(UTRPage, utr)
+              }
+              _ <- repository.set(newSessionWithUtr)
+            } yield {
+              Logger.info(s"[IndexController] $utr organisation user is enrolled, storing UTR in user answers, checking status of trust")
+              Redirect(controllers.routes.EstateStatusController.checkStatus())
+            }
+        }
   }
 }

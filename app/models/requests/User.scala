@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package views
+package models.requests
 
-import views.behaviours.ViewBehaviours
-import views.html.IndexView
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
 
-class IndexViewSpec extends ViewBehaviours {
+sealed trait User {
+  val internalId: String
+  val affinityGroup: AffinityGroup
+  val enrolments: Enrolments
+}
 
-  "Index view" must {
+case class AgentUser(internalId: String, enrolments: Enrolments, agentReferenceNumber: String) extends User {
+  override val affinityGroup: AffinityGroup = AffinityGroup.Agent
+}
 
-    val application = applicationBuilder().build()
-
-    val view = application.injector.instanceOf[IndexView]
-
-    val applyView = view.apply()(fakeRequest, messages)
-
-    behave like normalPage(applyView, "index", "guidance")
-  }
+case class OrganisationUser(internalId: String, enrolments: Enrolments) extends User {
+  override val affinityGroup: AffinityGroup = AffinityGroup.Organisation
 }
