@@ -1,6 +1,6 @@
 {
   "responseHeader": {
-    "dfmcaReturnUserStatus": "Processed",
+    "status": "Processed",
     "formBundleNo": "1"
   },
   "trustOrEstateDisplay": {

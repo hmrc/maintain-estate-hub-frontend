@@ -36,21 +36,23 @@ case object EstatesServiceUnavailable extends EstateResponse
 object EstateStatusReads {
 
   implicit object StatusReads extends Reads[EstateStatus] {
-    override def reads(json: JsValue): JsResult[EstateStatus] = json("responseHeader")("dfmcaReturnUserStatus") match {
-      case JsString("Processed") =>
-        json("trustOrEstateDisplay").validate[GetEstate] match {
-          case JsSuccess(estate, _) =>
-            val formBundle = json("responseHeader")("formBundleNo").as[String]
-            JsSuccess(Processed(estate, formBundle))
-          case JsError(errors) => JsError(s"Can not parse as GetEstate due to $errors")
-        }
-      case JsString("In Processing") => JsSuccess(Processing)
-      case JsString("Pending Closure") => JsSuccess(Closed)
-      case JsString("Closed") => JsSuccess(Closed)
-      case JsString("Suspended") => JsSuccess(SorryThereHasBeenAProblem)
-      case JsString("Parked") => JsSuccess(SorryThereHasBeenAProblem)
-      case JsString("Obsoleted") => JsSuccess(SorryThereHasBeenAProblem)
-      case _ => JsError("Unexpected Status")
+    override def reads(json: JsValue): JsResult[EstateStatus] = {
+      json("responseHeader")("status") match {
+        case JsString("Processed") =>
+          json("trustOrEstateDisplay").validate[GetEstate] match {
+            case JsSuccess(estate, _) =>
+              val formBundle = json("responseHeader")("formBundleNo").as[String]
+              JsSuccess(Processed(estate, formBundle))
+            case JsError(errors) => JsError(s"Can not parse as GetEstate due to $errors")
+          }
+        case JsString("In Processing") => JsSuccess(Processing)
+        case JsString("Pending Closure") => JsSuccess(Closed)
+        case JsString("Closed") => JsSuccess(Closed)
+        case JsString("Suspended") => JsSuccess(SorryThereHasBeenAProblem)
+        case JsString("Parked") => JsSuccess(SorryThereHasBeenAProblem)
+        case JsString("Obsoleted") => JsSuccess(SorryThereHasBeenAProblem)
+        case _ => JsError("Unexpected Status")
+      }
     }
   }
 

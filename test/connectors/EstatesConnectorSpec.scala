@@ -67,7 +67,7 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
                   """
                     |{
                     |  "responseHeader": {
-                    |    "dfmcaReturnUserStatus": "In Processing",
+                    |    "status": "In Processing",
                     |    "formBundleNo": "1"
                     |  }
                     |}
