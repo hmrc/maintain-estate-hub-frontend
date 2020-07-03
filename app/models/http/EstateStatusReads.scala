@@ -38,13 +38,7 @@ object EstateStatusReads {
   implicit object StatusReads extends Reads[EstateStatus] {
     override def reads(json: JsValue): JsResult[EstateStatus] = {
       json("responseHeader")("status") match {
-        case JsString("Processed") =>
-          json("trustOrEstateDisplay").validate[GetEstate] match {
-            case JsSuccess(estate, _) =>
-              val formBundle = json("responseHeader")("formBundleNo").as[String]
-              JsSuccess(Processed(estate, formBundle))
-            case JsError(errors) => JsError(s"Can not parse as GetEstate due to $errors")
-          }
+        case JsString("Processed") => validate(json)
         case JsString("In Processing") => JsSuccess(Processing)
         case JsString("Pending Closure") => JsSuccess(Closed)
         case JsString("Closed") => JsSuccess(Closed)
@@ -52,6 +46,15 @@ object EstateStatusReads {
         case JsString("Parked") => JsSuccess(SorryThereHasBeenAProblem)
         case JsString("Obsoleted") => JsSuccess(SorryThereHasBeenAProblem)
         case _ => JsError("Unexpected Status")
+      }
+    }
+
+    private def validate(json: JsValue): JsResult[EstateStatus] = {
+      json("trustOrEstateDisplay").validate[GetEstate] match {
+        case JsSuccess(estate, _) =>
+          val formBundle = json("responseHeader")("formBundleNo").as[String]
+          JsSuccess(Processed(estate, formBundle))
+        case JsError(errors) => JsError(s"Validating as GetEstate failed due to $errors")
       }
     }
   }
