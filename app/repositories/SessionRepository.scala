@@ -102,8 +102,6 @@ class DefaultSessionRepository @Inject()(
 
   override def resetCache(internalId: String): Future[Option[JsObject]] = {
 
-    Logger.debug(s"PlaybackRepository resetting cache for $internalId")
-
     val selector = Json.obj(
       "internalId" -> internalId
     )
