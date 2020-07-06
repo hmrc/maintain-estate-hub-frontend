@@ -3,7 +3,7 @@
     "status": "Processed",
     "formBundleNo": "1"
   },
-  "trustOrEstateDisplay": {
+  "getEstate": {
     "applicationType": "02",
     "matchData": {
       "utr": "2000000000"

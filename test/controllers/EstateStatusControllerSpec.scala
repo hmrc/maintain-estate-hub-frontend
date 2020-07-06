@@ -238,7 +238,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         val json: JsValue = Json.parse(payload)
 
         val estate: GetEstate = json.transform(
-          (JsPath \ 'trustOrEstateDisplay).json.pick
+          (JsPath \ 'getEstate).json.pick
         ).get.as[GetEstate]
 
         "auth denied for UTR" in new LocalSetup {

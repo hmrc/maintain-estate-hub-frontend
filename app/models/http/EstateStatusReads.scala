@@ -50,7 +50,7 @@ object EstateStatusReads {
     }
 
     private def validate(json: JsValue): JsResult[EstateStatus] = {
-      json("trustOrEstateDisplay").validate[GetEstate] match {
+      json("getEstate").validate[GetEstate] match {
         case JsSuccess(estate, _) =>
           val formBundle = json("responseHeader")("formBundleNo").as[String]
           JsSuccess(Processed(estate, formBundle))
