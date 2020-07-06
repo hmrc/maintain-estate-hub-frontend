@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-    main_template: MainTemplate
-)
+package models
 
-@()(implicit request: Request[_], messages: Messages)
+import models.requests.{AgentUser, OrganisationUser}
+import uk.gov.hmrc.auth.core.Enrolments
 
-@main_template(
-    title = messages("index.title")
-    ) {
+object FakeUser {
 
-    @components.heading("index.heading")
+  def agent(enrolments: Enrolments) = AgentUser("id", enrolments, "arn")
 
-    <p>@messages("index.guidance")</p>
+  def organisation(enrolments: Enrolments) = OrganisationUser("id", enrolments)
+
 }

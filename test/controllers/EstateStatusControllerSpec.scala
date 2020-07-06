@@ -31,7 +31,7 @@ import play.api.libs.json.{JsPath, JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{AuthenticationService, FakeDeniedAuthenticationService, FakeFailingAuthenticationService}
+import services.{EstateAuthenticationService, FakeDeniedEstateAuthenticationService, FakeFailingEstateAuthenticationService}
 import views.html._
 
 import scala.concurrent.Future
@@ -156,7 +156,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       "a Closed status is received from the estates connector" in new LocalSetup {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Closed))
 
@@ -172,7 +172,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       "a Processing status is received from the estates connector" in new LocalSetup {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processing))
 
@@ -188,7 +188,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       "a Locked status is received from the estate store connector" in new LocalSetup {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
 
         when(fakeEstateStoreConnector.get(any[String])(any(), any()))
           .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = true))))
@@ -202,7 +202,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       "a NotFound status is received from the estates connector" in new LocalSetup {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(UtrNotFound))
 
@@ -218,7 +218,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       "a ServiceUnavailable status is received from the estates connector" in new LocalSetup {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
 
         when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(EstatesServiceUnavailable))
 
@@ -243,12 +243,12 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         "auth denied for UTR" in new LocalSetup {
           
-          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
 
           override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
             bind[EstatesConnector].to(fakeConnector),
             bind[EstatesStoreConnector].to(fakeEstateStoreConnector),
-            bind[AuthenticationService].to(new FakeDeniedAuthenticationService())
+            bind[EstateAuthenticationService].to(new FakeDeniedEstateAuthenticationService())
           ).build()
 
           when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
@@ -265,12 +265,12 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         "auth fails" in new LocalSetup {
 
-          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
 
           override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
             bind[EstatesConnector].to(fakeConnector),
             bind[EstatesStoreConnector].to(fakeEstateStoreConnector),
-            bind[AuthenticationService].to(new FakeFailingAuthenticationService())
+            bind[EstateAuthenticationService].to(new FakeFailingEstateAuthenticationService())
           ).build()
 
           when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
@@ -289,7 +289,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       override val builder: GuiceApplicationBuilder = applicationBuilder(userAnswers = Some(emptyUserAnswers))
 
-      override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.onPageLoad().url)
+      override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
 
       status(result) mustEqual SEE_OTHER
 

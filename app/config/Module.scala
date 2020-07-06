@@ -19,7 +19,7 @@ package config
 import com.google.inject.AbstractModule
 import controllers.actions._
 import repositories.{DefaultSessionRepository, SessionRepository}
-import services.{AuthenticationService, AuthenticationServiceImpl}
+import services.{EstateAuthenticationService, EstateAuthenticationServiceImpl}
 
 class Module extends AbstractModule {
 
@@ -33,6 +33,6 @@ class Module extends AbstractModule {
 
     bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]).asEagerSingleton()
 
-    bind(classOf[AuthenticationService]).to(classOf[AuthenticationServiceImpl]).asEagerSingleton()
+    bind(classOf[EstateAuthenticationService]).to(classOf[EstateAuthenticationServiceImpl]).asEagerSingleton()
   }
 }

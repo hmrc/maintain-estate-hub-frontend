@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class FakeAllowedAuthenticationService extends AuthenticationService {
+class FakeAllowedEstateAuthenticationService extends EstateAuthenticationService {
 
   override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] =
     Future.successful(Right("SomeARN"))
@@ -34,7 +34,7 @@ class FakeAllowedAuthenticationService extends AuthenticationService {
 
 }
 
-class FakeDeniedAuthenticationService extends AuthenticationService {
+class FakeDeniedEstateAuthenticationService extends EstateAuthenticationService {
 
   override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] =
     Future.successful(Left(Redirect("redirect-url")))
@@ -45,7 +45,7 @@ class FakeDeniedAuthenticationService extends AuthenticationService {
 
 }
 
-class FakeFailingAuthenticationService extends AuthenticationService {
+class FakeFailingEstateAuthenticationService extends EstateAuthenticationService {
 
   override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] =
     Future.successful(Left(Results.Unauthorized))

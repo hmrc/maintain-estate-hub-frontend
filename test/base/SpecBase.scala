@@ -19,19 +19,21 @@ package base
 import config.FrontendAppConfig
 import controllers.actions._
 import models.UserAnswers
+import models.requests.User
 import org.scalatest.TryValues
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
 import play.api.libs.json.Json
+import play.api.mvc.PlayBodyParsers
 import play.api.test.FakeRequest
 
 import scala.concurrent.ExecutionContext
 
-trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Mocked with ScalaFutures with IntegrationPatience {
+trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Mocked with ScalaFutures {
 
   val userAnswersId = "id"
 
@@ -49,11 +51,26 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
 
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
+  private def applicationBuilderInterface(userAnswers: Option[UserAnswers] = None,
+                                 fakeIdentifierAction: IdentifierAction) : GuiceApplicationBuilder = {
     new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
-        bind[IdentifierAction].to[FakeIdentifierAction],
+        bind[IdentifierAction].to(fakeIdentifierAction),
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
+  }
+
+  protected def applicationBuilderForUser(userAnswers: Option[UserAnswers] = None,
+                                          user: User): GuiceApplicationBuilder = {
+    val parsers = injector.instanceOf[PlayBodyParsers]
+    val fakeIdentifierAction = new FakeUserIdentifierAction(parsers)(user)
+
+    applicationBuilderInterface(userAnswers, fakeIdentifierAction)
+  }
+
+  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder = {
+    val fakeIdentifierAction = injector.instanceOf[FakeOrganisationIdentifierAction]
+    applicationBuilderInterface(userAnswers, fakeIdentifierAction)
+  }
 }
