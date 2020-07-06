@@ -44,7 +44,7 @@ class IndexControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustBe controllers.routes.UTRController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustBe controllers.routes.UTRController.onPageLoad().url
 
       application.stop()
     }

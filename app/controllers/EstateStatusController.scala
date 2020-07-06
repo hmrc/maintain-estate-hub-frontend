@@ -127,7 +127,7 @@ class EstateStatusController @Inject()(
     request.userAnswers.get(UTRPage) match {
       case None =>
         Logger.info(s"[EstateStatusController] no UTR in user answers, redirecting to ask for it")
-        Future.successful(Redirect(routes.UTRController.onPageLoad(NormalMode)))
+        Future.successful(Redirect(routes.UTRController.onPageLoad()))
       case Some(utr) =>
         Logger.info(s"[EstateStatusController] checking status of estate for $utr")
         block(utr)

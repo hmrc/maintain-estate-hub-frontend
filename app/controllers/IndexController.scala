@@ -43,7 +43,7 @@ class IndexController @Inject()(
         .map(_.value)
         .fold {
           Logger.info(s"[IndexController] user ${request.user.affinityGroup} is not enrolled, redirect to ask for UTR")
-          Future.successful(Redirect(controllers.routes.UTRController.onPageLoad(NormalMode)))
+          Future.successful(Redirect(controllers.routes.UTRController.onPageLoad()))
         } {
           utr =>
             for {

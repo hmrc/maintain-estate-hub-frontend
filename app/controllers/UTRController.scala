@@ -19,7 +19,7 @@ package controllers
 import controllers.actions._
 import forms.UTRFormProvider
 import javax.inject.Inject
-import models.Mode
+import models.{Mode, UserAnswers}
 import pages.UTRPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -39,31 +39,29 @@ class UTRController @Inject()(
                                view: UTRView
                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = actions.authWithData {
+  val form = formProvider()
+
+  def onPageLoad(): Action[AnyContent] = actions.authWithSession.async {
     implicit request =>
-
-      val preparedForm = request.userAnswers.get(UTRPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+      Future.successful(Ok(view(form)))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = actions.authWithData.async {
+  def onSubmit(): Action[AnyContent] = actions.authWithSession.async {
     implicit request =>
-
       form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value =>
+        (formWithErrors: Form[_]) =>
+          Future.successful(BadRequest(view(formWithErrors))),
+        utr => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UTRPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.resetCache(request.user.internalId)
+            newSessionWithUtr <- Future.fromTry {
+              UserAnswers.startNewSession(request.user.internalId).set(UTRPage, utr)
+            }
+            _ <- sessionRepository.set(newSessionWithUtr)
           } yield Redirect(controllers.routes.EstateStatusController.checkStatus())
+        }
       )
   }
+
 }
