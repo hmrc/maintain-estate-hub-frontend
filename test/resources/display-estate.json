@@ -38,18 +38,20 @@
       "estate": {
         "entities": {
           "personalRepresentative": {
-            "lineNo": "1",
-            "bpMatchStatus": "01",
-            "entityStart": "2017-02-28",
-            "name": {
-              "firstName": "Alister",
-              "lastName": "Mc'Govern"
-            },
-            "dateOfBirth": "1980-06-01",
-            "identification": {
-              "nino": "JS123456A"
-            },
-            "phoneNumber": "078888888"
+            "estatePerRepInd": {
+              "lineNo": "1",
+              "bpMatchStatus": "01",
+              "entityStart": "2017-02-28",
+              "name": {
+                "firstName": "Alister",
+                "lastName": "Mc'Govern"
+              },
+              "dateOfBirth": "1980-06-01",
+              "identification": {
+                "nino": "JS123456A"
+              },
+              "phoneNumber": "078888888"
+            }
           },
           "deceased": {
             "lineNo": "1",
