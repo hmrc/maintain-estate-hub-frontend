@@ -18,25 +18,23 @@ package controllers
 
 import base.SpecBase
 import forms.UTRFormProvider
-import models.{NormalMode, UserAnswers}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import models.{FakeUser, NormalMode}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.UTRPage
-import play.api.inject.bind
+import play.api.data.Form
+import play.api.mvc.{AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 import views.html.UTRView
-
-import scala.concurrent.Future
 
 class UTRControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new UTRFormProvider()
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
-  lazy val uTRRoute = routes.UTRController.onPageLoad(NormalMode).url
+  lazy val utrRoute: String = routes.UTRController.onPageLoad().url
+
+  lazy val onSubmit: Call = routes.UTRController.onSubmit()
 
   "UTR Controller" must {
 
@@ -44,7 +42,7 @@ class UTRControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, uTRRoute)
+      val request = FakeRequest(GET, utrRoute)
 
       val result = route(application, request).value
 
@@ -53,53 +51,68 @@ class UTRControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(fakeRequest, messages).toString
+        view(form)(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "populate the view correctly on a GET when the question has previously been answered" in {
+    "return OK and the correct view for a GET if no existing data is found (creating a new session)" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(UTRPage, "answer").success.value
+      val application = applicationBuilder(userAnswers = None).build()
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, uTRRoute)
-
-      val view = application.injector.instanceOf[UTRView]
+      val request = FakeRequest(GET, utrRoute)
 
       val result = route(application, request).value
+
+      val view = application.injector.instanceOf[UTRView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), NormalMode)(fakeRequest, messages).toString
+        view(form)(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to estate status for a POST if no existing data is found (creating a new session)" in {
 
-      val mockSessionRepository = mock[SessionRepository]
+      val application = applicationBuilder(userAnswers = None).build()
+
       val utr = "0987654321"
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
-
       val request =
-        FakeRequest(POST, uTRRoute)
+        FakeRequest(POST, utrRoute)
           .withFormUrlEncodedBody(("value", utr))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual controllers.routes.EstateStatusController.checkStatus().url
+
+      application.stop()
+    }
+
+    "redirect to estate status on a POST" in {
+
+      val utr = "0987654321"
+
+      val enrolments = Enrolments(Set(Enrolment(
+        "HMRC-TERS-ORG", Seq(EnrolmentIdentifier("SAUTR", utr)), "Activated"
+      )))
+
+      val application =
+        applicationBuilderForUser(
+          userAnswers = Some(emptyUserAnswers),
+          user = FakeUser.organisation(enrolments)
+        ).build()
+
+      implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, utrRoute).withFormUrlEncodedBody(("value", utr))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustBe controllers.routes.EstateStatusController.checkStatus().url
 
       application.stop()
     }
@@ -109,7 +122,7 @@ class UTRControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, uTRRoute)
+        FakeRequest(POST, utrRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -121,41 +134,11 @@ class UTRControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(fakeRequest, messages).toString
+        view(boundForm)(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to Session Expired for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
-
-      val request = FakeRequest(GET, uTRRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      val request =
-        FakeRequest(POST, uTRRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
   }
 }

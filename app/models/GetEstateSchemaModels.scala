@@ -25,30 +25,7 @@ case class PersonalRepresentativeType(estatePerRepInd : Option[EstatePerRepIndTy
                                       estatePerRepOrg : Option[EstatePerRepOrgType] = None)
 
 object PersonalRepresentativeType {
-
-  implicit object PersonalRepFormats extends Format[PersonalRepresentativeType] {
-
-    override def writes(o: PersonalRepresentativeType): JsValue = {
-      o.estatePerRepInd match {
-        case Some(ind) => Json.toJson(ind)
-        case None => Json.toJson(o.estatePerRepOrg)
-      }
-    }
-
-    override def reads(json: JsValue): JsResult[PersonalRepresentativeType] = {
-      json.validate[EstatePerRepIndType].map {
-        ind =>
-          PersonalRepresentativeType(estatePerRepInd = Some(ind))
-      }.orElse {
-        json.validate[EstatePerRepOrgType].map {
-          org =>
-            PersonalRepresentativeType(estatePerRepOrg = Some(org))
-        }
-      }
-    }
-  }
-
-  implicit val personalRepFormats : Format[PersonalRepresentativeType] = PersonalRepFormats
+  implicit val personalRepFormats : Format[PersonalRepresentativeType] = Json.format[PersonalRepresentativeType]
 }
 
 case class EstatePerRepIndType(name: NameType,
@@ -109,13 +86,7 @@ case class GetEstate(matchData: MatchData,
                      estate: Estate)
 
 object GetEstate {
-  implicit val writes: Writes[GetEstate] = Json.writes[GetEstate]
-  implicit val reads: Reads[GetEstate] = (
-    (JsPath \ "matchData").read[MatchData] and
-      (JsPath \ "correspondence").read[Correspondence] and
-      (JsPath \ "declaration").read[Declaration] and
-      (JsPath \ "details" \ "estate").read[Estate]
-    )(GetEstate.apply _)
+  implicit val formats: Format[GetEstate] = Json.format[GetEstate]
 }
 
 case class NameType(firstName: String,

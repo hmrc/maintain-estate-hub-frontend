@@ -3,7 +3,7 @@
     "status": "Processed",
     "formBundleNo": "1"
   },
-  "trustOrEstateDisplay": {
+  "getEstate": {
     "applicationType": "02",
     "matchData": {
       "utr": "2000000000"
@@ -34,10 +34,10 @@
         "country": "GB"
       }
     },
-    "details": {
-      "estate": {
-        "entities": {
-          "personalRepresentative": {
+    "estate": {
+      "entities": {
+        "personalRepresentative": {
+          "estatePerRepInd": {
             "lineNo": "1",
             "bpMatchStatus": "01",
             "entityStart": "2017-02-28",
@@ -50,24 +50,24 @@
               "nino": "JS123456A"
             },
             "phoneNumber": "078888888"
-          },
-          "deceased": {
-            "lineNo": "1",
-            "bpMatchStatus": "01",
-            "entityStart": "2017-02-28",
-            "name": {
-              "firstName": "Wilbert",
-              "lastName": "Jefferies"
-            },
-            "dateOfDeath": "2016-04-06",
-            "identification": {
-              "nino": "JS123456A"
-            }
           }
         },
-        "administrationEndDate": "2017-06-01",
-        "periodTaxDues": "01"
-      }
+        "deceased": {
+          "lineNo": "1",
+          "bpMatchStatus": "01",
+          "entityStart": "2017-02-28",
+          "name": {
+            "firstName": "Wilbert",
+            "lastName": "Jefferies"
+          },
+          "dateOfDeath": "2016-04-06",
+          "identification": {
+            "nino": "JS123456A"
+          }
+        }
+      },
+      "administrationEndDate": "2017-06-01",
+      "periodTaxDues": "01"
     }
   }
 }

@@ -19,14 +19,15 @@ package controllers
 import connectors.{EstatesConnector, EstatesStoreConnector}
 import controllers.actions.Actions
 import javax.inject.Inject
+import models.GetEstate
 import models.http._
 import models.requests.DataRequest
-import models.{GetEstate, NormalMode}
 import pages.UTRPage
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.EstateAuthenticationService
+import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html._
 
@@ -64,28 +65,28 @@ class EstateStatusController @Inject()(
   def inProcessing(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
       enforceUtr() { utr =>
-        Future.successful(Ok(inProcessingView(utr)))
+        Future.successful(Ok(inProcessingView(utr, isAgentUser)))
       }
   }
 
   def closed(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
       enforceUtr() { utr =>
-        Future.successful(Ok(closedView(utr)))
+        Future.successful(Ok(closedView(utr, isAgentUser)))
       }
   }
 
   def utrDoesNotMatchRecords(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
       enforceUtr() { _ =>
-        Future.successful(Ok(utrDoesNotMatchRecordsView()))
+        Future.successful(Ok(utrDoesNotMatchRecordsView(isAgentUser)))
       }
   }
 
   def problemWithService(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
       enforceUtr() { _ =>
-        Future.successful(Ok(problemWithServiceView()))
+        Future.successful(Ok(problemWithServiceView(isAgentUser)))
       }
   }
 
@@ -101,6 +102,10 @@ class EstateStatusController @Inject()(
       enforceUtr() { utr =>
         Future.successful(Ok(lockedView(utr)))
       }
+  }
+
+  private def isAgentUser(implicit request: DataRequest[AnyContent]): Boolean = {
+    request.user.affinityGroup == Agent
   }
 
   private def tryToPlayback(utr: String)(implicit request: DataRequest[AnyContent]): Future[Result] = {
@@ -127,7 +132,7 @@ class EstateStatusController @Inject()(
     request.userAnswers.get(UTRPage) match {
       case None =>
         Logger.info(s"[EstateStatusController] no UTR in user answers, redirecting to ask for it")
-        Future.successful(Redirect(routes.UTRController.onPageLoad(NormalMode)))
+        Future.successful(Redirect(routes.UTRController.onPageLoad()))
       case Some(utr) =>
         Logger.info(s"[EstateStatusController] checking status of estate for $utr")
         block(utr)
@@ -138,15 +143,15 @@ class EstateStatusController @Inject()(
                                           (implicit request: DataRequest[AnyContent]): Future[Result] = {
 
     authenticationService.authenticateForUtr(utr) flatMap {
-      case Left(failure) =>
-        val location = failure.header.headers.getOrElse(LOCATION, "no location header")
-        val failureStatus = failure.header.status
+      case Left(unauthorisedRedirect) =>
+        val location = unauthorisedRedirect.header.headers.getOrElse(LOCATION, "no location header")
+        val failureStatus = unauthorisedRedirect.header.status
         Logger.info(s"[EstateStatusController] unable to authenticate user for $utr, " +
           s"due to $failureStatus status, sending user to $location")
 
-        Future.successful(failure)
+        Future.successful(unauthorisedRedirect)
       case Right(_) =>
-        ???
+        Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
   }
 }

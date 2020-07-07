@@ -22,13 +22,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("UTR.title")}"
     ) {
 
-    @formHelper(action = UTRController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = UTRController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -38,7 +38,8 @@
             field = form("value"),
             label = messages("UTR.heading"),
             headingIsLabel = true,
-            hint = Some(messages("UTR.hint"))
+            hint = Some(messages("UTR.hint")),
+            labelClass = Some("heading-large")
         )
 
         <p>@messages("UTR.linkMessage") <a href="https://www.gov.uk/find-lost-utr-number" target="_blank">@messages("UTR.linkText")</a>.</p>

@@ -22,7 +22,7 @@
     config: FrontendAppConfig
 )
 
-@(utr: String)(implicit request: Request[_], messages: Messages)
+@(utr: String, isAgent: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("closed.title")
@@ -40,5 +40,7 @@
 
     <p>@messages("closed.p3") <a href="@config.estatesHelplineUrl">@messages("closed.p3.link")</a>.</p>
 
-    <p>@messages("closed.p4") <a href="@config.loginContinueUrl">@messages("closed.p4.link")</a>.</p>
+    @if(isAgent){
+        <p>@messages("closed.p4") <a href="@config.agentOverviewUrl">@messages("closed.p4.link")</a>.</p>
+    }
 }

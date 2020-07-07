@@ -22,7 +22,7 @@
     config: FrontendAppConfig
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(isAgent: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("problemWithService.title")
@@ -36,7 +36,9 @@
 
     <p>@messages("problemWithService.p2.beforeLink") <a href="@config.estatesHelplineUrl" target="_blank">@messages("problemWithService.p2.link")</a> @messages("problemWithService.p2.afterLink")</p>
 
-    <p>@messages("problemWithService.p3") <a href="@config.loginContinueUrl">@messages("problemWithService.p3.link")</a>.</p>
+    @if(isAgent){
+        <p>@messages("problemWithService.p3") <a href="@config.agentOverviewUrl">@messages("problemWithService.p3.link")</a>.</p>
+    }
 
     @components.button_link(
         id = Some("sign-out"),

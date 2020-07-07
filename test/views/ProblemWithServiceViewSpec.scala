@@ -21,22 +21,40 @@ import views.html.ProblemWithServiceView
 
 class ProblemWithServiceViewSpec extends ViewBehaviours {
 
-  "Problem With Service view" must {
+  "Problem With Service view" when {
 
-    val application = applicationBuilder().build()
+    "agent user" must {
+      val application = applicationBuilder().build()
 
-    val view = application.injector.instanceOf[ProblemWithServiceView]
+      val view = application.injector.instanceOf[ProblemWithServiceView]
 
-    val applyView = view.apply()(fakeRequest, messages)
+      val applyView = view.apply(isAgent = true)(fakeRequest, messages)
 
-    behave like pageWithBackLink(applyView)
+      behave like pageWithBackLink(applyView)
 
-    behave like normalPage(applyView,
-      "problemWithService",
-      "p1", "p2.beforeLink", "p2.link", "p2.afterLink", "p3", "p3.link"
-    )
+      behave like normalPage(applyView,
+        "problemWithService",
+        "p1", "p2.beforeLink", "p2.link", "p2.afterLink", "p3", "p3.link"
+      )
 
-    behave like pageWithSignOutButton(applyView)
+      behave like pageWithSignOutButton(applyView)
+    }
 
+    "non-agent user" must {
+      val application = applicationBuilder().build()
+
+      val view = application.injector.instanceOf[ProblemWithServiceView]
+
+      val applyView = view.apply(isAgent = false)(fakeRequest, messages)
+
+      behave like pageWithBackLink(applyView)
+
+      behave like normalPage(applyView,
+        "problemWithService",
+        "p1", "p2.beforeLink", "p2.link", "p2.afterLink"
+      )
+
+      behave like pageWithSignOutButton(applyView)
+    }
   }
 }

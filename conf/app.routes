@@ -22,7 +22,5 @@ GET        /status/sorry-there-has-been-a-problem       controllers.EstateStatus
 GET        /status/not-found                            controllers.EstateStatusController.utrDoesNotMatchRecords()
 GET        /status/already-claimed                      controllers.EstateStatusController.accountNotLinked()
 
-GET        /unique-tax-reference-number                 controllers.UTRController.onPageLoad(mode: Mode = NormalMode)
-POST       /unique-tax-reference-number                 controllers.UTRController.onSubmit(mode: Mode = NormalMode)
-GET        /change-unique-tax-reference-number          controllers.UTRController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-unique-tax-reference-number          controllers.UTRController.onSubmit(mode: Mode = CheckMode)
+GET        /unique-tax-reference-number                 controllers.UTRController.onPageLoad()
+POST       /unique-tax-reference-number                 controllers.UTRController.onSubmit()

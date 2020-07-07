@@ -23,22 +23,42 @@ class InProcessingViewSpec extends ViewBehaviours {
 
   private val fakeUtr: String = "1234567890"
 
-  "In Processing view" must {
+  "In Processing view" when {
 
-    val application = applicationBuilder().build()
+    "agent user" must {
 
-    val view = application.injector.instanceOf[InProcessingView]
+      val application = applicationBuilder().build()
 
-    val applyView = view.apply(fakeUtr)(fakeRequest, messages)
+      val view = application.injector.instanceOf[InProcessingView]
 
-    behave like pageWithBackLink(applyView)
+      val applyView = view.apply(fakeUtr, isAgent = true)(fakeRequest, messages)
 
-    behave like pageWithSubHeading(applyView, s"This estate’s UTR: $fakeUtr")
+      behave like pageWithBackLink(applyView)
 
-    behave like normalPage(applyView,
-      "inProcessing",
-      "p1", "p2", "p3", "p3.link", "p4", "p4.link"
-    )
+      behave like pageWithSubHeading(applyView, s"This estate’s UTR: $fakeUtr")
 
+      behave like normalPage(applyView,
+        "inProcessing",
+        "p1", "p2", "p3", "p3.link", "p4", "p4.link"
+      )
+    }
+
+    "non-agent user" must {
+
+      val application = applicationBuilder().build()
+
+      val view = application.injector.instanceOf[InProcessingView]
+
+      val applyView = view.apply(fakeUtr, isAgent = false)(fakeRequest, messages)
+
+      behave like pageWithBackLink(applyView)
+
+      behave like pageWithSubHeading(applyView, s"This estate’s UTR: $fakeUtr")
+
+      behave like normalPage(applyView,
+        "inProcessing",
+        "p1", "p2", "p3", "p3.link"
+      )
+    }
   }
 }

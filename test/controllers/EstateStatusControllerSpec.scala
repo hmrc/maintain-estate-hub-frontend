@@ -19,7 +19,8 @@ package controllers
 import base.SpecBase
 import connectors.{EstatesConnector, EstatesStoreConnector}
 import models.http._
-import models.{EstateLock, GetEstate, NormalMode, UserAnswers}
+import models.requests.{AgentUser, OrganisationUser}
+import models.{EstateLock, GetEstate, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
@@ -32,6 +33,7 @@ import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{EstateAuthenticationService, FakeDeniedEstateAuthenticationService, FakeFailingEstateAuthenticationService}
+import uk.gov.hmrc.auth.core.Enrolments
 import views.html._
 
 import scala.concurrent.Future
@@ -61,36 +63,92 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
     override val builder: GuiceApplicationBuilder = applicationBuilder(userAnswers = Some(userAnswers))
   }
 
+  trait AgentSetup extends LocalSetup {
+    override lazy val application: Application =
+      applicationBuilderForUser(
+        userAnswers = Some(userAnswers),
+        user = AgentUser("id", Enrolments(Set()), "arn")
+      ).overrides(
+        bind[EstatesConnector].to(fakeConnector),
+        bind[EstatesStoreConnector].to(fakeEstateStoreConnector)
+      ).build()
+  }
+
+  trait NonAgentSetup extends LocalSetup {
+    override lazy val application: Application =
+      applicationBuilderForUser(
+        userAnswers = Some(userAnswers),
+        user = OrganisationUser("id", Enrolments(Set()))
+      ).overrides(
+        bind[EstatesConnector].to(fakeConnector),
+        bind[EstatesStoreConnector].to(fakeEstateStoreConnector)
+      ).build()
+  }
+
   "Estate Status Controller" must {
 
     "return OK and the correct view for GET" when {
 
-      "../status/closed" in new LocalSetup {
+      "../status/closed" when {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.closed().url)
+        "agent user" in new AgentSetup {
 
-        val view: ClosedView = application.injector.instanceOf[ClosedView]
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.closed().url)
 
-        status(result) mustEqual OK
+          val view: ClosedView = application.injector.instanceOf[ClosedView]
 
-        contentAsString(result) mustEqual
-          view(fakeUtr)(fakeRequest, messages).toString
+          status(result) mustEqual OK
 
-        application.stop()
+          contentAsString(result) mustEqual
+            view(fakeUtr, isAgent = true)(fakeRequest, messages).toString
+
+          application.stop()
+        }
+
+        "non-agent user" in new NonAgentSetup {
+
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.closed().url)
+
+          val view: ClosedView = application.injector.instanceOf[ClosedView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(fakeUtr, isAgent = false)(fakeRequest, messages).toString
+
+          application.stop()
+        }
       }
 
-      "../status/processing" in new LocalSetup {
+      "../status/processing" when {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.inProcessing().url)
+        "agent user" in new AgentSetup {
 
-        val view: InProcessingView = application.injector.instanceOf[InProcessingView]
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.inProcessing().url)
 
-        status(result) mustEqual OK
+          val view: InProcessingView = application.injector.instanceOf[InProcessingView]
 
-        contentAsString(result) mustEqual
-          view(fakeUtr)(fakeRequest, messages).toString
+          status(result) mustEqual OK
 
-        application.stop()
+          contentAsString(result) mustEqual
+            view(fakeUtr, isAgent = true)(fakeRequest, messages).toString
+
+          application.stop()
+        }
+
+        "non-agent user" in new NonAgentSetup {
+
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.inProcessing().url)
+
+          val view: InProcessingView = application.injector.instanceOf[InProcessingView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(fakeUtr, isAgent = false)(fakeRequest, messages).toString
+
+          application.stop()
+        }
       }
 
       "../status/locked" in new LocalSetup {
@@ -107,32 +165,66 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
-      "../status/not-found" in new LocalSetup {
+      "../status/not-found" when {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.utrDoesNotMatchRecords().url)
+        "agent user" in new AgentSetup {
 
-        val view: UtrDoesNotMatchRecordsView = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.utrDoesNotMatchRecords().url)
 
-        status(result) mustEqual OK
+          val view: UtrDoesNotMatchRecordsView = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
 
-        contentAsString(result) mustEqual
-          view()(fakeRequest, messages).toString
+          status(result) mustEqual OK
 
-        application.stop()
+          contentAsString(result) mustEqual
+            view(isAgent = true)(fakeRequest, messages).toString
+
+          application.stop()
+        }
+
+        "non-agent user" in new NonAgentSetup {
+
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.utrDoesNotMatchRecords().url)
+
+          val view: UtrDoesNotMatchRecordsView = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(isAgent = false)(fakeRequest, messages).toString
+
+          application.stop()
+        }
       }
 
-      "../status/sorry-there-has-been-a-problem" in new LocalSetup {
+      "../status/sorry-there-has-been-a-problem" when {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
+        "agent user" in new AgentSetup {
 
-        val view: ProblemWithServiceView = application.injector.instanceOf[ProblemWithServiceView]
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
 
-        status(result) mustEqual OK
+          val view: ProblemWithServiceView = application.injector.instanceOf[ProblemWithServiceView]
 
-        contentAsString(result) mustEqual
-          view()(fakeRequest, messages).toString
+          status(result) mustEqual OK
 
-        application.stop()
+          contentAsString(result) mustEqual
+            view(isAgent = true)(fakeRequest, messages).toString
+
+          application.stop()
+        }
+
+        "non-agent user" in new NonAgentSetup {
+
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
+
+          val view: ProblemWithServiceView = application.injector.instanceOf[ProblemWithServiceView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(isAgent = false)(fakeRequest, messages).toString
+
+          application.stop()
+        }
       }
 
       "../status/already-claimed" in new LocalSetup {
@@ -238,7 +330,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         val json: JsValue = Json.parse(payload)
 
         val estate: GetEstate = json.transform(
-          (JsPath \ 'trustOrEstateDisplay).json.pick
+          (JsPath \ 'getEstate).json.pick
         ).get.as[GetEstate]
 
         "auth denied for UTR" in new LocalSetup {
@@ -293,7 +385,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.UTRController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual controllers.routes.UTRController.onPageLoad.url
 
       application.stop()
     }
