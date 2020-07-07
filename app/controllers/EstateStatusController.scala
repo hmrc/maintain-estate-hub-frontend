@@ -27,6 +27,7 @@ import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.EstateAuthenticationService
+import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html._
 
@@ -85,7 +86,7 @@ class EstateStatusController @Inject()(
   def problemWithService(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
       enforceUtr() { _ =>
-        Future.successful(Ok(problemWithServiceView()))
+        Future.successful(Ok(problemWithServiceView(request.user.affinityGroup == Agent)))
       }
   }
 

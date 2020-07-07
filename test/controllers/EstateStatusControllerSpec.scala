@@ -19,7 +19,8 @@ package controllers
 import base.SpecBase
 import connectors.{EstatesConnector, EstatesStoreConnector}
 import models.http._
-import models.{EstateLock, GetEstate, NormalMode, UserAnswers}
+import models.requests.{AgentUser, OrganisationUser}
+import models.{EstateLock, GetEstate, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
@@ -32,6 +33,7 @@ import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{EstateAuthenticationService, FakeDeniedEstateAuthenticationService, FakeFailingEstateAuthenticationService}
+import uk.gov.hmrc.auth.core.Enrolments
 import views.html._
 
 import scala.concurrent.Future
@@ -121,18 +123,53 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
-      "../status/sorry-there-has-been-a-problem" in new LocalSetup {
+      "../status/sorry-there-has-been-a-problem" when {
 
-        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
+        "agent user" in new LocalSetup {
 
-        val view: ProblemWithServiceView = application.injector.instanceOf[ProblemWithServiceView]
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
 
-        status(result) mustEqual OK
+          override lazy val application: Application =
+            applicationBuilderForUser(
+              userAnswers = Some(userAnswers),
+              user = AgentUser("id", Enrolments(Set()), "arn")
+            ).overrides(
+              bind[EstatesConnector].to(fakeConnector),
+              bind[EstatesStoreConnector].to(fakeEstateStoreConnector)
+            ).build()
 
-        contentAsString(result) mustEqual
-          view()(fakeRequest, messages).toString
+          val view: ProblemWithServiceView = application.injector.instanceOf[ProblemWithServiceView]
 
-        application.stop()
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(isAgent = true)(fakeRequest, messages).toString
+
+          application.stop()
+        }
+
+        "non-agent user" in new LocalSetup {
+
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.problemWithService().url)
+
+          override lazy val application: Application =
+            applicationBuilderForUser(
+              userAnswers = Some(userAnswers),
+              user = OrganisationUser("id", Enrolments(Set()))
+            ).overrides(
+              bind[EstatesConnector].to(fakeConnector),
+              bind[EstatesStoreConnector].to(fakeEstateStoreConnector)
+            ).build()
+
+          val view: ProblemWithServiceView = application.injector.instanceOf[ProblemWithServiceView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(isAgent = false)(fakeRequest, messages).toString
+
+          application.stop()
+        }
       }
 
       "../status/already-claimed" in new LocalSetup {
