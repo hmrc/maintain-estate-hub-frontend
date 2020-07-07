@@ -19,9 +19,9 @@ package controllers
 import connectors.{EstatesConnector, EstatesStoreConnector}
 import controllers.actions.Actions
 import javax.inject.Inject
+import models.GetEstate
 import models.http._
 import models.requests.DataRequest
-import models.{GetEstate, NormalMode}
 import pages.UTRPage
 import play.api.Logger
 import play.api.i18n.I18nSupport
@@ -65,28 +65,28 @@ class EstateStatusController @Inject()(
   def inProcessing(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
       enforceUtr() { utr =>
-        Future.successful(Ok(inProcessingView(utr)))
+        Future.successful(Ok(inProcessingView(utr, isAgentUser)))
       }
   }
 
   def closed(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
       enforceUtr() { utr =>
-        Future.successful(Ok(closedView(utr)))
+        Future.successful(Ok(closedView(utr, isAgentUser)))
       }
   }
 
   def utrDoesNotMatchRecords(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
       enforceUtr() { _ =>
-        Future.successful(Ok(utrDoesNotMatchRecordsView()))
+        Future.successful(Ok(utrDoesNotMatchRecordsView(isAgentUser)))
       }
   }
 
   def problemWithService(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
       enforceUtr() { _ =>
-        Future.successful(Ok(problemWithServiceView(request.user.affinityGroup == Agent)))
+        Future.successful(Ok(problemWithServiceView(isAgentUser)))
       }
   }
 
@@ -102,6 +102,10 @@ class EstateStatusController @Inject()(
       enforceUtr() { utr =>
         Future.successful(Ok(lockedView(utr)))
       }
+  }
+
+  private def isAgentUser(implicit request: DataRequest[AnyContent]): Boolean = {
+    request.user.affinityGroup == Agent
   }
 
   private def tryToPlayback(utr: String)(implicit request: DataRequest[AnyContent]): Future[Result] = {

@@ -36,7 +36,7 @@
 
     <p>@messages("problemWithService.p2.beforeLink") <a href="@config.estatesHelplineUrl" target="_blank">@messages("problemWithService.p2.link")</a> @messages("problemWithService.p2.afterLink")</p>
 
-    if(isAgent){
+    @if(isAgent){
         <p>@messages("problemWithService.p3") <a href="@config.agentOverviewUrl">@messages("problemWithService.p3.link")</a>.</p>
     }
 

@@ -21,20 +21,38 @@ import views.html.UtrDoesNotMatchRecordsView
 
 class UtrDoesNotMatchRecordsViewSpec extends ViewBehaviours {
 
-  "Utr Does Not Match Records view" must {
+  "Utr Does Not Match Records view" when {
 
-    val application = applicationBuilder().build()
+    "agent user" must {
 
-    val view = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
+      val application = applicationBuilder().build()
 
-    val applyView = view.apply()(fakeRequest, messages)
+      val view = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
 
-    behave like pageWithBackLink(applyView)
+      val applyView = view.apply(isAgent = true)(fakeRequest, messages)
 
-    behave like normalPage(applyView,
-      "utrDoesNotMatchRecords",
-      "p1", "p2", "p3", "p3.link", "p4", "p4.link", "p5", "p5.link"
-    )
+      behave like pageWithBackLink(applyView)
 
+      behave like normalPage(applyView,
+        "utrDoesNotMatchRecords",
+        "p1", "p2", "p3", "p3.link", "p4", "p4.link", "p5", "p5.link"
+      )
+    }
+
+    "non-agent user" must {
+
+      val application = applicationBuilder().build()
+
+      val view = application.injector.instanceOf[UtrDoesNotMatchRecordsView]
+
+      val applyView = view.apply(isAgent = false)(fakeRequest, messages)
+
+      behave like pageWithBackLink(applyView)
+
+      behave like normalPage(applyView,
+        "utrDoesNotMatchRecords",
+        "p1", "p2", "p3", "p3.link", "p4", "p4.link"
+      )
+    }
   }
 }

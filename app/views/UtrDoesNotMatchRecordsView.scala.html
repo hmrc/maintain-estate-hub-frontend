@@ -22,7 +22,7 @@
     config: FrontendAppConfig
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(isAgent: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("utrDoesNotMatchRecords.title")
@@ -40,5 +40,7 @@
 
     <p>@messages("utrDoesNotMatchRecords.p4") <a href="@config.estatesHelplineUrl">@messages("utrDoesNotMatchRecords.p4.link")</a>.</p>
 
-    <p>@messages("utrDoesNotMatchRecords.p5") <a href="@config.loginContinueUrl">@messages("utrDoesNotMatchRecords.p5.link")</a>.</p>
+    @if(isAgent){
+        <p>@messages("utrDoesNotMatchRecords.p5") <a href="@config.agentOverviewUrl">@messages("utrDoesNotMatchRecords.p5.link")</a>.</p>
+    }
 }
