@@ -86,13 +86,7 @@ case class GetEstate(matchData: MatchData,
                      estate: Estate)
 
 object GetEstate {
-  implicit val writes: Writes[GetEstate] = Json.writes[GetEstate]
-  implicit val reads: Reads[GetEstate] = (
-    (JsPath \ "matchData").read[MatchData] and
-      (JsPath \ "correspondence").read[Correspondence] and
-      (JsPath \ "declaration").read[Declaration] and
-      (JsPath \ "details" \ "estate").read[Estate]
-    )(GetEstate.apply _)
+  implicit val formats: Format[GetEstate] = Json.format[GetEstate]
 }
 
 case class NameType(firstName: String,

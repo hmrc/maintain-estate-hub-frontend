@@ -34,42 +34,40 @@
         "country": "GB"
       }
     },
-    "details": {
-      "estate": {
-        "entities": {
-          "personalRepresentative": {
-            "estatePerRepInd": {
-              "lineNo": "1",
-              "bpMatchStatus": "01",
-              "entityStart": "2017-02-28",
-              "name": {
-                "firstName": "Alister",
-                "lastName": "Mc'Govern"
-              },
-              "dateOfBirth": "1980-06-01",
-              "identification": {
-                "nino": "JS123456A"
-              },
-              "phoneNumber": "078888888"
-            }
-          },
-          "deceased": {
+    "estate": {
+      "entities": {
+        "personalRepresentative": {
+          "estatePerRepInd": {
             "lineNo": "1",
             "bpMatchStatus": "01",
             "entityStart": "2017-02-28",
             "name": {
-              "firstName": "Wilbert",
-              "lastName": "Jefferies"
+              "firstName": "Alister",
+              "lastName": "Mc'Govern"
             },
-            "dateOfDeath": "2016-04-06",
+            "dateOfBirth": "1980-06-01",
             "identification": {
               "nino": "JS123456A"
-            }
+            },
+            "phoneNumber": "078888888"
           }
         },
-        "administrationEndDate": "2017-06-01",
-        "periodTaxDues": "01"
-      }
+        "deceased": {
+          "lineNo": "1",
+          "bpMatchStatus": "01",
+          "entityStart": "2017-02-28",
+          "name": {
+            "firstName": "Wilbert",
+            "lastName": "Jefferies"
+          },
+          "dateOfDeath": "2016-04-06",
+          "identification": {
+            "nino": "JS123456A"
+          }
+        }
+      },
+      "administrationEndDate": "2017-06-01",
+      "periodTaxDues": "01"
     }
   }
 }
