@@ -74,7 +74,7 @@ class UTRControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to trust status for a POST if no existing data is found (creating a new session)" in {
+    "redirect to estate status for a POST if no existing data is found (creating a new session)" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
