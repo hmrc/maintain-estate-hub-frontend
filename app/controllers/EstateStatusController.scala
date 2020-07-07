@@ -139,15 +139,15 @@ class EstateStatusController @Inject()(
                                           (implicit request: DataRequest[AnyContent]): Future[Result] = {
 
     authenticationService.authenticateForUtr(utr) flatMap {
-      case Left(failure) =>
-        val location = failure.header.headers.getOrElse(LOCATION, "no location header")
-        val failureStatus = failure.header.status
+      case Left(unauthorisedRedirect) =>
+        val location = unauthorisedRedirect.header.headers.getOrElse(LOCATION, "no location header")
+        val failureStatus = unauthorisedRedirect.header.status
         Logger.info(s"[EstateStatusController] unable to authenticate user for $utr, " +
           s"due to $failureStatus status, sending user to $location")
 
-        Future.successful(failure)
+        Future.successful(unauthorisedRedirect)
       case Right(_) =>
-        ???
+        Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
   }
 }
