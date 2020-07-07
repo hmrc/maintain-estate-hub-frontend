@@ -24,7 +24,7 @@ import views.html.MaintainThisEstateView
 
 class MaintainThisEstateControllerSpec extends SpecBase {
 
-  "MaintainThisTrust Controller" must {
+  "Maintain This Estate Controller" must {
 
     "return OK and the correct view for a GET when needs IV" in {
 

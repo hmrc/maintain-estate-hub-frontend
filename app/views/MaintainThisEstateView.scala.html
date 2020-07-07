@@ -14,8 +14,11 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    config: FrontendAppConfig
 )
 
 @(utr: String, continueUrl: String)(implicit request: Request[_], messages: Messages)
@@ -36,7 +39,7 @@
 
     <p>@messages("maintainThisEstate.p3")</p>
 
-    <p>@messages("maintainThisEstate.p4") <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts" target="_blank">@messages("maintainThisEstate.p4.a")</a>.</p>
+    <p>@messages("maintainThisEstate.p4") <a href="@config.estatesHelplineUrl" target="_blank">@messages("maintainThisEstate.p4.a")</a>.</p>
 
     <p>@components.button_link(Some("continue"), "site.continue", continueUrl)</p>
 
