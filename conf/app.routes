@@ -24,3 +24,6 @@ GET        /status/already-claimed                      controllers.EstateStatus
 
 GET        /unique-tax-reference-number                 controllers.UTRController.onPageLoad()
 POST       /unique-tax-reference-number                 controllers.UTRController.onSubmit()
+
+GET        /maintain-this-estate                        controllers.MaintainThisEstateController.onPageLoad(needsIv:Boolean=true)
+GET        /continue-maintaining-this-estate            controllers.MaintainThisEstateController.onPageLoad(needsIv:Boolean=false)
