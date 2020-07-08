@@ -22,6 +22,9 @@ GET        /status/sorry-there-has-been-a-problem       controllers.EstateStatus
 GET        /status/not-found                            controllers.EstateStatusController.utrDoesNotMatchRecords()
 GET        /status/already-claimed                      controllers.EstateStatusController.accountNotLinked()
 
+GET        /estate-not-claimed                          controllers.EstateNotClaimedController.onPageLoad()
+GET        /agent-not-authorised                        controllers.AgentNotAuthorisedController.onPageLoad()
+
 GET        /unique-tax-reference-number                 controllers.UTRController.onPageLoad()
 POST       /unique-tax-reference-number                 controllers.UTRController.onSubmit()
 
