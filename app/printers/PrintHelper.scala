@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-package viewmodels
+package printers
 
-import play.twirl.api.Html
+import javax.inject.Inject
+import models.GetEstate
+import play.api.i18n.Messages
+import utils.countryOptions.CountryOptions
+import viewmodels.AnswerSection
 
-case class AnswerRow(label: Html, answer: Html)
+class PrintHelper @Inject()(countryOptions: CountryOptions){
+
+  def personalRepresentative(estate: GetEstate)(implicit messages: Messages) : Seq[AnswerSection] = Nil
+
+}

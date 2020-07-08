@@ -30,6 +30,7 @@ import play.api.inject.{Injector, bind}
 import play.api.libs.json.Json
 import play.api.mvc.PlayBodyParsers
 import play.api.test.FakeRequest
+import utils.countryOptions.{CountryOptions, CountryOptionsNonUK}
 
 import scala.concurrent.ExecutionContext
 
@@ -47,6 +48,8 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
 
   def fakeRequest = FakeRequest("", "")
 
+  def nonUkCountryOptions = injector.instanceOf[CountryOptionsNonUK]
+
   implicit def executionContext = injector.instanceOf[ExecutionContext]
 
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
@@ -57,7 +60,9 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to(fakeIdentifierAction),
-        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
+        bind[UTRAuthenticationAction].to[FakeUTRAuthenticationAction],
+        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
+        bind[CountryOptions].toInstance(nonUkCountryOptions)
       )
   }
 

@@ -20,6 +20,7 @@ import com.google.inject.AbstractModule
 import controllers.actions._
 import repositories.{DefaultSessionRepository, SessionRepository}
 import services.{EstateAuthenticationService, EstateAuthenticationServiceImpl}
+import utils.countryOptions.{AllCountryOptions, CountryOptions}
 
 class Module extends AbstractModule {
 
@@ -34,5 +35,7 @@ class Module extends AbstractModule {
     bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]).asEagerSingleton()
 
     bind(classOf[EstateAuthenticationService]).to(classOf[EstateAuthenticationServiceImpl]).asEagerSingleton()
+
+    bind(classOf[CountryOptions]).to(classOf[AllCountryOptions])
   }
 }
