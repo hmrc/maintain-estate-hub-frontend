@@ -29,9 +29,9 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.individual(FakeData.personalRepresentativeIndividualNino, FakeData.correspondenceAddressUk)
+        val result = printer.individual(Some(FakeData.personalRepresentativeIndividualNino), FakeData.correspondenceAddressUk)
 
-        result mustBe AnswerSection(
+        result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
             AnswerRow(Html("Is the personal representative an individual or business?"), Html("Individual")),
@@ -54,9 +54,9 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.individual(FakeData.personalRepresentativeIndividualNino, FakeData.correspondenceAddressNonUk)
+        val result = printer.individual(Some(FakeData.personalRepresentativeIndividualNino), FakeData.correspondenceAddressNonUk)
 
-        result mustBe AnswerSection(
+        result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
             AnswerRow(Html("Is the personal representative an individual or business?"), Html("Individual")),
@@ -79,9 +79,9 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.individual(FakeData.personalRepresentativeIndividualPassportOrIdCardUkAddress, FakeData.correspondenceAddressUk)
+        val result = printer.individual(Some(FakeData.personalRepresentativeIndividualPassportOrIdCardUkAddress), FakeData.correspondenceAddressUk)
 
-        result mustBe AnswerSection(
+        result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
             AnswerRow(Html("Is the personal representative an individual or business?"), Html("Individual")),
@@ -104,9 +104,9 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.individual(FakeData.personalRepresentativeIndividualPassportOrIdCardNonUkAddress, FakeData.correspondenceAddressUk)
+        val result = printer.individual(Some(FakeData.personalRepresentativeIndividualPassportOrIdCardNonUkAddress), FakeData.correspondenceAddressUk)
 
-        result mustBe AnswerSection(
+        result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
             AnswerRow(Html("Is the personal representative an individual or business?"), Html("Individual")),
@@ -132,9 +132,9 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.business(FakeData.personalRepresentativeBusinessUtr, FakeData.correspondenceAddressUk)
+        val result = printer.business(Some(FakeData.personalRepresentativeBusinessUtr), FakeData.correspondenceAddressUk)
 
-        result mustBe AnswerSection(
+        result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
             AnswerRow(Html("Is the personal representative an individual or business?"), Html("Business")),
@@ -155,9 +155,9 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.business(FakeData.personalRepresentativeBusinessUtr, FakeData.correspondenceAddressNonUk)
+        val result = printer.business(Some(FakeData.personalRepresentativeBusinessUtr), FakeData.correspondenceAddressNonUk)
 
-        result mustBe AnswerSection(
+        result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
             AnswerRow(Html("Is the personal representative an individual or business?"), Html("Business")),
@@ -178,9 +178,9 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.business(FakeData.personalRepresentativeBusinessWithoutUtrUk, FakeData.correspondenceAddressNonUk)
+        val result = printer.business(Some(FakeData.personalRepresentativeBusinessWithoutUtrUk), FakeData.correspondenceAddressNonUk)
 
-        result mustBe AnswerSection(
+        result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
             AnswerRow(Html("Is the personal representative an individual or business?"), Html("Business")),
@@ -201,9 +201,9 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.business(FakeData.personalRepresentativeBusinessWithoutUtrNonUk, FakeData.correspondenceAddressNonUk)
+        val result = printer.business(Some(FakeData.personalRepresentativeBusinessWithoutUtrNonUk), FakeData.correspondenceAddressNonUk)
 
-        result mustBe AnswerSection(
+        result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
             AnswerRow(Html("Is the personal representative an individual or business?"), Html("Business")),

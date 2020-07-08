@@ -22,8 +22,20 @@ import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
-class PrintHelper @Inject()(countryOptions: CountryOptions){
+class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativePrinter,
+                            countryOptions: CountryOptions){
 
-  def personalRepresentative(estate: GetEstate)(implicit messages: Messages) : Seq[AnswerSection] = Nil
+  def personalRepresentative(getEstate: GetEstate)(implicit messages: Messages) : Seq[AnswerSection] = {
+
+    val individual = getEstate.estate.entities.personalRepresentative.estatePerRepInd
+    val business = getEstate.estate.entities.personalRepresentative.estatePerRepOrg
+
+    val correspondenceAddress = getEstate.correspondence.address
+
+    Seq(
+      personalRepresentativePrinter.individual(individual, correspondenceAddress),
+      personalRepresentativePrinter.business(business, correspondenceAddress)
+    ).flatten
+  }
 
 }

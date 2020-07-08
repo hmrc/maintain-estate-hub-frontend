@@ -24,57 +24,71 @@ import viewmodels.AnswerSection
 
 class PersonalRepresentativePrinter @Inject()(countryOptions: CountryOptions) {
 
+  import ImplicitConverters._
 
-  def individual(perRepInd: EstatePerRepIndType, correspondenceAddress: AddressType)(implicit messages: Messages): AnswerSection = {
+  def individual(perRepInd: Option[EstatePerRepIndType], correspondenceAddress: AddressType)(implicit messages: Messages): Option[AnswerSection] = {
+    perRepInd flatMap { ind =>
+      val bound = new AnswerRowConverter(countryOptions, AnswersFormatters.fullName(ind.name).body)
 
-    val bound = new AnswerRowConverter(countryOptions, AnswersFormatters.fullName(perRepInd.name).body)
+      val address = ind.identification.address match {
+        case Some(x) => x
+        case None => correspondenceAddress
+      }
 
-    val address = perRepInd.identification.address match {
-      case Some(x) => x
-      case None => correspondenceAddress
-    }
-
-    AnswerSection(
-      headingKey = Some(messages("print.personalRepresentative")),
-      rows = Seq(
+      val questions = Seq(
         bound.stringQuestion(messages("print.personalRepresentative.individual"), "print.personalRepresentative.type"),
-        bound.fullNameQuestion(perRepInd.name, "print.personalRepresentativeInd.name"),
-        bound.dateQuestion(perRepInd.dateOfBirth, "print.personalRepresentativeInd.dateOfBirth"),
-        bound.yesNoQuestion(perRepInd.identification.nino.isDefined, "print.personalRepresentativeInd.ninoYesNo"),
-        bound.ninoQuestion(perRepInd.identification.nino, "print.personalRepresentativeInd.nino"),
-        bound.passportOrIdCardQuestion(perRepInd.identification.passport, "print.personalRepresentativeInd.passportOrIdCard"),
+        bound.fullNameQuestion(ind.name, "print.personalRepresentativeInd.name"),
+        bound.dateQuestion(ind.dateOfBirth, "print.personalRepresentativeInd.dateOfBirth"),
+        bound.yesNoQuestion(ind.identification.nino.isDefined, "print.personalRepresentativeInd.ninoYesNo"),
+        bound.ninoQuestion(ind.identification.nino, "print.personalRepresentativeInd.nino"),
+        bound.passportOrIdCardQuestion(ind.identification.passport, "print.personalRepresentativeInd.passportOrIdCard"),
         bound.yesNoQuestion(AddressType.isUK(address), "print.personalRepresentativeInd.addressUkYesNo"),
         bound.addressQuestion(address, "print.personalRepresentativeInd.address"),
-        bound.stringQuestion(perRepInd.phoneNumber, "print.personalRepresentativeInd.telephone"),
-        bound.yesNoQuestion(perRepInd.email.isDefined, "print.personalRepresentativeInd.emailYesNo"),
-        bound.stringQuestion(perRepInd.email, "print.personalRepresentativeInd.email")
+        bound.stringQuestion(ind.phoneNumber, "print.personalRepresentativeInd.telephone"),
+        bound.yesNoQuestion(ind.email.isDefined, "print.personalRepresentativeInd.emailYesNo"),
+        bound.stringQuestion(ind.email, "print.personalRepresentativeInd.email")
       ).flatten
-    )
+
+      questions match {
+        case Nil => None
+        case _ => AnswerSection(
+          headingKey = Some(messages("print.personalRepresentative")),
+          rows = questions
+        ).toOption
+      }
+    }
   }
 
-  def business(perRepOrg: EstatePerRepOrgType, correspondenceAddress: AddressType)(implicit messages: Messages): AnswerSection = {
+  def business(perRepOrg: Option[EstatePerRepOrgType], correspondenceAddress: AddressType)(implicit messages: Messages): Option[AnswerSection] = {
 
-    val bound = new AnswerRowConverter(countryOptions, perRepOrg.orgName)
+    perRepOrg.flatMap { org =>
+      val bound = new AnswerRowConverter(countryOptions, org.orgName)
 
-    val address = perRepOrg.identification.address match {
-      case Some(x) => x
-      case None => correspondenceAddress
-    }
+      val address = org.identification.address match {
+        case Some(x) => x
+        case None => correspondenceAddress
+      }
 
-    AnswerSection(
-      headingKey = Some(messages("print.personalRepresentative")),
-      rows = Seq(
+      val questions = Seq(
         bound.stringQuestion(messages("print.personalRepresentative.business"), "print.personalRepresentative.type"),
-        bound.yesNoQuestion(perRepOrg.identification.utr.isDefined, "print.personalRepresentativeOrg.ukRegisteredYesNo"),
-        bound.stringQuestion(perRepOrg.orgName, "print.personalRepresentativeOrg.name"),
-        bound.stringQuestion(perRepOrg.identification.utr, "print.personalRepresentativeOrg.utr"),
+        bound.yesNoQuestion(org.identification.utr.isDefined, "print.personalRepresentativeOrg.ukRegisteredYesNo"),
+        bound.stringQuestion(org.orgName, "print.personalRepresentativeOrg.name"),
+        bound.stringQuestion(org.identification.utr, "print.personalRepresentativeOrg.utr"),
         bound.yesNoQuestion(AddressType.isUK(address), "print.personalRepresentativeOrg.addressUkYesNo"),
         bound.addressQuestion(address, "print.personalRepresentativeOrg.address"),
-        bound.stringQuestion(perRepOrg.phoneNumber, "print.personalRepresentativeOrg.telephone"),
-        bound.yesNoQuestion(perRepOrg.email.isDefined, "print.personalRepresentativeOrg.emailYesNo"),
-        bound.stringQuestion(perRepOrg.email, "print.personalRepresentativeOrg.email")
+        bound.stringQuestion(org.phoneNumber, "print.personalRepresentativeOrg.telephone"),
+        bound.yesNoQuestion(org.email.isDefined, "print.personalRepresentativeOrg.emailYesNo"),
+        bound.stringQuestion(org.email, "print.personalRepresentativeOrg.email")
       ).flatten
-    )
+
+      questions match {
+        case Nil => None
+        case _ => AnswerSection(
+          headingKey = Some(messages("print.personalRepresentative")),
+          rows = questions
+        ).toOption
+      }
+    }
   }
 
 }

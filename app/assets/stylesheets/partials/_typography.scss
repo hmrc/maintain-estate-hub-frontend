@@ -41,6 +41,16 @@ p.font-xsmall{
   list-style-type: disc;
 }
 
+.numbered-list {
+  padding-left: 20px;
+  list-style-type: decimal;
+  font-weight: bold;
+}
+
+.numbered-list > li > b {
+  font-weight: bold;
+}
+
 .govuk-caption-xl {
   font-family: "nta", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

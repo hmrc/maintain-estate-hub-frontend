@@ -26,9 +26,7 @@ import viewmodels.AnswerRow
 
 class AnswerRowConverter(countryOptions: CountryOptions, messageArgs: String*) {
 
-  implicit class AnswerRowToOption(answerRow: AnswerRow) {
-    def toOption = Some(answerRow)
-  }
+  import ImplicitConverters._
 
   def fullNameQuestion(data: NameType, labelKey: String)
                       (implicit messages:Messages): Option[AnswerRow] = {
