@@ -43,7 +43,7 @@ class LastDeclaredAnswersController  @Inject()(
   def onPageLoad() = actions.authenticatedForUtr.async {
     implicit request =>
 
-      estatesConnector.getEstate("utr") map {
+      estatesConnector.getEstate(request.utr) map {
         case Processed(estate, _) =>
 
           val personalRep = print.personalRepresentative(estate)

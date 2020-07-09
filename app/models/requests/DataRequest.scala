@@ -26,3 +26,9 @@ case class OptionalDataRequest[A] (request: Request[A],
 case class DataRequest[A] (request: Request[A],
                            userAnswers: UserAnswers,
                            user: User) extends WrappedRequest[A](request)
+
+
+case class DataRequestWithUTR[A] (request: Request[A],
+                           userAnswers: UserAnswers,
+                           user: User,
+                           utr: String) extends WrappedRequest[A](request)

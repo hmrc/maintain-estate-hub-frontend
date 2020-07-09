@@ -17,7 +17,7 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import models.requests.{DataRequest, OptionalDataRequest}
+import models.requests.{DataRequest, DataRequestWithUTR, OptionalDataRequest}
 import play.api.mvc.{ActionBuilder, AnyContent}
 
 class Actions @Inject()(
@@ -33,6 +33,6 @@ class Actions @Inject()(
   def authWithData: ActionBuilder[DataRequest, AnyContent] =
     authWithSession andThen requireData
 
-  def authenticatedForUtr : ActionBuilder[DataRequest, AnyContent] =
+  def authenticatedForUtr : ActionBuilder[DataRequestWithUTR, AnyContent] =
     authWithData andThen verifyUtr
 }

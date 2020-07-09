@@ -17,7 +17,7 @@
 package controllers.actions
 
 import com.google.inject.{ImplementedBy, Inject}
-import models.requests.DataRequest
+import models.requests.{DataRequest, DataRequestWithUTR}
 import pages.UTRPage
 import play.api.Logger
 import play.api.mvc.Results.Redirect
@@ -32,12 +32,16 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
                                             service: EstateAuthenticationService
                                             )(override implicit val executionContext: ExecutionContext) extends UTRAuthenticationAction {
 
-  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
+  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
     request.userAnswers.get(UTRPage) map { utr =>
-      service.authenticateForUtr(utr)(request, hc)
+      service.authenticateForUtr(utr)(request, hc) map {
+        case Left(redirect) => Left(redirect)
+        case Right(b) =>
+          Right(DataRequestWithUTR(b.request, b.userAnswers, b.user, utr))
+      }
     } getOrElse {
       Logger.info(s"[UTRAuthenticationAction] cannot authenticate user due to no cached utr")
       Future.successful(Left(Redirect(controllers.routes.IndexController.onPageLoad())))
@@ -48,8 +52,8 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
 }
 
 @ImplementedBy(classOf[UTRAuthenticationActionImpl])
-trait UTRAuthenticationAction extends ActionRefiner[DataRequest, DataRequest] {
+trait UTRAuthenticationAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
 
-  def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequest[A]]]
+  def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]]
 
 }
