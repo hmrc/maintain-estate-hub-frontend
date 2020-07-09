@@ -19,14 +19,12 @@ package controllers
 import connectors.{EstatesConnector, EstatesStoreConnector}
 import controllers.actions.Actions
 import javax.inject.Inject
-import models.GetEstate
 import models.http._
 import models.requests.DataRequest
 import pages.UTRPage
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import services.EstateAuthenticationService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html._
@@ -43,8 +41,7 @@ class EstateStatusController @Inject()(
                                         closedView: ClosedView,
                                         lockedView: LockedView,
                                         problemWithServiceView: ProblemWithServiceView,
-                                        accountNotLinkedView: AccountNotLinkedView,
-                                        authenticationService: EstateAuthenticationService
+                                        accountNotLinkedView: AccountNotLinkedView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def checkStatus(): Action[AnyContent] = actions.authWithData.async {
@@ -109,10 +106,11 @@ class EstateStatusController @Inject()(
   }
 
   private def tryToPlayback(utr: String)(implicit request: DataRequest[AnyContent]): Future[Result] = {
+    Logger.info(s"[EstateStatusController] getting estate for $utr")
     connector.getEstate(utr) flatMap {
       case Processed(estate, _) =>
         Logger.info(s"[EstateStatusController] $utr estate is in a processed state")
-        authenticateForUtrAndExtract(utr, estate)
+        Future.successful(Redirect(controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad()))
       case Processing =>
         Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being in processing")
         Future.successful(Redirect(controllers.routes.EstateStatusController.inProcessing()))
@@ -136,22 +134,6 @@ class EstateStatusController @Inject()(
       case Some(utr) =>
         Logger.info(s"[EstateStatusController] checking status of estate for $utr")
         block(utr)
-    }
-  }
-
-  private def authenticateForUtrAndExtract(utr: String, estate: GetEstate)
-                                          (implicit request: DataRequest[AnyContent]): Future[Result] = {
-
-    authenticationService.authenticateForUtr(utr) flatMap {
-      case Left(unauthorisedRedirect) =>
-        val location = unauthorisedRedirect.header.headers.getOrElse(LOCATION, "no location header")
-        val failureStatus = unauthorisedRedirect.header.status
-        Logger.info(s"[EstateStatusController] unable to authenticate user for $utr, " +
-          s"due to $failureStatus status, sending user to $location")
-
-        Future.successful(unauthorisedRedirect)
-      case Right(_) =>
-        Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
   }
 }

@@ -32,7 +32,6 @@ import play.api.libs.json.{JsPath, JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{EstateAuthenticationService, FakeDeniedEstateAuthenticationService, FakeFailingEstateAuthenticationService}
 import uk.gov.hmrc.auth.core.Enrolments
 import views.html._
 
@@ -324,7 +323,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
-      "a Processed status is received from the estates connector" when {
+      "a Processed status is received from the estates connector" in new LocalSetup {
 
         val payload: String = Source.fromFile(getClass.getResource("/display-estate.json").getPath).mkString
         val json: JsValue = Json.parse(payload)
@@ -333,47 +332,23 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           (JsPath \ 'getEstate).json.pick
         ).get.as[GetEstate]
 
-        "auth denied for UTR" in new LocalSetup {
-          
-          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
+        override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
 
-          override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
-            bind[EstatesConnector].to(fakeConnector),
-            bind[EstatesStoreConnector].to(fakeEstateStoreConnector),
-            bind[EstateAuthenticationService].to(new FakeDeniedEstateAuthenticationService())
-          ).build()
+        override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
+          bind[EstatesConnector].to(fakeConnector),
+          bind[EstatesStoreConnector].to(fakeEstateStoreConnector)
+        ).build()
 
-          when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
+        when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
 
-          when(fakeEstateStoreConnector.get(any[String])(any(), any()))
-            .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
+        when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+          .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
 
-          status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual "redirect-url"
+        redirectLocation(result).value mustEqual controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad().url
 
-          application.stop()
-        }
-
-        "auth fails" in new LocalSetup {
-
-          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
-
-          override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
-            bind[EstatesConnector].to(fakeConnector),
-            bind[EstatesStoreConnector].to(fakeEstateStoreConnector),
-            bind[EstateAuthenticationService].to(new FakeFailingEstateAuthenticationService())
-          ).build()
-
-          when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
-
-          when(fakeEstateStoreConnector.get(any[String])(any(), any()))
-            .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
-
-          status(result) mustEqual UNAUTHORIZED
-
-          application.stop()
-        }
+        application.stop()
       }
     }
 

@@ -24,7 +24,11 @@ import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
 class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativePrinter,
+                            estateNamePrinter: EstateNamePrinter,
                             @AllCountries countryOptions: CountryOptions){
+
+  def estateName(getEstate: GetEstate)(implicit messages: Messages): Seq[AnswerSection] =
+    estateNamePrinter.name(getEstate.correspondence).toList
 
   def personalRepresentative(getEstate: GetEstate)(implicit messages: Messages) : Seq[AnswerSection] = {
 

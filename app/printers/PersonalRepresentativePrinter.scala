@@ -29,7 +29,7 @@ class PersonalRepresentativePrinter @Inject()(@AllCountries countryOptions: Coun
 
   def individual(perRepInd: Option[EstatePerRepIndType], correspondenceAddress: AddressType)(implicit messages: Messages): Option[AnswerSection] = {
     perRepInd flatMap { ind =>
-      val bound = new AnswerRowConverter(countryOptions, AnswersFormatters.fullName(ind.name).body)
+      val bound = new AnswerRowConverter(countryOptions, ind.name.fullName)
 
       val address = ind.identification.address match {
         case Some(x) => x

@@ -32,6 +32,7 @@ case class Processed(estate: GetEstate, formBundleNumber: String) extends Estate
 case object SorryThereHasBeenAProblem extends EstateStatus
 case object UtrNotFound extends EstateResponse
 case object EstatesServiceUnavailable extends EstateResponse
+case object ServerError extends EstateResponse
 
 object EstateStatusReads {
 
@@ -71,8 +72,10 @@ object EstateStatusReads {
             SorryThereHasBeenAProblem
           case NOT_FOUND =>
             UtrNotFound
-          case _ =>
+          case SERVICE_UNAVAILABLE =>
             EstatesServiceUnavailable
+          case _ =>
+            ServerError
         }
       }
     }

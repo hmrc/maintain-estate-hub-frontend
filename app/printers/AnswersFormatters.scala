@@ -28,10 +28,7 @@ object AnswersFormatters {
 
   val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
 
-  def fullName(name: NameType) = {
-    val middle = name.middleName.map(" " + _ + " ").getOrElse(" ")
-    HtmlFormat.escape(s"${name.firstName}$middle${name.lastName}")
-  }
+  def fullName(name: NameType) = HtmlFormat.escape(name.fullName)
 
   def yesOrNo(answer: Boolean)(implicit messages: Messages): Html = {
     if (answer) {

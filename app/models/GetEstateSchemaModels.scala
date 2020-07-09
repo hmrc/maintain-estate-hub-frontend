@@ -90,7 +90,14 @@ object GetEstate {
 
 case class NameType(firstName: String,
                     middleName: Option[String],
-                    lastName: String)
+                    lastName: String) {
+
+  def fullName : String = {
+    val middle = middleName.map(" " + _ + " ").getOrElse(" ")
+    s"${firstName}$middle${lastName}"
+  }
+
+}
 
 object NameType {
   implicit val nameTypeFormat: Format[NameType] = Json.format[NameType]

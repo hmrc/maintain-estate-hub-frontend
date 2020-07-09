@@ -19,7 +19,7 @@ package controllers.print
 import base.{FakeData, SpecBase}
 import connectors.EstatesConnector
 import models.PersonalRepresentativeType
-import models.http.Processed
+import models.http.{Processed, SorryThereHasBeenAProblem}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -57,6 +57,7 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
       when(mockEstatesConnector.getEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
       when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
+      when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
 
       val request = FakeRequest(GET, controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url)
 
@@ -67,7 +68,31 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(Nil)(fakeRequest, messages).toString
+        view(Nil, Nil)(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "redirect to problem with the service when unable to retrieve estate" in {
+      val application = applicationBuilder(Some(emptyUserAnswers))
+        .overrides(
+          bind[EstatesConnector].toInstance(mockEstatesConnector),
+          bind[PrintHelper].toInstance(mockPrintHelper)
+        )
+        .build()
+
+      when(mockEstatesConnector.getEstate(any())(any(), any())).thenReturn(Future.successful(SorryThereHasBeenAProblem))
+
+      when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
+      when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
+
+      val request = FakeRequest(GET, controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustBe controllers.routes.EstateStatusController.problemWithService().url
 
       application.stop()
     }

@@ -17,7 +17,7 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import models.requests.DataRequest
+import models.requests.{DataRequest, DataRequestWithUTR}
 import play.api.mvc.Result
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -26,6 +26,6 @@ class FakeUTRAuthenticationAction @Inject()(
                                               implicit val executionContext: ExecutionContext
                                             ) extends UTRAuthenticationAction {
 
-  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequest[A]]] = Future.successful(Right(request))
+  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = Future.successful(Right(DataRequestWithUTR(request.request, request.userAnswers, request.user, "utr")))
 
 }
