@@ -21,6 +21,7 @@ import controllers.actions.Actions
 import handlers.ErrorHandler
 import javax.inject.Inject
 import models.http.Processed
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.MessagesControllerComponents
 import printers.PrintHelper
@@ -49,13 +50,14 @@ class LastDeclaredAnswersController  @Inject()(
           val estateName = print.estateName(estate)
 
           Ok(view(personalRep, estateName))
-        case _ =>
+        case estate =>
+          Logger.warn(s"[LastDeclaredAnswersController] unable to render last declared answers due to estate being in state: $estate")
           Redirect(controllers.routes.EstateStatusController.problemWithService())
       } recover {
-        case _ =>
+        case e =>
+          Logger.error(s"[LastDeclaredAnswersController] unable to render last declared answers due to ${e.getMessage}")
           Redirect(controllers.routes.EstateStatusController.problemWithService())
       }
-
 
   }
 
