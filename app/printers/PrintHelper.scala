@@ -16,6 +16,7 @@
 
 package printers
 
+import config.annotations.AllCountries
 import javax.inject.Inject
 import models.GetEstate
 import play.api.i18n.Messages
@@ -23,7 +24,7 @@ import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
 class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativePrinter,
-                            countryOptions: CountryOptions){
+                            @AllCountries countryOptions: CountryOptions){
 
   def personalRepresentative(getEstate: GetEstate)(implicit messages: Messages) : Seq[AnswerSection] = {
 

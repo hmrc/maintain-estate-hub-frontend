@@ -48,8 +48,6 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
 
   def fakeRequest = FakeRequest("", "")
 
-  def nonUkCountryOptions = injector.instanceOf[CountryOptionsNonUK]
-
   implicit def executionContext = injector.instanceOf[ExecutionContext]
 
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
@@ -61,8 +59,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to(fakeIdentifierAction),
         bind[UTRAuthenticationAction].to[FakeUTRAuthenticationAction],
-        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
-        bind[CountryOptions].toInstance(nonUkCountryOptions)
+        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
   }
 

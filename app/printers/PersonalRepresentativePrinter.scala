@@ -16,13 +16,14 @@
 
 package printers
 
+import config.annotations.AllCountries
 import javax.inject.Inject
 import models.{AddressType, EstatePerRepIndType, EstatePerRepOrgType}
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
-class PersonalRepresentativePrinter @Inject()(countryOptions: CountryOptions) {
+class PersonalRepresentativePrinter @Inject()(@AllCountries countryOptions: CountryOptions) {
 
   import ImplicitConverters._
 
