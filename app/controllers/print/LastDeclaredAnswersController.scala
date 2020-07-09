@@ -36,8 +36,7 @@ class LastDeclaredAnswersController  @Inject()(
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: LastDeclaredAnswersView,
                                                 print: PrintHelper,
-                                                estatesConnector: EstatesConnector,
-                                                errorHandler: ErrorHandler
+                                                estatesConnector: EstatesConnector
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad() = actions.authenticatedForUtr.async {
