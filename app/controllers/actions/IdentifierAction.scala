@@ -60,10 +60,6 @@ class AuthenticatedIdentifierAction @Inject()(
     block(IdentifierRequest(request, OrganisationUser(internalId, enrolments)))
   }
 
-  private def redirectToLogin: Result = {
-    Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
-  }
-
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
@@ -86,7 +82,7 @@ class AuthenticatedIdentifierAction @Inject()(
         Logger.warn(s"[AuthenticatedIdentifierAction] Unable to retrieve retrievals")
         Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     } recover {
-      case _: NoActiveSession => redirectToLogin
+      case _: NoActiveSession => config.redirectToLogin
       case _: AuthorisationException => Redirect(controllers.routes.UnauthorisedController.onPageLoad())
     }
   }
