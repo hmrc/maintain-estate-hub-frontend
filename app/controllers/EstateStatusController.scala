@@ -151,7 +151,7 @@ class EstateStatusController @Inject()(
 
         Future.successful(unauthorisedRedirect)
       case Right(_) =>
-        Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+        Future.successful(Redirect(controllers.print.routes.LastDeclaredAnswersController.onPageLoad()))
     }
   }
 }

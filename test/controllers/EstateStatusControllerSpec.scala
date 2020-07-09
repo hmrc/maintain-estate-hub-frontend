@@ -32,7 +32,7 @@ import play.api.libs.json.{JsPath, JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{EstateAuthenticationService, FakeDeniedEstateAuthenticationService, FakeFailingEstateAuthenticationService}
+import services.{EstateAuthenticationService, FakeAllowedEstateAuthenticationService, FakeDeniedEstateAuthenticationService, FakeFailingEstateAuthenticationService}
 import uk.gov.hmrc.auth.core.Enrolments
 import views.html._
 
@@ -332,6 +332,27 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         val estate: GetEstate = json.transform(
           (JsPath \ 'getEstate).json.pick
         ).get.as[GetEstate]
+
+        "passed authentication for UTR" in new LocalSetup {
+          override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
+
+          override lazy val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(
+            bind[EstatesConnector].to(fakeConnector),
+            bind[EstatesStoreConnector].to(fakeEstateStoreConnector),
+            bind[EstateAuthenticationService].to(new FakeAllowedEstateAuthenticationService())
+          ).build()
+
+          when(fakeConnector.getEstate(any[String])(any(), any())).thenReturn(Future.successful(Processed(estate, "1")))
+
+          when(fakeEstateStoreConnector.get(any[String])(any(), any()))
+            .thenReturn(Future.successful(Some(EstateLock(utr, managedByAgent = false, estateLocked = false))))
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url
+
+          application.stop()
+        }
 
         "auth denied for UTR" in new LocalSetup {
           
