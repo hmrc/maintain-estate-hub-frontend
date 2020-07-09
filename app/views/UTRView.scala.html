@@ -37,8 +37,9 @@
         @components.input_text(
             field = form("value"),
             label = messages("UTR.heading"),
-            headingIsLabel = true,
+            labelAsHeading = true,
             hint = Some(messages("UTR.hint")),
+            readerHint = Some(messages("UTR.hint.reader")),
             labelClass = Some("heading-large")
         )
 
