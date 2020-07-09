@@ -21,7 +21,7 @@ main_template: MainTemplate,
 formHelper: FormWithCSRF
 )
 
-@(entities: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(personalRepresentative: Seq[Section], estateName: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @main_template(
 title = messages("lastDeclared.title")
@@ -29,22 +29,35 @@ title = messages("lastDeclared.title")
 
     @components.back_link()
 
-    @components.heading("lastDeclared.heading", headingSize = "heading-xlarge")
+    @components.heading("lastDeclared.heading", headingSize = "heading-large")
 
     <div class="section">
+        <p>@components.button_link(Some("continue"),
+            "site.button.continue.maintaining",
+            controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url)
+        </p>
 
-        @components.button_print()
+        <p>@components.button_print()</p>
     </div>
 
-    @for(section <- entities){
+    @for(section <- personalRepresentative){
         @{
             section match {
-            case a: AnswerSection => components.answer_section(a)
-            case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-        }
+                case a: AnswerSection => components.answer_section(a)
+                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
+            }
         }
     }
 
     <p>@messages("lastDeclared.informationFirstRegistered")</p>
+
+    @for(section <- estateName){
+        @{
+            section match {
+                case a: AnswerSection => components.answer_section(a)
+                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
+            }
+        }
+    }
 
 }

@@ -18,6 +18,7 @@ package controllers.print
 
 import connectors.EstatesConnector
 import controllers.actions.Actions
+import handlers.ErrorHandler
 import javax.inject.Inject
 import models.http.Processed
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,7 +35,8 @@ class LastDeclaredAnswersController  @Inject()(
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: LastDeclaredAnswersView,
                                                 print: PrintHelper,
-                                                estatesConnector: EstatesConnector
+                                                estatesConnector: EstatesConnector,
+                                                errorHandler: ErrorHandler
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad() = actions.authenticatedForUtr.async {
@@ -44,13 +46,14 @@ class LastDeclaredAnswersController  @Inject()(
         case Processed(estate, _) =>
 
           val personalRep = print.personalRepresentative(estate)
+          val estateName = print.estateName(estate)
 
-          Ok(view(personalRep))
+          Ok(view(personalRep, estateName))
         case _ =>
-          Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+          Redirect(controllers.routes.EstateStatusController.problemWithService())
       } recover {
         case _ =>
-          Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+          Redirect(controllers.routes.EstateStatusController.problemWithService())
       }
 
 

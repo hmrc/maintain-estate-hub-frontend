@@ -128,6 +128,10 @@ maintainThisEstate.p4.a = contact the deceased estate helpline (opens in a new w
 
 # Last declared print
 
+lastDeclared.title = Last declared copy of the estate’s registration
+lastDeclared.heading = Last declared copy of the estate’s registration
+lastDeclared.informationFirstRegistered = No further updates to estate name, the person who died, complex estate and years of tax liability are required through this service.
+
 print.personalRepresentative = Personal representative
 
 print.personalRepresentative.individual = Individual
@@ -153,6 +157,9 @@ print.personalRepresentativeOrg.address.checkYourAnswersLabel = What is {0}’s 
 print.personalRepresentativeOrg.telephone.checkYourAnswersLabel = What is {0}’s telephone number?
 print.personalRepresentativeOrg.emailYesNo.checkYourAnswersLabel = Do you know {0}’s email address?
 print.personalRepresentativeOrg.email.checkYourAnswersLabel = What is {0}’s email address?
+
+print.estate.name = Estate name
+print.estate.name.checkYourAnswersLabel = What is the estate’s name?
 
 agentNotAuthorised.title = Sorry, you cannot access this estate
 agentNotAuthorised.heading = Sorry, you cannot access this estate
