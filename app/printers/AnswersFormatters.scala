@@ -44,7 +44,7 @@ object AnswersFormatters {
   def address(address: AddressType, countryOptions: CountryOptions): Html = {
 
     val lines = address.postCode match {
-      case Some(x) if address.country == "GB" =>
+      case Some(x) if AddressType.isUK(address) =>
         Seq(
           Some(HtmlFormat.escape(address.line1)),
           Some(HtmlFormat.escape(address.line2)),
