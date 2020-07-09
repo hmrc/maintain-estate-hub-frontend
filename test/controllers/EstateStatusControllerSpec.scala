@@ -32,7 +32,6 @@ import play.api.libs.json.{JsPath, JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{EstateAuthenticationService, FakeAllowedEstateAuthenticationService, FakeDeniedEstateAuthenticationService, FakeFailingEstateAuthenticationService}
 import uk.gov.hmrc.auth.core.Enrolments
 import views.html._
 
@@ -347,7 +346,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad().url
 
         application.stop()
       }

@@ -19,14 +19,12 @@ package controllers
 import connectors.{EstatesConnector, EstatesStoreConnector}
 import controllers.actions.Actions
 import javax.inject.Inject
-import models.GetEstate
 import models.http._
 import models.requests.DataRequest
 import pages.UTRPage
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import services.EstateAuthenticationService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html._
@@ -112,7 +110,7 @@ class EstateStatusController @Inject()(
     connector.getEstate(utr) flatMap {
       case Processed(estate, _) =>
         Logger.info(s"[EstateStatusController] $utr estate is in a processed state")
-        Future.successful(Redirect(controllers.print.routes.LastDeclaredAnswersController.onPageLoad()))
+        Future.successful(Redirect(controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad()))
       case Processing =>
         Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being in processing")
         Future.successful(Redirect(controllers.routes.EstateStatusController.inProcessing()))

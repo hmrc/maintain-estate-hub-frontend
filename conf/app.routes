@@ -31,4 +31,6 @@ POST       /unique-tax-reference-number                 controllers.UTRControlle
 GET        /maintain-this-estate                        controllers.MaintainThisEstateController.onPageLoad(needsIv:Boolean=true)
 GET        /continue-maintaining-this-estate            controllers.MaintainThisEstateController.onPageLoad(needsIv:Boolean=false)
 
+GET        /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onPageLoad
+POST       /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onSubmit
 GET        /last-declared                               controllers.print.LastDeclaredAnswersController.onPageLoad

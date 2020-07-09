@@ -126,6 +126,11 @@ maintainThisEstate.p3 = If you need to register or maintain another estate, you 
 maintainThisEstate.p4 = If you need help using this service
 maintainThisEstate.p4.a = contact the deceased estate helpline (opens in a new window or tab)
 
+viewLastDeclaredYesNo.title = Do you want to view this estate’s last declaration?
+viewLastDeclaredYesNo.heading = Do you want to view this estate’s last declaration?
+viewLastDeclaredYesNo.subHeading = This estate’s UTR: {0}
+viewLastDeclaredYesNo.error.required = Select yes if you want to view this estate’s last declaration
+
 # Last declared print
 
 lastDeclared.title = Last declared copy of the estate’s registration
