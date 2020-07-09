@@ -41,8 +41,12 @@ site.service_name = Register and Maintain an Estate
 site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
 site.sign_out_of_account = Sign out of this account
+<<<<<<< HEAD
 site.print-or-save = Print or save this page
 site.button.continue.maintaining = Continue maintaining this estate
+=======
+site.error = Error:
+>>>>>>> master
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
@@ -105,6 +109,7 @@ accountNotLinked.p2.link = contact the estates helpline (opens in a new window o
 UTR.title = What is the estate’s Unique Taxpayer Reference (UTR)?
 UTR.heading = What is the estate’s Unique Taxpayer Reference (UTR)?
 UTR.hint = This is 10 numbers, for example 1234567890. It will be on the estate’s Self Assessment notice to file (SA316). It may be called ‘reference’, ‘UTR’ or ‘official use’.
+UTR.hint.reader = This is 10 numbers, for example 1 2 3 4 5 6 7 8 9 0. It will be on the estate’s Self Assessment notice to file (S A 3 1 6). It may be called ‘reference’, ‘UTR’ or ‘official use’.
 UTR.checkYourAnswersLabel = What is the estate’s Unique Taxpayer Reference (UTR)?
 UTR.error.required = Enter the estate’s Unique Taxpayer Reference
 UTR.error.length = Unique Taxpayer Reference must be a 10 digit number
