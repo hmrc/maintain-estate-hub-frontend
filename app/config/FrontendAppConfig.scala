@@ -20,7 +20,8 @@ import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.mvc.Call
+import play.api.mvc.Results.Redirect
+import play.api.mvc.{Call, Result}
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
@@ -39,12 +40,15 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val agentServicesUrl = s"$agentsSubscriptionsUrl?continue=$loginContinueUrl"
 
   lazy val estatesHelplineUrl: String = configuration.get[String]("urls.estatesHelpline")
-  lazy val registerForAGovernmentGatewayAccountUrl: String = configuration.get[String]("urls.registerForAGovernmentGatewayAccount")
 
   lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
   lazy val loginUrl: String = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   lazy val logoutUrl: String = configuration.get[String]("urls.logout")
+
+  def redirectToLogin: Result = {
+    Redirect(loginUrl, Map("continue" -> Seq(loginContinueUrl)))
+  }
 
   lazy val agentOverviewUrl: String = configuration.get[String]("urls.agentOverview")
 
