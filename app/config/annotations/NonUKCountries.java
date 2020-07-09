@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-package viewmodels
+package config.annotations;
 
-import play.twirl.api.Html
+import com.google.inject.BindingAnnotation;
 
-case class AnswerRow(label: Html, answer: Html)
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface NonUKCountries {}

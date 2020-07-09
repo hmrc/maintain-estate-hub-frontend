@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 
-package viewmodels
+package printers
 
-import play.twirl.api.Html
+import viewmodels.{AnswerRow, AnswerSection}
 
-case class AnswerRow(label: Html, answer: Html)
+object ImplicitConverters {
+
+  implicit class AnswerSectionToOption(answerRow: AnswerSection) {
+    def toOption = Some(answerRow)
+  }
+
+  implicit class AnswerRowToOption(answerRow: AnswerRow) {
+    def toOption = Some(answerRow)
+  }
+
+}

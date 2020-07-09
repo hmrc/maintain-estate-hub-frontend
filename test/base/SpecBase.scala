@@ -30,6 +30,7 @@ import play.api.inject.{Injector, bind}
 import play.api.libs.json.Json
 import play.api.mvc.PlayBodyParsers
 import play.api.test.FakeRequest
+import utils.countryOptions.{CountryOptions, CountryOptionsNonUK}
 
 import scala.concurrent.ExecutionContext
 
@@ -57,6 +58,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to(fakeIdentifierAction),
+        bind[UTRAuthenticationAction].to[FakeUTRAuthenticationAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
   }

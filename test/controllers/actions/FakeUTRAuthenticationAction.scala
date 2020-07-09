@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 
-package viewmodels
+package controllers.actions
 
-import play.twirl.api.Html
+import com.google.inject.Inject
+import models.requests.DataRequest
+import play.api.mvc.Result
 
-case class AnswerRow(label: Html, answer: Html)
+import scala.concurrent.{ExecutionContext, Future}
+
+class FakeUTRAuthenticationAction @Inject()(
+                                              implicit val executionContext: ExecutionContext
+                                            ) extends UTRAuthenticationAction {
+
+  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequest[A]]] = Future.successful(Right(request))
+
+}

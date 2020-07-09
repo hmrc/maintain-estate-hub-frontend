@@ -41,6 +41,10 @@ site.service_name = Register and Maintain an Estate
 site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
 site.sign_out_of_account = Sign out of this account
+
+site.print-or-save = Print or save this page
+site.button.continue.maintaining = Continue maintaining this estate
+
 site.error = Error:
 
 unauthorised.title = You can’t access this service with this account
@@ -122,6 +126,34 @@ maintainThisEstate.p3 = If you need to register or maintain another estate, you 
 maintainThisEstate.p4 = If you need help using this service
 maintainThisEstate.p4.a = contact the deceased estate helpline (opens in a new window or tab)
 
+# Last declared print
+
+print.personalRepresentative = Personal representative
+
+print.personalRepresentative.individual = Individual
+print.personalRepresentative.business = Business
+
+print.personalRepresentative.type.checkYourAnswersLabel = Is the personal representative an individual or business?
+print.personalRepresentativeInd.name.checkYourAnswersLabel = What is the personal representative’s name?
+print.personalRepresentativeInd.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
+print.personalRepresentativeInd.ninoYesNo.checkYourAnswersLabel = Does {0} have a National Insurance number?
+print.personalRepresentativeInd.nino.checkYourAnswersLabel = What is {0}’s National Insurance number?
+print.personalRepresentativeInd.passportOrIdCard.checkYourAnswersLabel = What are {0}’s passport or ID card details?
+print.personalRepresentativeInd.addressUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
+print.personalRepresentativeInd.address.checkYourAnswersLabel = What is {0}’s address?
+print.personalRepresentativeInd.telephone.checkYourAnswersLabel = What is {0}’s telephone number?
+print.personalRepresentativeInd.emailYesNo.checkYourAnswersLabel = Do you know {0}’s email address?
+print.personalRepresentativeInd.email.checkYourAnswersLabel = What is {0}’s email address?
+
+print.personalRepresentativeOrg.ukRegisteredYesNo.checkYourAnswersLabel = Is the personal representative a UK registered business?
+print.personalRepresentativeOrg.name.checkYourAnswersLabel = What is the business’s name?
+print.personalRepresentativeOrg.utr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR) number?
+print.personalRepresentativeOrg.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+print.personalRepresentativeOrg.address.checkYourAnswersLabel = What is {0}’s address?
+print.personalRepresentativeOrg.telephone.checkYourAnswersLabel = What is {0}’s telephone number?
+print.personalRepresentativeOrg.emailYesNo.checkYourAnswersLabel = Do you know {0}’s email address?
+print.personalRepresentativeOrg.email.checkYourAnswersLabel = What is {0}’s email address?
+
 agentNotAuthorised.title = Sorry, you cannot access this estate
 agentNotAuthorised.heading = Sorry, you cannot access this estate
 agentNotAuthorised.subHeading = This estate’s UTR: {0}
@@ -151,3 +183,4 @@ estateNotClaimed.b2.p3 = If you need help with the service
 estateNotClaimed.b2.p3.link = contact the deceased estate helpline
 estateNotClaimed.b2.p4 = You can
 estateNotClaimed.b2.p4.link = return to register and maintain an estate for a client
+

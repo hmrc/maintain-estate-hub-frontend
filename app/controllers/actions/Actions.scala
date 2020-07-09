@@ -23,7 +23,8 @@ import play.api.mvc.{ActionBuilder, AnyContent}
 class Actions @Inject()(
                          identify: IdentifierAction,
                          getData: DataRetrievalAction,
-                         requireData: DataRequiredAction
+                         requireData: DataRequiredAction,
+                         verifyUtr: UTRAuthenticationAction
                        ) {
 
   def authWithSession: ActionBuilder[OptionalDataRequest, AnyContent] =
@@ -31,4 +32,7 @@ class Actions @Inject()(
 
   def authWithData: ActionBuilder[DataRequest, AnyContent] =
     authWithSession andThen requireData
+
+  def authenticatedForUtr : ActionBuilder[DataRequest, AnyContent] =
+    authWithData andThen verifyUtr
 }
