@@ -82,7 +82,7 @@ class AuthenticatedIdentifierAction @Inject()(
         Logger.warn(s"[AuthenticatedIdentifierAction] Unable to retrieve retrievals")
         Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     } recover {
-      case _: NoActiveSession => config.redirectToLogin
+      case _: NoActiveSession => Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
       case _: AuthorisationException => Redirect(controllers.routes.UnauthorisedController.onPageLoad())
     }
   }

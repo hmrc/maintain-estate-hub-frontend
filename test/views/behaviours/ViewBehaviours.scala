@@ -109,6 +109,16 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def expectedHref(view: HtmlFormat.Appendable, id: String, expectedHref: String) : Unit = {
+
+    s"have a link for $id" in {
+      val doc = asDocument(view)
+      val link = doc.getElementById(id)
+      link.attr("href") mustBe expectedHref
+    }
+
+  }
+
   def pageWithSubHeading(view: HtmlFormat.Appendable, text: String): Unit = {
 
     "behave like a page with a sub-heading" must {
