@@ -35,6 +35,8 @@ class EstateNotClaimedViewSpec extends ViewBehaviours {
 
     behave like pageWithSubHeading(applyView, fakeUtr)
 
+    behave like expectedHref(applyView, "register-for-gg-account", "http://localhost:9949/auth-login-stub/gg-sign-in?continue=http://localhost:8822/register-an-estate")
+
     behave like normalPage(applyView,
       "estateNotClaimed",
       "p1", "b1.heading", "b1.p1", "b1.p2", "b1.p2.link", "b1.p3", "b1.p4", "b2.heading", "b2.p1", "b2.p2", "b2.p3", "b2.p3.link", "b2.p4", "b2.p4.link"

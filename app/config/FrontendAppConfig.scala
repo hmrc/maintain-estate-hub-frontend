@@ -20,8 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.mvc.Results.Redirect
-import play.api.mvc.{Call, Result}
+import play.api.mvc.Call
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
@@ -46,8 +45,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   lazy val logoutUrl: String = configuration.get[String]("urls.logout")
 
-  def redirectToLogin: Result = {
-    Redirect(loginUrl, Map("continue" -> Seq(loginContinueUrl)))
+  def redirectToLoginUrl: String = {
+    s"$loginUrl?continue=$loginContinueUrl"
   }
 
   lazy val agentOverviewUrl: String = configuration.get[String]("urls.agentOverview")
