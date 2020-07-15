@@ -118,7 +118,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.ViewLastDeclaredAnswersYesNoController.onPageLoad().url
+      redirectLocation(result).value mustEqual routes.WhatIsNextController.onPageLoad().url
 
       application.stop()
     }

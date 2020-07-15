@@ -23,7 +23,7 @@ class LockedViewSpec extends ViewBehaviours {
 
   val utr = "0987654321"
 
-  "TrustLocked view" must {
+  "EstateLocked view" must {
 
     val view = viewFor[LockedView](Some(emptyUserAnswers))
 

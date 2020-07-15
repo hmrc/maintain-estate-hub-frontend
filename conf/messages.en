@@ -50,6 +50,22 @@ site.error = Error:
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
+featureNotAvailable.title = This part of the online service is not available yet
+featureNotAvailable.heading = This part of the online service is not available yet
+featureNotAvailable.p1 = If you need to make any changes to the estate you can
+featureNotAvailable.link = contact the estate helpline (opens in a new window or tab)
+featureNotAvailable.p2 = You will be able to update these details online in the future.
+
+declarationWhatNext.title = What do you want to do next?
+declarationWhatNext.heading = What do you want to do next?
+declarationWhatNext.declare = Add a new personal representative
+declarationWhatNext.declare.hint = Declare a new personal representative.
+declarationWhatNext.make-changes = Make changes to the current personal representative
+declarationWhatNext.make-changes.hint = Update the details of the personal representative.
+declarationWhatNext.close-estate = Close the estate and declare
+declarationWhatNext.close-estate.hint = Tell HMRC when the administration persiod ended for the estate and apply any changes to the personal representative before a final declaration.
+declarationWhatNext.error.required = Select what you want to do next
+
 utrDoesNotMatchRecords.title = Sorry, you cannot access this estate
 utrDoesNotMatchRecords.heading = Sorry, you cannot access this estate
 utrDoesNotMatchRecords.p1 = The Unique Taxpayer Reference (UTR) entered does not match our records.

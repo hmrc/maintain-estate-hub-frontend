@@ -69,7 +69,7 @@ class ViewLastDeclaredAnswersYesNoController @Inject()(
               if (value) {
                 Redirect(controllers.print.routes.LastDeclaredAnswersController.onPageLoad())
               } else {
-                Redirect(controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad())
+                Redirect(controllers.routes.WhatIsNextController.onPageLoad())
               }
             }
           }

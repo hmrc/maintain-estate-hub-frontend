@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(overrideMessage : Option[String] = None, submitClass: Option[String] = None)(implicit messages: Messages)
+package pages
 
-<div class="section">
- <button id="submit" class="button  @if(submitClass.nonEmpty){@{submitClass.get}}">
-  @if(overrideMessage.isEmpty) {
-  @messages("site.continue")
-  } else {
-  @messages(overrideMessage.get)
+import models.WhatIsNext
+import pages.behaviours.PageBehaviours
+
+class WhatIsNextPageSpec extends PageBehaviours {
+
+  "WhatIsNextPage" must {
+
+    beRetrievable[WhatIsNext](WhatIsNextPage)
+
+    beSettable[WhatIsNext](WhatIsNextPage)
+
+    beRemovable[WhatIsNext](WhatIsNextPage)
   }
- </button>
-</div>
+}
