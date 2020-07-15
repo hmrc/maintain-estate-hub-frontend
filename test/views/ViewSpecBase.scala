@@ -101,4 +101,11 @@ trait ViewSpecBase extends SpecBase {
       case _ => assert(!radio.hasAttr("checked") && radio.attr("checked") != "checked", s"\n\nElement $id is checked")
     }
   }
+
+  def assertRadioButtonContainsHint(doc: Document, id: String, text: String) = {
+    assertRenderedById(doc, id)
+    val hint = doc.getElementById(id)
+    assert(hint.text() == text, s"\n\nElement $id does not have text $text")
+  }
+
 }

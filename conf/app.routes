@@ -14,6 +14,8 @@ GET        /unauthorised                                controllers.Unauthorised
 
 GET        /logout                                      controllers.LogoutController.logout()
 
+GET        /feature-not-available                       controllers.FeatureNotAvailableController.onPageLoad()
+
 GET        /status                                      controllers.EstateStatusController.checkStatus()
 GET        /status/processing                           controllers.EstateStatusController.inProcessing()
 GET        /status/closed                               controllers.EstateStatusController.closed()
@@ -34,3 +36,6 @@ GET        /continue-maintaining-this-estate            controllers.MaintainThis
 GET        /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onPageLoad
 POST       /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onSubmit
 GET        /last-declared                               controllers.print.LastDeclaredAnswersController.onPageLoad
+
+GET        /declare-what-changed                        controllers.WhatIsNextController.onPageLoad()
+POST       /declare-what-changed                        controllers.WhatIsNextController.onSubmit()
