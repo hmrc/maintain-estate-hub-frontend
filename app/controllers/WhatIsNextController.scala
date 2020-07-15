@@ -72,7 +72,7 @@ class WhatIsNextController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsNextPage, value))
             _ <- repository.set(updatedAnswers)
           } yield value match {
-            case WhatIsNext.DeclareNewPersonalRep => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+            case WhatIsNext.DeclareNewPersonalRep => Redirect(config.addNewPersonalRepUrl(request.utr))
             case WhatIsNext.MakeChanges => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
             case WhatIsNext.CloseEstate => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
             case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())

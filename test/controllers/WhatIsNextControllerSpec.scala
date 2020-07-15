@@ -106,7 +106,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers = emptyUserAnswers
         .set(UTRPage, utr).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers), utr = utr).build()
 
       implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
         .withFormUrlEncodedBody(("value", "declare"))
@@ -115,7 +115,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustBe controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustBe frontendAppConfig.addNewPersonalRepUrl(utr)
 
       application.stop()
     }
