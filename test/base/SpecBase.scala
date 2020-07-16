@@ -53,12 +53,14 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
   private def applicationBuilderInterface(userAnswers: Option[UserAnswers] = None,
-                                 fakeIdentifierAction: IdentifierAction) : GuiceApplicationBuilder = {
+                                          fakeIdentifierAction: IdentifierAction,
+                                          utr: String = "utr"
+                                         ) : GuiceApplicationBuilder = {
     new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to(fakeIdentifierAction),
-        bind[UTRAuthenticationAction].to[FakeUTRAuthenticationAction],
+        bind[UTRAuthenticationAction].toInstance(new FakeUTRAuthenticationAction(utr)),
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
   }
@@ -71,8 +73,10 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
     applicationBuilderInterface(userAnswers, fakeIdentifierAction)
   }
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder = {
+  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
+                                   utr: String = "utr"
+                                  ): GuiceApplicationBuilder = {
     val fakeIdentifierAction = injector.instanceOf[FakeOrganisationIdentifierAction]
-    applicationBuilderInterface(userAnswers, fakeIdentifierAction)
+    applicationBuilderInterface(userAnswers, fakeIdentifierAction, utr)
   }
 }

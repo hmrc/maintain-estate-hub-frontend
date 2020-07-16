@@ -16,16 +16,15 @@
 
 package controllers.actions
 
-import com.google.inject.Inject
 import models.requests.{DataRequest, DataRequestWithUTR}
 import play.api.mvc.Result
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeUTRAuthenticationAction @Inject()(
-                                              implicit val executionContext: ExecutionContext
-                                            ) extends UTRAuthenticationAction {
+class FakeUTRAuthenticationAction(utr: String) extends UTRAuthenticationAction {
 
-  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = Future.successful(Right(DataRequestWithUTR(request.request, request.userAnswers, request.user, "utr")))
+  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = Future.successful(Right(DataRequestWithUTR(request.request, request.userAnswers, request.user, utr)))
 
+  override protected implicit val executionContext: ExecutionContext =
+    scala.concurrent.ExecutionContext.Implicits.global
 }

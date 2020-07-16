@@ -61,6 +61,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val estatesUrl: String = configuration.get[Service]("microservice.services.estates").baseUrl
   lazy val estatesAuthUrl: String = configuration.get[Service]("microservice.services.estates-auth").baseUrl
 
+  def addNewPersonalRepUrl(utr: String): String = configuration.get[String]("urls.maintainPersonalRep") + s"/$utr"
+
   def verifyIdentityForAnEstateUrl(utr: String) =
     s"${configuration.get[String]("urls.startVerifyIdentity")}/$utr"
 
