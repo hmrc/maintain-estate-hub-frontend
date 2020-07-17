@@ -73,7 +73,7 @@ class WhatIsNextController @Inject()(
             _ <- repository.set(updatedAnswers)
           } yield value match {
             case WhatIsNext.DeclareNewPersonalRep => Redirect(config.addNewPersonalRepUrl(request.utr))
-            case WhatIsNext.MakeChanges => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+            case WhatIsNext.MakeChanges => Redirect(config.amendExistingPersonalRepUrl(request.utr))
             case WhatIsNext.CloseEstate => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
             case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
           }

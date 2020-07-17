@@ -99,7 +99,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to Feature unavailable when user selects 'DeclareNewPersonalRep'" in {
+    "redirect to add new personal rep journey in maintain personal rep service when user selects 'DeclareNewPersonalRep'" in {
 
       val utr = "0987654321"
 
@@ -120,14 +120,14 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to Feature unavailable when user selects 'MakeChanges'" in {
+    "redirect to amend existing personal rep journey in maintain personal rep service when user selects 'MakeChanges'" in {
 
       val utr = "0987654321"
 
       val userAnswers = emptyUserAnswers
         .set(UTRPage, utr).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers), utr = utr).build()
 
       implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
         .withFormUrlEncodedBody(("value", "make-changes"))
@@ -136,7 +136,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustBe controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustBe frontendAppConfig.amendExistingPersonalRepUrl(utr)
 
       application.stop()
     }
