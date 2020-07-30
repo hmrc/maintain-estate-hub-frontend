@@ -18,8 +18,9 @@ package connectors
 
 import config.FrontendAppConfig
 import javax.inject.Inject
+import models.declaration.VariationResponse
 import models.http.{EstateResponse, EstateStatusReads}
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Writes}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -29,8 +30,14 @@ class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   private def getEstateUrl(utr: String) = s"${config.estatesUrl}/estates/$utr"
 
+  private def declareUrl(utr: String) = s"${config.estatesUrl}/estates/declare/$utr"
+
   def getEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
     http.GET[EstateResponse](getEstateUrl(utr))(EstateStatusReads.httpReads, hc, ec)
+  }
+
+  def declare(utr: String, payload: JsValue)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {
+    http.POST[JsValue, VariationResponse](declareUrl(utr), payload)(implicitly[Writes[JsValue]], VariationResponse.httpReads, hc, ec)
   }
 
 }

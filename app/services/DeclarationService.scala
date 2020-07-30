@@ -18,7 +18,7 @@ package services
 
 import com.google.inject.{ImplementedBy, Inject}
 import connectors.EstatesConnector
-import models.declaration.{Declaration, TVN, VariationResponse}
+import models.declaration.{Declaration, VariationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,7 +27,7 @@ class DeclarationServiceImpl @Inject()(connector: EstatesConnector) extends Decl
 
   override def declare(utr: String, declaration: Declaration)
                       (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {
-    Future.successful(TVN("tvn"))
+    connector.declare(utr, declaration.toJson)
   }
 }
 

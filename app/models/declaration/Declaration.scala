@@ -19,7 +19,10 @@ package models.declaration
 import models.NameType
 import play.api.libs.json.{Json, OFormat}
 
-final case class Declaration(name: NameType, email: Option[String])
+final case class Declaration(name: NameType, email: Option[String]) {
+
+  def toJson = Json.toJson(this)
+}
 
 object Declaration {
   implicit lazy val formats: OFormat[Declaration] = Json.format[Declaration]

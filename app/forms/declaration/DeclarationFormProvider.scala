@@ -20,14 +20,12 @@ import com.google.inject.Inject
 import forms.Validation
 import forms.mappings.Mappings
 import models.NameType
-import models.declaration.Declaration
 import play.api.data.Forms.{mapping, optional}
 import play.api.data.{Form, Mapping}
 
 class DeclarationFormProvider @Inject()() extends Mappings {
 
   private val fullName: Mapping[NameType] = mapping(
-
     "firstName" -> text("declaration.error.firstName.required")
       .verifying(
         firstError(

@@ -19,6 +19,7 @@ package controllers.declaration
 import java.time.LocalDateTime
 
 import com.google.inject.{Inject, Singleton}
+import config.FrontendAppConfig
 import controllers.actions._
 import forms.declaration.DeclarationFormProvider
 import models.{Declaration, declaration}
@@ -42,7 +43,8 @@ class DeclarationController @Inject()(
                                                  formProvider: DeclarationFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: DeclarationView,
-                                                 service: DeclarationService
+                                                 service: DeclarationService,
+                                                 appConfig: FrontendAppConfig
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[models.declaration.Declaration] = formProvider()
@@ -55,7 +57,7 @@ class DeclarationController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm))
+      Ok(view(preparedForm, appConfig.declarationEmailEnabled))
   }
 
   def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
@@ -63,7 +65,7 @@ class DeclarationController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
+          Future.successful(BadRequest(view(formWithErrors, appConfig.declarationEmailEnabled))),
         declaration =>
             service.declare("utr", declaration) flatMap {
               case TVN(tvn) =>

@@ -15,8 +15,6 @@
  *@
 
 @import controllers.declaration.routes._
-@import uk.gov.hmrc.auth.core.AffinityGroup
-@import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
 @import config.FrontendAppConfig
 
 @this(
@@ -25,7 +23,7 @@
         formHelper: FormWithCSRF
 )
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], declarationEmailEnabled: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("declaration.title")}"
@@ -62,7 +60,7 @@
 
         </fieldset>
 
-        @if(appConfig.declarationEmailEnabled) {
+        @if(declarationEmailEnabled) {
             <p>@messages("declaration.paragraph1")</p>
             <p>@messages("declaration.paragraph2")</p>
             @components.input_text(
