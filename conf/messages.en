@@ -41,6 +41,7 @@ site.service_name = Register and Maintain an Estate
 site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
 site.sign_out_of_account = Sign out of this account
+site.warning = Warning
 
 site.print-or-save = Print or save this page
 site.button.continue.maintaining = Continue maintaining this estate
@@ -212,3 +213,15 @@ estateNotClaimed.b2.p3.link = contact the deceased estate helpline
 estateNotClaimed.b2.p4 = You can
 estateNotClaimed.b2.p4.link = return to register and maintain an estate for a client
 
+
+problemDeclaring.heading = Sorry, there is a problem with the service
+problemDeclaring.title = Sorry, there is a problem with the service
+problemDeclaring.p1 = Try again later.
+problemDeclaring.p2 = If you need need help with the service
+problemDeclaring.p3 = You can
+problemDeclaring.contact.link = contact the deceased estate helpline (opens in a new window or tab)
+problemDeclaring.return.link = return to register and maintain an estate for a client
+
+declaration.individual.warning = I confirm that the information given is true and complete to the best of my knowledge and belief. I will ensure it is regularly kept up to date as required including changes of address. If I discover that I have made an error or something has changed, I will update this register.
+
+declaration.agent.warning = I confirm that my client has taken all reasonable steps to obtain up to date and accurate information for all of the entities given in this registration. I understand that if my client knowingly provides false information and cannot demonstrate that they have taken all reasonable steps, they could be subject to penalties.

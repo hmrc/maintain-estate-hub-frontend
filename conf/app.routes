@@ -39,3 +39,7 @@ GET        /last-declared                               controllers.print.LastDe
 
 GET        /declare-what-changed                        controllers.WhatIsNextController.onPageLoad()
 POST       /declare-what-changed                        controllers.WhatIsNextController.onSubmit()
+
+GET        /declare                                     controllers.declaration.DeclarationController.onPageLoad()
+POST       /declare                                     controllers.declaration.DeclarationController.onSubmit()
+GET        /there-has-been-a-problem-declaring          controllers.declaration.ProblemDeclaringController.onPageLoad()
