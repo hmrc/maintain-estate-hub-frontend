@@ -83,10 +83,11 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
             val errorSpan = doc.getElementsByClass("error-message").first
 
             // error id is that of the input field
-            errorSpan.attr("id") contains field
+            errorSpan.attr("id") must include(field)
+            errorSpan.getElementsByClass("visually-hidden").first().text() must include("Error:")
 
             // input is described by error to screen readers
-            doc.getElementById(field).attr("aria-describedby") contains errorSpan.attr("id")
+            doc.getElementById(field).attr("aria-describedby") must include(errorSpan.attr("id"))
 
             // error is linked with input
             errorSpan.siblingElements().get(0).attr("for") mustBe field
