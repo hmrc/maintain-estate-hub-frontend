@@ -59,12 +59,12 @@ class AgencyRegisteredAddressUkYesNoController @Inject()(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, controllers.declaration.routes.AgencyRegisteredAddressUkYesNoController.onSubmit()))),
 
-        value => {
+        isUk => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AgencyRegisteredAddressUkYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AgencyRegisteredAddressUkYesNoPage, isUk))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
-            if (value) {
+            if (isUk) {
               Redirect(controllers.declaration.routes.AgencyRegisteredAddressUkController.onPageLoad())
             } else {
               Redirect(controllers.declaration.routes.AgencyRegisteredAddressInternationalController.onPageLoad())
