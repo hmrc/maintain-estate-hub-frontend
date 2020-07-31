@@ -19,13 +19,16 @@ package services
 import base.SpecBase
 import connectors.EstatesConnector
 import models.NameType
-import models.declaration.{IndividualDeclaration, InternalServerError, TVN}
+import models.declaration.{AgentDeclaration, IndividualDeclaration, InternalServerError, TVN, UKAddress}
+import models.requests.{AgentRequestWithAddress, AgentUser}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{EitherValues, RecoverMethods}
 import play.api.inject.bind
 import play.api.libs.json.JsValue
+import play.api.test.FakeRequest
+import uk.gov.hmrc.auth.core.Enrolments
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
@@ -35,8 +38,16 @@ class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValue
   private val utr = "0987654321"
   private val mockConnector: EstatesConnector = mock[EstatesConnector]
 
-  private val declaration: IndividualDeclaration = IndividualDeclaration(
+  private val individualDeclaration: IndividualDeclaration = IndividualDeclaration(
     name = NameType("First", None, "Last"),
+    email = None
+  )
+
+  private val agentDeclaration: AgentDeclaration = AgentDeclaration(
+    name = NameType("First", None, "Last"),
+    agencyName = "Agency Ltd",
+    telephoneNumber = "0191",
+    crn = "crn",
     email = None
   )
 
@@ -44,7 +55,7 @@ class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValue
 
   "Declaration service" when {
 
-    "declaration" must {
+    "individual declaration" must {
 
       "return TVN response when no errors" in {
 
@@ -57,7 +68,7 @@ class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValue
 
         val service = app.injector.instanceOf[DeclarationService]
 
-        whenReady(service.declare(utr, declaration)) {
+        whenReady(service.declare(utr, individualDeclaration)) {
           result =>
             result mustBe TVN("123456")
         }
@@ -74,7 +85,51 @@ class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValue
 
         val service = app.injector.instanceOf[DeclarationService]
 
-        whenReady(service.declare(utr, declaration)) {
+        whenReady(service.declare(utr, individualDeclaration)) {
+          result =>
+            result mustBe InternalServerError
+        }
+      }
+
+    }
+
+    "agent declaration" must {
+
+      "return TVN response when no errors" in {
+
+        when(mockConnector.declare(any[String], any[JsValue])(any(), any()))
+          .thenReturn(Future.successful(TVN("123456")))
+
+        val app = applicationBuilder()
+          .overrides(bind[EstatesConnector].toInstance(mockConnector))
+          .build()
+
+        val service = app.injector.instanceOf[DeclarationService]
+
+        val address = UKAddress("Line1", "Line2", postcode = "NE981ZZ")
+        val request = AgentRequestWithAddress(FakeRequest(), emptyUserAnswers, AgentUser("id", Enrolments(Set()), "crn"), "utr", address)
+
+        whenReady(service.declare(request, agentDeclaration)) {
+          result =>
+            result mustBe TVN("123456")
+        }
+      }
+
+      "return InternalServerError when errors" in {
+
+        when(mockConnector.declare(any[String], any[JsValue])(any(), any()))
+          .thenReturn(Future.successful(InternalServerError))
+
+        val app = applicationBuilder()
+          .overrides(bind[EstatesConnector].toInstance(mockConnector))
+          .build()
+
+        val service = app.injector.instanceOf[DeclarationService]
+
+        val address = UKAddress("Line1", "Line2", postcode = "NE981ZZ")
+        val request = AgentRequestWithAddress(FakeRequest(), emptyUserAnswers, AgentUser("id", Enrolments(Set()), "crn"), "utr", address)
+
+        whenReady(service.declare(request, agentDeclaration)) {
           result =>
             result mustBe InternalServerError
         }
