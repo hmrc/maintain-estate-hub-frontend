@@ -72,7 +72,14 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
 
           s"show an error associated with the field '$field'" in {
 
-            val doc = asDocument(createView(form.withError(FormError(field, "error"))))
+            val fieldId = if(field.contains("_")) {
+              field.replace("_", ".")
+            } else {
+              field
+            }
+
+            val doc = asDocument(createView(form.withError(FormError(fieldId, "error"))))
+
             val errorSpan = doc.getElementsByClass("error-message").first
 
             // error id is that of the input field
