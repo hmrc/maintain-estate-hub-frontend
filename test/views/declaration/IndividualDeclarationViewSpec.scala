@@ -21,7 +21,7 @@ import models.declaration.Declaration
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
-import views.html.declaration.DeclarationView
+import views.html.declaration.IndividualDeclarationView
 
 class IndividualDeclarationViewSpec extends QuestionViewBehaviours[Declaration] {
 
@@ -33,7 +33,7 @@ class IndividualDeclarationViewSpec extends QuestionViewBehaviours[Declaration] 
 
     "email enabled" must {
 
-      val view = viewFor[DeclarationView](Some(emptyUserAnswers))
+      val view = viewFor[IndividualDeclarationView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, declarationEmailEnabled = true)(fakeRequest, messages)
@@ -58,7 +58,7 @@ class IndividualDeclarationViewSpec extends QuestionViewBehaviours[Declaration] 
 
     "email disabled" must {
 
-      val view = viewFor[DeclarationView](Some(emptyUserAnswers))
+      val view = viewFor[IndividualDeclarationView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, declarationEmailEnabled = false)(fakeRequest, messages)

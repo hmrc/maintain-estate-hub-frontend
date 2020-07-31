@@ -27,7 +27,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{DeclarationService, FakeDeclarationService, FakeFailingDeclarationService}
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
-import views.html.declaration.DeclarationView
+import views.html.declaration.IndividualDeclarationView
 
 class DeclarationControllerSpec extends SpecBase {
 
@@ -46,7 +46,7 @@ class DeclarationControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[DeclarationView]
+      val view = application.injector.instanceOf[IndividualDeclarationView]
 
       status(result) mustEqual OK
 
@@ -93,7 +93,7 @@ class DeclarationControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("firstName" -> "", "lastName" -> ""))
 
-      val view = application.injector.instanceOf[DeclarationView]
+      val view = application.injector.instanceOf[IndividualDeclarationView]
 
       val result = route(application, request).value
 

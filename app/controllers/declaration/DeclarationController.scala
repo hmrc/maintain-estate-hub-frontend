@@ -31,7 +31,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.DeclarationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.declaration.DeclarationView
+import views.html.declaration.IndividualDeclarationView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -42,7 +42,7 @@ class DeclarationController @Inject()(
                                                  actions: Actions,
                                                  formProvider: DeclarationFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: DeclarationView,
+                                                 view: IndividualDeclarationView,
                                                  service: DeclarationService,
                                                  appConfig: FrontendAppConfig
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
