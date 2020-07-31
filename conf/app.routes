@@ -46,6 +46,9 @@ POST       /declaration                                 controllers.declaration.
 GET        /agent-declaration                           controllers.declaration.AgentDeclarationController.onPageLoad()
 POST       /agent-declaration                           controllers.declaration.AgentDeclarationController.onSubmit()
 
+GET        /is-agency-address-in-uk                     controllers.declaration.AgencyRegisteredAddressUkYesNoController.onPageLoad()
+POST       /is-agency-address-in-uk                     controllers.declaration.AgencyRegisteredAddressUkYesNoController.onSubmit()
+
 GET        /agency/address/uk                           controllers.declaration.AgencyRegisteredAddressUkController.onPageLoad()
 POST       /agency/address/uk                           controllers.declaration.AgencyRegisteredAddressUkController.onSubmit()
 

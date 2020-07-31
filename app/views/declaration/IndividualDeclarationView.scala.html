@@ -37,22 +37,30 @@
 
         @components.heading("declaration.heading")
 
-        @components.input_text(
-            field = form("firstName"),
-            label = messages("declaration.firstName"),
-            autoComplete = Some("given-name")
-        )
+        <fieldset>
 
-        @components.input_text(
-            field = form("middleName"),
-            label = messages("declaration.middleName")
-        )
+            <legend class="visually-hidden">
+                @messages("declaration.subheading.personal")
+            </legend>
 
-        @components.input_text(
-            field = form("lastName"),
-            label = messages("declaration.lastName"),
-            autoComplete = Some("family-name")
-        )
+            @components.input_text(
+                field = form("firstName"),
+                label = messages("declaration.firstName"),
+                autoComplete = Some("given-name")
+            )
+
+            @components.input_text(
+                field = form("middleName"),
+                label = messages("declaration.middleName")
+            )
+
+            @components.input_text(
+                field = form("lastName"),
+                label = messages("declaration.lastName"),
+                autoComplete = Some("family-name")
+            )
+
+        </fieldset>
 
         @if(declarationEmailEnabled) {
             <p>@messages("declaration.paragraph1")</p>
