@@ -30,21 +30,23 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.DeclarationService
+import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.declaration.IndividualDeclarationView
+import views.html.declaration.{AgentDeclarationView, IndividualDeclarationView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeclarationController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 repository: SessionRepository,
-                                                 actions: Actions,
-                                                 formProvider: DeclarationFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: IndividualDeclarationView,
-                                                 service: DeclarationService,
-                                                 appConfig: FrontendAppConfig
+                                       override val messagesApi: MessagesApi,
+                                       repository: SessionRepository,
+                                       actions: Actions,
+                                       formProvider: DeclarationFormProvider,
+                                       val controllerComponents: MessagesControllerComponents,
+                                       individualView: IndividualDeclarationView,
+                                       agentView: AgentDeclarationView,
+                                       service: DeclarationService,
+                                       appConfig: FrontendAppConfig
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[models.declaration.Declaration] = formProvider()
@@ -57,15 +59,29 @@ class DeclarationController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, appConfig.declarationEmailEnabled))
+      val view = request.user.affinityGroup match {
+        case AffinityGroup.Agent =>
+          agentView(preparedForm, appConfig.declarationEmailEnabled)
+        case _ =>
+          individualView(preparedForm, appConfig.declarationEmailEnabled)
+      }
+
+      Ok(view)
   }
 
   def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
     implicit request =>
 
       form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, appConfig.declarationEmailEnabled))),
+        (formWithErrors: Form[_]) => {
+          val view = request.user.affinityGroup match {
+            case AffinityGroup.Agent =>
+              agentView(formWithErrors, appConfig.declarationEmailEnabled)
+            case _ =>
+              individualView(formWithErrors, appConfig.declarationEmailEnabled)
+          }
+          Future.successful(BadRequest(view))
+        },
         declaration =>
             service.declare("utr", declaration) flatMap {
               case TVN(tvn) =>

@@ -19,7 +19,7 @@ package controllers.declaration
 import base.SpecBase
 import forms.declaration.DeclarationFormProvider
 import models.declaration.Declaration
-import models.requests.OrganisationUser
+import models.requests.{AgentUser, OrganisationUser}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call}
@@ -27,7 +27,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{DeclarationService, FakeDeclarationService, FakeFailingDeclarationService}
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
-import views.html.declaration.IndividualDeclarationView
+import views.html.declaration.{AgentDeclarationView, IndividualDeclarationView}
 
 class DeclarationControllerSpec extends SpecBase {
 
@@ -36,24 +36,94 @@ class DeclarationControllerSpec extends SpecBase {
 
   lazy val onSubmit: Call = routes.DeclarationController.onSubmit()
 
-  "Declaration Controller" must {
+  "Declaration Controller" when {
 
-    "return OK and the correct view for a onPageLoad" in {
+    "individual journey" must {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      "return OK and the correct view for a onPageLoad" in {
 
-      val request = FakeRequest(GET, routes.DeclarationController.onPageLoad().url)
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val result = route(application, request).value
+        val request = FakeRequest(GET, routes.DeclarationController.onPageLoad().url)
 
-      val view = application.injector.instanceOf[IndividualDeclarationView]
+        val result = route(application, request).value
 
-      status(result) mustEqual OK
+        val view = application.injector.instanceOf[IndividualDeclarationView]
 
-      contentAsString(result) mustEqual
-        view(form, declarationEmailEnabled = false)(fakeRequest, messages).toString
+        status(result) mustEqual OK
 
-      application.stop()
+        contentAsString(result) mustEqual
+          view(form, declarationEmailEnabled = false)(fakeRequest, messages).toString
+
+        application.stop()
+      }
+
+      "return a Bad Request and errors when invalid data is submitted" in {
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+        val request =
+          FakeRequest(POST, routes.DeclarationController.onPageLoad().url)
+            .withFormUrlEncodedBody(("firstName", ""), ("lastName", ""))
+
+        val boundForm = form.bind(Map("firstName" -> "", "lastName" -> ""))
+
+        val view = application.injector.instanceOf[IndividualDeclarationView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, declarationEmailEnabled = false)(fakeRequest, messages).toString
+
+        application.stop()
+      }
+
+    }
+
+    "agent journey" must {
+
+      "return OK and the correct view for a onPageLoad" in {
+
+        val application = applicationBuilderForUser(userAnswers = Some(emptyUserAnswers), AgentUser("id", Enrolments(Set()), "arn")).build()
+
+        val request = FakeRequest(GET, routes.DeclarationController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[AgentDeclarationView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form, declarationEmailEnabled = false)(fakeRequest, messages).toString
+
+        application.stop()
+      }
+
+      "return a Bad Request and errors when invalid data is submitted" in {
+
+        val application = applicationBuilderForUser(userAnswers = Some(emptyUserAnswers), AgentUser("id", Enrolments(Set()), "arn")).build()
+
+        val request =
+          FakeRequest(POST, routes.DeclarationController.onPageLoad().url)
+            .withFormUrlEncodedBody(("firstName", ""), ("lastName", ""))
+
+        val boundForm = form.bind(Map("firstName" -> "", "lastName" -> ""))
+
+        val view = application.injector.instanceOf[AgentDeclarationView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, declarationEmailEnabled = false)(fakeRequest, messages).toString
+
+        application.stop()
+      }
+
     }
 
     "redirect to confirmation for a POST" in {
@@ -79,28 +149,6 @@ class DeclarationControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe controllers.declaration.routes.DeclarationController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request =
-        FakeRequest(POST, routes.DeclarationController.onPageLoad().url)
-          .withFormUrlEncodedBody(("firstName", ""), ("lastName", ""))
-
-      val boundForm = form.bind(Map("firstName" -> "", "lastName" -> ""))
-
-      val view = application.injector.instanceOf[IndividualDeclarationView]
-
-      val result = route(application, request).value
-
-      status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, declarationEmailEnabled = false)(fakeRequest, messages).toString
 
       application.stop()
     }
