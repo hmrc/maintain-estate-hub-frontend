@@ -43,4 +43,7 @@ POST       /declare-what-changed                        controllers.WhatIsNextCo
 GET        /declaration                                 controllers.declaration.IndividualDeclarationController.onPageLoad()
 POST       /declaration                                 controllers.declaration.IndividualDeclarationController.onSubmit()
 
+GET        /agent-declaration                                 controllers.declaration.AgentDeclarationController.onPageLoad()
+POST       /agent-declaration                                 controllers.declaration.AgentDeclarationController.onSubmit()
+
 GET        /there-has-been-a-problem-declaring          controllers.declaration.ProblemDeclaringController.onPageLoad()

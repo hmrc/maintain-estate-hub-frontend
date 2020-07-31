@@ -78,50 +78,6 @@ class IndividualDeclarationControllerSpec extends SpecBase {
       application.stop()
     }
 
-//    "agent journey" must {
-//
-//      "return OK and the correct view for a onPageLoad" in {
-//
-//        val application = applicationBuilderForUser(userAnswers = Some(emptyUserAnswers), AgentUser("id", Enrolments(Set()), "arn")).build()
-//
-//        val request = FakeRequest(GET, routes.DeclarationController.onPageLoad().url)
-//
-//        val result = route(application, request).value
-//
-//        val view = application.injector.instanceOf[AgentDeclarationView]
-//
-//        status(result) mustEqual OK
-//
-//        contentAsString(result) mustEqual
-//          view(form, declarationEmailEnabled = false)(fakeRequest, messages).toString
-//
-//        application.stop()
-//      }
-//
-//      "return a Bad Request and errors when invalid data is submitted" in {
-//
-//        val application = applicationBuilderForUser(userAnswers = Some(emptyUserAnswers), AgentUser("id", Enrolments(Set()), "arn")).build()
-//
-//        val request =
-//          FakeRequest(POST, routes.DeclarationController.onPageLoad().url)
-//            .withFormUrlEncodedBody(("firstName", ""), ("lastName", ""))
-//
-//        val boundForm = form.bind(Map("firstName" -> "", "lastName" -> ""))
-//
-//        val view = application.injector.instanceOf[AgentDeclarationView]
-//
-//        val result = route(application, request).value
-//
-//        status(result) mustEqual BAD_REQUEST
-//
-//        contentAsString(result) mustEqual
-//          view(boundForm, declarationEmailEnabled = false)(fakeRequest, messages).toString
-//
-//        application.stop()
-//      }
-//
-//    }
-
     "redirect to confirmation for a POST" in {
 
       val utr = "0987654321"

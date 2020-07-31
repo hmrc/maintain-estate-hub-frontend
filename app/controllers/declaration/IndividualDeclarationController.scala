@@ -29,7 +29,6 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.DeclarationService
-import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.declaration.{AgentDeclarationView, IndividualDeclarationView}
 

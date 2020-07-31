@@ -18,6 +18,7 @@ package models.requests
 
 import play.api.mvc.{Request, WrappedRequest}
 import models.UserAnswers
+import models.declaration.Address
 
 case class OptionalDataRequest[A] (request: Request[A],
                                    userAnswers: Option[UserAnswers],
@@ -32,3 +33,9 @@ case class DataRequestWithUTR[A] (request: Request[A],
                            userAnswers: UserAnswers,
                            user: User,
                            utr: String) extends WrappedRequest[A](request)
+
+case class AgentRequestWithAddress[A] (request: Request[A],
+                                       userAnswers: UserAnswers,
+                                       user: AgentUser,
+                                       utr: String,
+                                       address: Address) extends WrappedRequest[A](request)

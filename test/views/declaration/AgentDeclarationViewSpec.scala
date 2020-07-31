@@ -16,18 +16,18 @@
 
 package views.declaration
 
-import forms.declaration.IndividualDeclarationFormProvider
-import models.declaration.IndividualDeclaration
+import forms.declaration.AgentDeclarationFormProvider
+import models.declaration.AgentDeclaration
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.declaration.AgentDeclarationView
 
-class AgentDeclarationViewSpec extends QuestionViewBehaviours[IndividualDeclaration] {
+class AgentDeclarationViewSpec extends QuestionViewBehaviours[AgentDeclaration] {
 
   val messageKeyPrefix = "declaration"
 
-  val form = new IndividualDeclarationFormProvider()()
+  val form = new AgentDeclarationFormProvider()()
 
   "declaration for agents" when {
 
@@ -46,7 +46,7 @@ class AgentDeclarationViewSpec extends QuestionViewBehaviours[IndividualDeclarat
         form,
         applyView,
         messageKeyPrefix,
-        "firstName", "middleName", "lastName", "email"
+        "firstName", "middleName", "lastName", "agencyName", "telephoneNumber", "crn","email"
       )
 
       "have a warning" in {
@@ -71,7 +71,7 @@ class AgentDeclarationViewSpec extends QuestionViewBehaviours[IndividualDeclarat
         form,
         applyView,
         messageKeyPrefix,
-        "firstName", "middleName", "lastName"
+        "firstName", "middleName", "lastName", "agencyName", "telephoneNumber", "crn"
       )
 
       "have a warning" in {

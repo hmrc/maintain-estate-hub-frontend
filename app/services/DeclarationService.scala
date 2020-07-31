@@ -18,7 +18,8 @@ package services
 
 import com.google.inject.{ImplementedBy, Inject}
 import connectors.EstatesConnector
-import models.declaration.{Declaration, DeclarationForApi, IndividualDeclaration, VariationResponse}
+import models.declaration._
+import models.requests.AgentRequestWithAddress
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -37,11 +38,39 @@ class DeclarationServiceImpl @Inject()(connector: EstatesConnector) extends Decl
 
     connector.declare(utr, Json.toJson(payload))
   }
+
+  override def declare(agentRequest: AgentRequestWithAddress[_],
+                       declaration: AgentDeclaration)
+                      (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {
+
+    import models.Implicits._
+
+    val arn = agentRequest.user.agentReferenceNumber
+    val address = agentRequest.address
+    val utr = agentRequest.utr
+    val agencyName = declaration.agencyName
+    val tel = declaration.telephoneNumber
+    val crn = declaration.crn
+
+    val agentDetails = AgentDetails(arn, agencyName, address.convert, tel, crn)
+
+    val payload = DeclarationForApi(
+      declaration = Declaration(declaration.name),
+      agentDetails = Some(agentDetails),
+      endDate = None
+    )
+
+    connector.declare(utr, Json.toJson(payload))
+  }
 }
 
 @ImplementedBy(classOf[DeclarationServiceImpl])
 trait DeclarationService {
 
   def declare(utr: String, declaration: IndividualDeclaration)
+             (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse]
+
+  def declare(agentRequest: AgentRequestWithAddress[_],
+              declaration: AgentDeclaration)
              (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse]
 }
