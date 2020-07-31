@@ -23,14 +23,17 @@
         readerHint: Option[String] = None,
         labelClass: Option[String] = None,
         symbol: Option[String] = None,
-        optionalHtmlContent: Option[Html] = None
+        optionalHtmlContent: Option[Html] = None,
+        autoComplete : Option[String] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
     @if(labelAsHeading){<h1 class="label-as-heading">}
-<label class="form-label" for="@{field.id}">
-    <span class="bold @if(labelClass.nonEmpty){@labelClass}">@label</span>
-</label>
+
+    <label class="form-label" for="@{field.id}">
+        <span class="bold @if(labelClass.nonEmpty){@labelClass}">@label</span>
+    </label>
+
     @if(labelAsHeading){</h1>}
     @if(optionalHtmlContent.nonEmpty){@optionalHtmlContent}
     @if(hint.nonEmpty){
@@ -50,11 +53,11 @@
     id="@{field.id}"
     name="@{field.name}"
     value="@{field.value}"
-        @if(hint.nonEmpty) {
-            aria-describedby="@{field.id}_hint"
-        }
-        @if(field.hasErrors) {
-            aria-labelledby="error-message-@{field.id}-input"
+    @if(autoComplete.nonEmpty) {
+        autocomplete="@{autoComplete.get}"
+    }
+    @if(hint.nonEmpty || field.hasErrors) {
+        aria-describedby="@if(hint.nonEmpty){@{field.id}_hint} @if(field.hasErrors){error-message-@{field.id}-input}"
     }
     />
 </div>
