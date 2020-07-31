@@ -18,7 +18,8 @@ package services
 
 import com.google.inject.{ImplementedBy, Inject}
 import connectors.EstatesConnector
-import models.declaration.{IndividualDeclaration, VariationResponse}
+import models.declaration.{Declaration, DeclarationForApi, IndividualDeclaration, VariationResponse}
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,7 +28,14 @@ class DeclarationServiceImpl @Inject()(connector: EstatesConnector) extends Decl
 
   override def declare(utr: String, declaration: IndividualDeclaration)
                       (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {
-    connector.declare(utr, declaration.toJson)
+
+    val payload = DeclarationForApi(
+      declaration = Declaration(declaration.name),
+      agentDetails = None,
+      endDate = None
+    )
+
+    connector.declare(utr, Json.toJson(payload))
   }
 }
 

@@ -19,7 +19,7 @@ package pages
 import models.declaration.IndividualDeclaration
 import play.api.libs.json.JsPath
 
-case object DeclarationPage extends QuestionPage[IndividualDeclaration] {
+case object IndividualDeclarationPage extends QuestionPage[IndividualDeclaration] {
 
   override def path: JsPath = JsPath \ toString
 

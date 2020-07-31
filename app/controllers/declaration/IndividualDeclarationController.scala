@@ -23,7 +23,7 @@ import config.FrontendAppConfig
 import controllers.actions._
 import forms.declaration.IndividualDeclarationFormProvider
 import models.declaration.{IndividualDeclaration, TVN}
-import pages.{DeclarationPage, SubmissionDatePage, TVNPage}
+import pages.{IndividualDeclarationPage, SubmissionDatePage, TVNPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -53,19 +53,12 @@ class IndividualDeclarationController @Inject()(
   def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(DeclarationPage) match {
+      val preparedForm = request.userAnswers.get(IndividualDeclarationPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      val view = request.user.affinityGroup match {
-        case AffinityGroup.Agent =>
-          agentView(preparedForm, appConfig.declarationEmailEnabled)
-        case _ =>
-          individualView(preparedForm, appConfig.declarationEmailEnabled)
-      }
-
-      Ok(view)
+      Ok(individualView(preparedForm, appConfig.declarationEmailEnabled))
   }
 
   def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
@@ -73,13 +66,7 @@ class IndividualDeclarationController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          val view = request.user.affinityGroup match {
-            case AffinityGroup.Agent =>
-              agentView(formWithErrors, appConfig.declarationEmailEnabled)
-            case _ =>
-              individualView(formWithErrors, appConfig.declarationEmailEnabled)
-          }
-          Future.successful(BadRequest(view))
+          Future.successful(BadRequest(individualView(formWithErrors, appConfig.declarationEmailEnabled)))
         },
         declaration =>
             service.declare(request.utr, declaration) flatMap {
@@ -87,7 +74,7 @@ class IndividualDeclarationController @Inject()(
                 for {
                   updatedAnswers <- Future.fromTry(
                     request.userAnswers
-                      .set(DeclarationPage, declaration)
+                      .set(IndividualDeclarationPage, declaration)
                       .flatMap(_.set(SubmissionDatePage, LocalDateTime.now))
                       .flatMap(_.set(TVNPage, tvn))
                   )
