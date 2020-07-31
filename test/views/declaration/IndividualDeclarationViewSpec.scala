@@ -46,7 +46,7 @@ class IndividualDeclarationViewSpec extends QuestionViewBehaviours[Declaration] 
         form,
         applyView,
         messageKeyPrefix,
-        "name_firstName", "name_middleName", "name_lastName", "email"
+        "firstName", "middleName", "lastName", "email"
       )
 
       "have a warning" in {
@@ -71,7 +71,7 @@ class IndividualDeclarationViewSpec extends QuestionViewBehaviours[Declaration] 
         form,
         applyView,
         messageKeyPrefix,
-        "name_firstName", "name_middleName", "name_lastName"
+        "firstName", "middleName", "lastName"
       )
 
       "have a warning" in {

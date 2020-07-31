@@ -42,18 +42,18 @@
             </legend>
 
             @components.input_text(
-                field = form("name.firstName"),
+                field = form("firstName"),
                 label = messages("declaration.firstName"),
                 autoComplete = Some("given-name")
             )
 
             @components.input_text(
-                field = form("name.middleName"),
+                field = form("middleName"),
                 label = messages("declaration.middleName")
             )
 
             @components.input_text(
-                field = form("name.lastName"),
+                field = form("lastName"),
                 label = messages("declaration.lastName"),
                 autoComplete = Some("family-name")
             )

@@ -143,7 +143,7 @@ class DeclarationControllerSpec extends SpecBase {
         ).build()
 
       implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
-        .withFormUrlEncodedBody(("name.firstName", "John"), ("name.lastName", "Smith"))
+        .withFormUrlEncodedBody(("firstName", "John"), ("lastName", "Smith"))
 
       val result = route(application, request).value
 
@@ -168,7 +168,7 @@ class DeclarationControllerSpec extends SpecBase {
         ).build()
 
       implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
-        .withFormUrlEncodedBody(("name.firstName", "John"), ("name.lastName", "Smith"))
+        .withFormUrlEncodedBody(("firstName", "John"), ("lastName", "Smith"))
 
       val result = route(application, request).value
 
