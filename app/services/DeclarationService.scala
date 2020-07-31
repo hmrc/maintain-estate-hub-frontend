@@ -18,14 +18,14 @@ package services
 
 import com.google.inject.{ImplementedBy, Inject}
 import connectors.EstatesConnector
-import models.declaration.{Declaration, VariationResponse}
+import models.declaration.{IndividualDeclaration, VariationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationServiceImpl @Inject()(connector: EstatesConnector) extends DeclarationService {
 
-  override def declare(utr: String, declaration: Declaration)
+  override def declare(utr: String, declaration: IndividualDeclaration)
                       (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {
     connector.declare(utr, declaration.toJson)
   }
@@ -34,6 +34,6 @@ class DeclarationServiceImpl @Inject()(connector: EstatesConnector) extends Decl
 @ImplementedBy(classOf[DeclarationServiceImpl])
 trait DeclarationService {
 
-  def declare(utr: String, declaration: Declaration)
+  def declare(utr: String, declaration: IndividualDeclaration)
              (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse]
 }

@@ -16,18 +16,18 @@
 
 package views.declaration
 
-import forms.declaration.DeclarationFormProvider
-import models.declaration.Declaration
+import forms.declaration.IndividualDeclarationFormProvider
+import models.declaration.IndividualDeclaration
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.declaration.AgentDeclarationView
 
-class AgentDeclarationViewSpec extends QuestionViewBehaviours[Declaration] {
+class AgentDeclarationViewSpec extends QuestionViewBehaviours[IndividualDeclaration] {
 
   val messageKeyPrefix = "declaration"
 
-  val form = new DeclarationFormProvider()()
+  val form = new IndividualDeclarationFormProvider()()
 
   "declaration for agents" when {
 

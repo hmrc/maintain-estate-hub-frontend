@@ -16,21 +16,21 @@
 
 package services
 
-import models.declaration.{Declaration, InternalServerError, TVN, VariationResponse}
+import models.declaration.{IndividualDeclaration, InternalServerError, TVN, VariationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class FakeDeclarationService extends DeclarationService {
 
-  override def declare(utr: String, declaration: Declaration)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VariationResponse] =
+  override def declare(utr: String, declaration: IndividualDeclaration)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VariationResponse] =
     Future.successful(TVN("tvn"))
 
 }
 
 class FakeFailingDeclarationService extends DeclarationService {
 
-  override def declare(utr: String, declaration: Declaration)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VariationResponse] =
+  override def declare(utr: String, declaration: IndividualDeclaration)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VariationResponse] =
     Future.successful(InternalServerError)
 
 }

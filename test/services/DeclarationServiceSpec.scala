@@ -19,7 +19,7 @@ package services
 import base.SpecBase
 import connectors.EstatesConnector
 import models.NameType
-import models.declaration.{Declaration, InternalServerError, TVN}
+import models.declaration.{IndividualDeclaration, InternalServerError, TVN}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -35,7 +35,7 @@ class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValue
   private val utr = "0987654321"
   private val mockConnector: EstatesConnector = mock[EstatesConnector]
 
-  private val declaration: Declaration = Declaration(
+  private val declaration: IndividualDeclaration = IndividualDeclaration(
     name = NameType("First", None, "Last"),
     email = None
   )

@@ -29,7 +29,7 @@
     title = s"${errorPrefix(form)} ${messages("declaration.title")}"
 ) {
 
-    @formHelper(action = DeclarationController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = IndividualDeclarationController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 

@@ -21,9 +21,8 @@ import java.time.LocalDateTime
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
 import controllers.actions._
-import forms.declaration.DeclarationFormProvider
-import models.{Declaration, declaration}
-import models.declaration.TVN
+import forms.declaration.IndividualDeclarationFormProvider
+import models.declaration.{IndividualDeclaration, TVN}
 import pages.{DeclarationPage, SubmissionDatePage, TVNPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -37,19 +36,19 @@ import views.html.declaration.{AgentDeclarationView, IndividualDeclarationView}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeclarationController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       repository: SessionRepository,
-                                       actions: Actions,
-                                       formProvider: DeclarationFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       individualView: IndividualDeclarationView,
-                                       agentView: AgentDeclarationView,
-                                       service: DeclarationService,
-                                       appConfig: FrontendAppConfig
+class IndividualDeclarationController @Inject()(
+                                                 override val messagesApi: MessagesApi,
+                                                 repository: SessionRepository,
+                                                 actions: Actions,
+                                                 formProvider: IndividualDeclarationFormProvider,
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 individualView: IndividualDeclarationView,
+                                                 agentView: AgentDeclarationView,
+                                                 service: DeclarationService,
+                                                 appConfig: FrontendAppConfig
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[models.declaration.Declaration] = formProvider()
+  val form: Form[IndividualDeclaration] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
     implicit request =>
@@ -83,7 +82,7 @@ class DeclarationController @Inject()(
           Future.successful(BadRequest(view))
         },
         declaration =>
-            service.declare("utr", declaration) flatMap {
+            service.declare(request.utr, declaration) flatMap {
               case TVN(tvn) =>
                 for {
                   updatedAnswers <- Future.fromTry(
@@ -93,7 +92,7 @@ class DeclarationController @Inject()(
                       .flatMap(_.set(TVNPage, tvn))
                   )
                   _ <- repository.set(updatedAnswers)
-                } yield Redirect(routes.DeclarationController.onPageLoad())
+                } yield Redirect(routes.IndividualDeclarationController.onPageLoad())
               case _ =>
                 Future.successful(Redirect(controllers.declaration.routes.ProblemDeclaringController.onPageLoad()))
           }
