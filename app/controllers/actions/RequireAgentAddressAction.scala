@@ -29,9 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RequireAgentAddressActionImpl @Inject()(implicit val executionContext: ExecutionContext) extends RequireAgentAddressAction {
 
   override protected def refine[A](request: DataRequestWithUTR[A]): Future[Either[Result, AgentRequestWithAddress[A]]] = {
-
     request.user match {
-      case a @ AgentUser(_, _, _) =>
+      case a : AgentUser =>
         request.userAnswers.get(AgencyRegisteredAddressPage) match {
           case Some(x) =>
             Future.successful(Right(AgentRequestWithAddress(request.request, request.userAnswers, a, request.utr, x)))
@@ -41,8 +40,6 @@ class RequireAgentAddressActionImpl @Inject()(implicit val executionContext: Exe
       case _ =>
         Future.successful(Left(Redirect(routes.UnauthorisedController.onPageLoad())))
     }
-
-
   }
 }
 

@@ -281,7 +281,7 @@ agencyRegisteredAddressInternational.heading = What is your agency’s registere
 declaration.title = Declaration
 declaration.heading = Declaration
 declaration.subheading.personal = Personal details
-declaration.subheading.agent = Agents details
+declaration.subheading.agent = Agent’s details
 
 
 declaration.agencyName = Your agency name
