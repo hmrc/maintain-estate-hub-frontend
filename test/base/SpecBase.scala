@@ -36,9 +36,7 @@ import scala.concurrent.ExecutionContext
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Mocked with ScalaFutures {
 
-  val userAnswersId = "id"
-
-  def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
+  def emptyUserAnswers = TestUserAnswers.emptyUserAnswers
 
   def injector: Injector = app.injector
 
