@@ -20,6 +20,7 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
+error.postcodeInvalid = Enter a real postcode
 
 index.title = maintain-estate-hub-frontend
 index.heading = maintain-estate-hub-frontend
@@ -53,6 +54,21 @@ site.address.uk.line4 = Address line 4 (optional)
 site.address.uk.postcode = Postcode
 site.address.uk.postcode.hint = For example AB1 1AB
 
+
+ukAddress.error.line1.required = Enter address line 1
+ukAddress.error.line2.required = Enter address line 2
+ukAddress.error.postcode.required = Enter a postcode
+ukAddress.error.line1.length = Address line 1 must be 35 characters or less
+ukAddress.error.line2.length = Address line 2 must be 35 characters or less
+ukAddress.error.line3.length = Address line 3 must be 35 characters or less
+ukAddress.error.line4.length = Address line 4 must be 35 characters or less
+ukAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line4.invalidCharacters = Address line 4 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.postcode.invalidCharacters = Enter a real postcode
+
+
 site.address.international.title = What is the address?
 site.address.international.heading = What is {0}’s address?
 site.address.international.line1 = Address line 1
@@ -60,6 +76,16 @@ site.address.international.line2 = Address line 2
 site.address.international.line3 = Address line 3 (optional)
 site.address.international.country = Country
 site.address.international.country.select = Select a country
+
+internationalAddress.error.line1.required = Enter address line 1
+internationalAddress.error.line2.required = Enter address line 2
+internationalAddress.error.country.required = Select a country
+internationalAddress.error.line1.length = Address line 1 must be 35 characters or less
+internationalAddress.error.line2.length = Address line 2 must be 35 characters or less
+internationalAddress.error.line3.length = Address line 3 must be 35 characters or less
+internationalAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+internationalAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+internationalAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 site.print-or-save = Print or save this page
 site.button.continue.maintaining = Continue maintaining this estate
