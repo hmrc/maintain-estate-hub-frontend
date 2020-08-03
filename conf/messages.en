@@ -329,3 +329,13 @@ declaration.paragraph2 = If you do not enter your email address, you will not re
 declaration.individual.warning = I confirm that the information given is true and complete to the best of my knowledge and belief. I will ensure it is regularly kept up to date as required including changes of address. If I discover that I have made an error or something has changed, I will update this register.
 
 declaration.agent.warning = I confirm that my client has taken all reasonable steps to obtain up to date and accurate information for all of the entities given in this registration. I understand that if my client knowingly provides false information and cannot demonstrate that they have taken all reasonable steps, they could be subject to penalties.
+
+
+confirmationPage.title = Declaration received
+confirmationPage.heading = Declaration received
+confirmationPage.heading2 = Your reference is:
+confirmationPage.printsave.link = Print or save a declared copy of the estate’s registration
+confirmationPage.subheading1 = What happens next
+confirmationPage.paragraph1 = Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact the personal representative.
+confirmationPage.agent.you.can = You can
+confirmationPage.agent.link = return to register and maintain an estate for a client.

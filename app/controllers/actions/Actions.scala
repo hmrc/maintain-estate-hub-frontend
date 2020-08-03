@@ -17,7 +17,7 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import models.requests.{AgentRequestWithAddress, DataRequest, DataRequestWithUTR, OptionalDataRequest}
+import models.requests.{AgentRequestWithAddress, DataRequest, DataRequestWithUTR, OptionalDataRequest, TvnRequest}
 import play.api.mvc.{ActionBuilder, AnyContent}
 
 class Actions @Inject()(
@@ -25,7 +25,8 @@ class Actions @Inject()(
                          getData: DataRetrievalAction,
                          requireData: DataRequiredAction,
                          verifyUtr: UTRAuthenticationAction,
-                         requireAgentAddress: RequireAgentAddressAction
+                         requireAgentAddress: RequireAgentAddressAction,
+                         getTvn: RequireTvnAction
                        ) {
 
   def authWithSession: ActionBuilder[OptionalDataRequest, AnyContent] =
@@ -39,4 +40,7 @@ class Actions @Inject()(
 
   def requireAgent : ActionBuilder[AgentRequestWithAddress, AnyContent] =
     authenticatedForUtr andThen requireAgentAddress
+
+  def requireTvn: ActionBuilder[TvnRequest, AnyContent] =
+    authenticatedForUtr andThen getTvn
 }

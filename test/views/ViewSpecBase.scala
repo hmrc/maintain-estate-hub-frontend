@@ -18,9 +18,10 @@ package views
 
 import models.UserAnswers
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Document, Element}
 import play.twirl.api.Html
 import base.SpecBase
+import org.scalatest.Assertion
 
 import scala.reflect.ClassTag
 
@@ -45,6 +46,14 @@ trait ViewSpecBase extends SpecBase {
 
     //<p> HTML elements are rendered out with a carriage return on some pages, so discount for comparison
     assert(elements.first().html().replace("\n", "") == expectedValue)
+  }
+
+  def assertAttributeValueForElement(element: Element, attribute: String, attributeValue: String): Assertion = {
+    assert(element.attr(attribute) == attributeValue)
+  }
+
+  def assertContainsTextForId(doc: Document, id: String, expectedText: String): Assertion = {
+    assert(doc.getElementById(id).text() == expectedText, s"\n\nElement $id does not have text $expectedText")
   }
 
   def assertPageTitleEqualsMessage(doc: Document, expectedMessageKey: String, args: Any*) = {
