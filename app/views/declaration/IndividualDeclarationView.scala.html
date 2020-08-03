@@ -29,16 +29,18 @@
     title = s"${errorPrefix(form)} ${messages("declaration.title")}"
 ) {
 
-    @formHelper(action = DeclarationController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = IndividualDeclarationController.onSubmit(), 'autocomplete -> "on") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
+        @components.heading("declaration.heading")
+
         <fieldset>
 
-            <legend>
-                @components.heading("declaration.heading")
+            <legend class="visually-hidden">
+                @messages("declaration.subheading.personal")
             </legend>
 
             @components.input_text(

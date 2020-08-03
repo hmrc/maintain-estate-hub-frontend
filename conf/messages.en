@@ -20,6 +20,7 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
+error.postcodeInvalid = Enter a real postcode
 
 index.title = maintain-estate-hub-frontend
 index.heading = maintain-estate-hub-frontend
@@ -43,6 +44,48 @@ site.sign_out = Sign out
 site.sign_out_of_account = Sign out of this account
 site.warning = Warning
 site.confirm-send = Confirm and send
+
+site.address.uk.title = What is the address?
+site.address.uk.heading = What is {0}’s address?
+site.address.uk.line1 = Address line 1
+site.address.uk.line2 = Address line 2
+site.address.uk.line3 = Address line 3 (optional)
+site.address.uk.line4 = Address line 4 (optional)
+site.address.uk.postcode = Postcode
+site.address.uk.postcode.hint = For example AB1 1AB
+
+
+ukAddress.error.line1.required = Enter address line 1
+ukAddress.error.line2.required = Enter address line 2
+ukAddress.error.postcode.required = Enter a postcode
+ukAddress.error.line1.length = Address line 1 must be 35 characters or less
+ukAddress.error.line2.length = Address line 2 must be 35 characters or less
+ukAddress.error.line3.length = Address line 3 must be 35 characters or less
+ukAddress.error.line4.length = Address line 4 must be 35 characters or less
+ukAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line4.invalidCharacters = Address line 4 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.postcode.invalidCharacters = Enter a real postcode
+
+
+site.address.international.title = What is the address?
+site.address.international.heading = What is {0}’s address?
+site.address.international.line1 = Address line 1
+site.address.international.line2 = Address line 2
+site.address.international.line3 = Address line 3 (optional)
+site.address.international.country = Country
+site.address.international.country.select = Select a country
+
+internationalAddress.error.line1.required = Enter address line 1
+internationalAddress.error.line2.required = Enter address line 2
+internationalAddress.error.country.required = Select a country
+internationalAddress.error.line1.length = Address line 1 must be 35 characters or less
+internationalAddress.error.line2.length = Address line 2 must be 35 characters or less
+internationalAddress.error.line3.length = Address line 3 must be 35 characters or less
+internationalAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+internationalAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+internationalAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 site.print-or-save = Print or save this page
 site.button.continue.maintaining = Continue maintaining this estate
@@ -223,27 +266,62 @@ problemDeclaring.p3 = You can
 problemDeclaring.contact.link = contact the deceased estate helpline (opens in a new window or tab)
 problemDeclaring.return.link = return to register and maintain an estate for a client
 
+
+agencyRegisteredAddressUkYesNo.title = Is your agency’s registered address in the UK?
+agencyRegisteredAddressUkYesNo.heading = Is your agency’s registered address in the UK?
+agencyRegisteredAddressUkYesNo.error.required = Select yes if your agency’s registered address is in the UK
+
+agencyRegisteredAddressUk.title = What is your agency’s registered address?
+agencyRegisteredAddressUk.heading = What is your agency’s registered address?
+
+agencyRegisteredAddressInternational.title = What is your agency’s registered address?
+agencyRegisteredAddressInternational.heading = What is your agency’s registered address?
+
+
 declaration.title = Declaration
 declaration.heading = Declaration
+declaration.subheading.personal = Personal details
+declaration.subheading.agent = Agent’s details
+
+
+declaration.agencyName = Your agency name
+declaration.error.agencyName.required = Enter your agency name
+declaration.error.agencyName.invalid = Your agency name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+declaration.error.agencyName.length = Your agency name must be 56 characters or less
+
+
+declaration.telephoneNumber = Your agency telephone
+declaration.error.telephoneNumber.required = Enter your agency telephone
+declaration.error.telephoneNumber.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+
+
+declaration.crn = Internal reference for this client
+declaration.error.crn.required = Enter internal reference for this client
+declaration.error.crn.invalid = Internal reference for this client must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+declaration.error.crn.length = Internal reference for this client must be 56 characters or less
+
 
 declaration.firstName = Your first name
 declaration.error.firstName.required = Enter your first name
 declaration.error.firstName.invalid = Your first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 declaration.error.firstName.length = Your first name must be 35 characters or less
 
+
 declaration.middleName = Your middle names (optional)
-declaration.error.middleName.required = Enter your middle names
 declaration.error.middleName.length = Your middle names must be 35 characters or less
 declaration.error.middleName.invalid = Your middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
 
 declaration.lastName = Your last name
 declaration.error.lastName.required = Enter your last name
 declaration.error.lastName.invalid = Your last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 declaration.error.lastName.length = Your last name must be 35 characters or less
 
+
 declaration.email = Email address (optional)
 declaration.error.email.length = Your email must be 35 characters or less
 declaration.error.email.invalid = Enter a valid email address with no spaces, like name@example.com
+
 
 declaration.paragraph1 = Please give us your email address to get a confirmation of your declaration.
 declaration.paragraph2 = If you do not enter your email address, you will not receive a confirmation email with the declaration reference number.
@@ -251,3 +329,13 @@ declaration.paragraph2 = If you do not enter your email address, you will not re
 declaration.individual.warning = I confirm that the information given is true and complete to the best of my knowledge and belief. I will ensure it is regularly kept up to date as required including changes of address. If I discover that I have made an error or something has changed, I will update this register.
 
 declaration.agent.warning = I confirm that my client has taken all reasonable steps to obtain up to date and accurate information for all of the entities given in this registration. I understand that if my client knowingly provides false information and cannot demonstrate that they have taken all reasonable steps, they could be subject to penalties.
+
+
+confirmationPage.title = Declaration received
+confirmationPage.heading = Declaration received
+confirmationPage.heading2 = Your reference is:
+confirmationPage.printsave.link = Print or save a declared copy of the estate’s registration
+confirmationPage.subheading1 = What happens next
+confirmationPage.paragraph1 = Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact the personal representative.
+confirmationPage.agent.you.can = You can
+confirmationPage.agent.link = return to register and maintain an estate for a client.

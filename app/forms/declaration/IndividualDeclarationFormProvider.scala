@@ -23,7 +23,7 @@ import models.NameType
 import play.api.data.Forms.{mapping, optional}
 import play.api.data.{Form, Mapping}
 
-class DeclarationFormProvider @Inject()() extends Mappings {
+class IndividualDeclarationFormProvider @Inject()() extends Mappings {
 
   private val fullName: Mapping[NameType] = mapping(
     "firstName" -> text("declaration.error.firstName.required")
@@ -48,7 +48,7 @@ class DeclarationFormProvider @Inject()() extends Mappings {
         ))
   )(NameType.apply)(NameType.unapply)
 
-  def apply(): Form[models.declaration.Declaration] =
+  def apply(): Form[models.declaration.IndividualDeclaration] =
     Form(
       mapping(
         "" -> fullName,
@@ -57,6 +57,6 @@ class DeclarationFormProvider @Inject()() extends Mappings {
             maxLength(35, s"declaration.error.email.length"),
             regexp(Validation.emailRegex, s"declaration.error.email.invalid"))
         ))
-      )(models.declaration.Declaration.apply)(models.declaration.Declaration.unapply)
+      )(models.declaration.IndividualDeclaration.apply)(models.declaration.IndividualDeclaration.unapply)
     )
 }

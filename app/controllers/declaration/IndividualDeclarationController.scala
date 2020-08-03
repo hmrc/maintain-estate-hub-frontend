@@ -21,52 +21,43 @@ import java.time.LocalDateTime
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
 import controllers.actions._
-import forms.declaration.DeclarationFormProvider
-import models.{Declaration, declaration}
-import models.declaration.TVN
-import pages.{DeclarationPage, SubmissionDatePage, TVNPage}
+import forms.declaration.IndividualDeclarationFormProvider
+import models.declaration.{IndividualDeclaration, TVN}
+import pages.{IndividualDeclarationPage, SubmissionDatePage, TVNPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.DeclarationService
-import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.declaration.{AgentDeclarationView, IndividualDeclarationView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeclarationController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       repository: SessionRepository,
-                                       actions: Actions,
-                                       formProvider: DeclarationFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       individualView: IndividualDeclarationView,
-                                       agentView: AgentDeclarationView,
-                                       service: DeclarationService,
-                                       appConfig: FrontendAppConfig
+class IndividualDeclarationController @Inject()(
+                                                 override val messagesApi: MessagesApi,
+                                                 repository: SessionRepository,
+                                                 actions: Actions,
+                                                 formProvider: IndividualDeclarationFormProvider,
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 individualView: IndividualDeclarationView,
+                                                 agentView: AgentDeclarationView,
+                                                 service: DeclarationService,
+                                                 appConfig: FrontendAppConfig
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[models.declaration.Declaration] = formProvider()
+  val form: Form[IndividualDeclaration] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(DeclarationPage) match {
+      val preparedForm = request.userAnswers.get(IndividualDeclarationPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      val view = request.user.affinityGroup match {
-        case AffinityGroup.Agent =>
-          agentView(preparedForm, appConfig.declarationEmailEnabled)
-        case _ =>
-          individualView(preparedForm, appConfig.declarationEmailEnabled)
-      }
-
-      Ok(view)
+      Ok(individualView(preparedForm, appConfig.declarationEmailEnabled))
   }
 
   def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
@@ -74,26 +65,20 @@ class DeclarationController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          val view = request.user.affinityGroup match {
-            case AffinityGroup.Agent =>
-              agentView(formWithErrors, appConfig.declarationEmailEnabled)
-            case _ =>
-              individualView(formWithErrors, appConfig.declarationEmailEnabled)
-          }
-          Future.successful(BadRequest(view))
+          Future.successful(BadRequest(individualView(formWithErrors, appConfig.declarationEmailEnabled)))
         },
         declaration =>
-            service.declare("utr", declaration) flatMap {
+            service.declare(request.utr, declaration) flatMap {
               case TVN(tvn) =>
                 for {
                   updatedAnswers <- Future.fromTry(
                     request.userAnswers
-                      .set(DeclarationPage, declaration)
+                      .set(IndividualDeclarationPage, declaration)
                       .flatMap(_.set(SubmissionDatePage, LocalDateTime.now))
                       .flatMap(_.set(TVNPage, tvn))
                   )
                   _ <- repository.set(updatedAnswers)
-                } yield Redirect(routes.DeclarationController.onPageLoad())
+                } yield Redirect(routes.IndividualDeclarationController.onPageLoad())
               case _ =>
                 Future.successful(Redirect(controllers.declaration.routes.ProblemDeclaringController.onPageLoad()))
           }

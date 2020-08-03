@@ -16,14 +16,31 @@
 
 package models.declaration
 
-import models.NameType
-import play.api.libs.json.{Json, OFormat}
+import java.time.LocalDate
 
-final case class Declaration(name: NameType, email: Option[String]) {
+import models.{AddressType, NameType}
+import play.api.libs.json.{Format, Json}
 
-  def toJson = Json.toJson(this)
+case class AgentDetails(arn: String,
+                        agentName: String,
+                        agentAddress: AddressType,
+                        agentTelephoneNumber: String,
+                        clientReference: String)
+
+object AgentDetails {
+  implicit val agentDetailsFormat: Format[AgentDetails] = Json.format[AgentDetails]
 }
 
+case class Declaration(name: NameType)
+
 object Declaration {
-  implicit lazy val formats: OFormat[Declaration] = Json.format[Declaration]
+  implicit val declarationFormat: Format[Declaration] = Json.format[Declaration]
+}
+
+case class DeclarationForApi(declaration: Declaration,
+                             agentDetails: Option[AgentDetails],
+                             endDate: Option[LocalDate])
+
+object DeclarationForApi {
+  implicit val declarationForApiFormat: Format[DeclarationForApi] = Json.format[DeclarationForApi]
 }
