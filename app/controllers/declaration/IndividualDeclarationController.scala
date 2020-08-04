@@ -78,7 +78,7 @@ class IndividualDeclarationController @Inject()(
                       .flatMap(_.set(TVNPage, tvn))
                   )
                   _ <- repository.set(updatedAnswers)
-                } yield Redirect(routes.IndividualDeclarationController.onPageLoad())
+                } yield Redirect(controllers.confirmation.routes.ConfirmationController.onPageLoad())
               case _ =>
                 Future.successful(Redirect(controllers.declaration.routes.ProblemDeclaringController.onPageLoad()))
           }

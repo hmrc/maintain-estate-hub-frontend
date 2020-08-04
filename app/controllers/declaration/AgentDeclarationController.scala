@@ -77,7 +77,7 @@ class AgentDeclarationController @Inject()(
                     .flatMap(_.set(TVNPage, tvn))
                 )
                 _ <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(controllers.declaration.routes.AgentDeclarationController.onPageLoad())
+              } yield Redirect(controllers.confirmation.routes.ConfirmationController.onPageLoad())
             case _ =>
               Future.successful(Redirect(controllers.declaration.routes.ProblemDeclaringController.onPageLoad()))
           }

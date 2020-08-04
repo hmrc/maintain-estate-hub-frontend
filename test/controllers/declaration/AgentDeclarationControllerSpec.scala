@@ -116,7 +116,7 @@ class AgentDeclarationControllerSpec extends SpecBase {
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustBe controllers.declaration.routes.AgentDeclarationController.onPageLoad().url
+      redirectLocation(result).value mustBe controllers.confirmation.routes.ConfirmationController.onPageLoad().url
 
       application.stop()
     }
