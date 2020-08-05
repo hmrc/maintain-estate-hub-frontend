@@ -18,14 +18,18 @@ package controllers.closure
 
 import com.google.inject.Inject
 import controllers.actions._
+import pages.WhatIsNextPage
+import pages.closure.HasAdministrationPeriodEndedYesNoPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.closure.AdministrationPeriodEndDateNeededView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class AdministrationPeriodEndDateNeededController @Inject()(
+                                                             sessionRepository: SessionRepository,
                                                              actions: Actions,
                                                              val controllerComponents: MessagesControllerComponents,
                                                              view: AdministrationPeriodEndDateNeededView
@@ -35,6 +39,20 @@ class AdministrationPeriodEndDateNeededController @Inject()(
     implicit request =>
 
       Ok(view())
+  }
+
+  def cleanupAndRedirect(): Action[AnyContent] = actions.authenticatedForUtr.async {
+    implicit request =>
+
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers
+          .remove(WhatIsNextPage)
+          .flatMap(_.remove(HasAdministrationPeriodEndedYesNoPage))
+        )
+        _ <- sessionRepository.set(updatedAnswers)
+      } yield {
+        Redirect(controllers.routes.WhatIsNextController.onPageLoad())
+      }
   }
 
 }

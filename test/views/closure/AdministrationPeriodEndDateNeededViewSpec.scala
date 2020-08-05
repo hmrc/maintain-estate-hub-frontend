@@ -35,6 +35,6 @@ class AdministrationPeriodEndDateNeededViewSpec extends ViewBehaviours {
       "link"
     )
 
-    behave like pageWithContinueButton(applyView)
+    behave like pageWithASubmitButton(applyView)
   }
 }

@@ -6,3 +6,4 @@ GET         /administration-period-end-date             controllers.closure.Admi
 POST        /administration-period-end-date             controllers.closure.AdministrationPeriodEndDateController.onSubmit()
 
 GET         /administration-period-end-date-needed      controllers.closure.AdministrationPeriodEndDateNeededController.onPageLoad()
+POST        /administration-period-end-date-needed      controllers.closure.AdministrationPeriodEndDateNeededController.cleanupAndRedirect()

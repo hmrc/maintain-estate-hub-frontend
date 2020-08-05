@@ -15,10 +15,11 @@
  *@
 
 @import config.FrontendAppConfig
-@import controllers.routes._
+@import controllers.closure.routes._
 
 @this(
     appConfig: FrontendAppConfig,
+    formHelper: FormWithCSRF,
     main_template: MainTemplate
 )
 
@@ -34,9 +35,7 @@
 
     <p>@messages("closure.administrationPeriodEndDateNeeded.p") <a href="@{appConfig.estatesHelplineUrl}" target="_blank">@messages("closure.administrationPeriodEndDateNeeded.link")</a>.</p>
 
-    @components.button_link(
-        id = Some("continue"),
-        messageKey = "site.continue",
-        href = WhatIsNextController.onPageLoad().url
-    )
+    @formHelper(action = AdministrationPeriodEndDateNeededController.cleanupAndRedirect(), 'autoComplete -> "off") {
+        @components.submit_button()
+    }
 }

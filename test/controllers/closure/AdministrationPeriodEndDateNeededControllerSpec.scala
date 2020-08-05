@@ -18,16 +18,22 @@ package controllers.closure
 
 import base.SpecBase
 import models.UserAnswers
+import models.WhatIsNext.CloseEstate
+import org.mockito.ArgumentCaptor
+import org.mockito.Mockito.verify
 import org.scalatestplus.mockito.MockitoSugar
-import pages.UTRPage
+import pages.closure.HasAdministrationPeriodEndedYesNoPage
+import pages.{UTRPage, WhatIsNextPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.closure.AdministrationPeriodEndDateNeededView
 
 class AdministrationPeriodEndDateNeededControllerSpec extends SpecBase with MockitoSugar {
 
   val utr: String = "1234567890"
-  lazy val howToCloseATrustRoute: String = routes.AdministrationPeriodEndDateNeededController.onPageLoad().url
+  lazy val administrationPeriodEndDateNeededRoute: String = routes.AdministrationPeriodEndDateNeededController.onPageLoad().url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(UTRPage, utr).success.value
 
@@ -37,7 +43,7 @@ class AdministrationPeriodEndDateNeededControllerSpec extends SpecBase with Mock
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, howToCloseATrustRoute)
+      val request = FakeRequest(GET, administrationPeriodEndDateNeededRoute)
 
       val result = route(application, request).value
 
@@ -47,6 +53,32 @@ class AdministrationPeriodEndDateNeededControllerSpec extends SpecBase with Mock
 
       contentAsString(result) mustEqual
         view()(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "do cleanup and redirect to WhatIsNextController for a POST" in {
+
+      val userAnswers: UserAnswers = emptyUserAnswers
+        .set(WhatIsNextPage, CloseEstate).success.value
+        .set(HasAdministrationPeriodEndedYesNoPage, false).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(fakeRepository))
+        .build()
+
+      val request = FakeRequest(POST, administrationPeriodEndDateNeededRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.WhatIsNextController.onPageLoad().url
+
+      val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(fakeRepository).set(uaCaptor.capture)
+      uaCaptor.getValue.get(WhatIsNextPage) mustNot be(defined)
+      uaCaptor.getValue.get(HasAdministrationPeriodEndedYesNoPage) mustNot be(defined)
 
       application.stop()
     }
