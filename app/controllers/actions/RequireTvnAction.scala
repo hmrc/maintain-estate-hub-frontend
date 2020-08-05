@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy
 import controllers.routes
 import javax.inject.Inject
 import models.requests.{DataRequestWithUTR, TvnRequest}
-import pages.TVNPage
+import pages.{AgentDeclarationPage, SubmissionDatePage, TVNPage}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 
@@ -29,12 +29,17 @@ import scala.concurrent.{ExecutionContext, Future}
 class RequireTvnActionImpl @Inject()(implicit val executionContext: ExecutionContext) extends RequireTvnAction {
 
   override protected def refine[A](request: DataRequestWithUTR[A]): Future[Either[Result, TvnRequest[A]]] = {
-    request.userAnswers.get(TVNPage) match {
-      case Some(tvn) =>
-        Future.successful(Right(TvnRequest(request.request, request.userAnswers, request.user, request.utr, tvn)))
-      case None =>
-        Future.successful(Left(Redirect(routes.EstateStatusController.problemWithService())))
-    }
+    Future.successful((for {
+        tvn <- request.userAnswers.get(TVNPage)
+        submissionDate <- request.userAnswers.get(SubmissionDatePage)
+      } yield {
+        val optionalCrn = request.userAnswers.get(AgentDeclarationPage).map(_.crn)
+
+        Right(TvnRequest(request.request, request.userAnswers, request.user, request.utr, tvn, optionalCrn, submissionDate))
+      }
+    ).getOrElse {
+      Left(Redirect(routes.EstateStatusController.problemWithService()))
+    })
   }
 }
 

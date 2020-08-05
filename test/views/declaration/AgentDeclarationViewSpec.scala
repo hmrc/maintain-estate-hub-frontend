@@ -52,7 +52,7 @@ class AgentDeclarationViewSpec extends QuestionViewBehaviours[AgentDeclaration] 
       "have a warning" in {
         val doc = asDocument(applyView(form))
 
-        doc.text() must include("I confirm that my client has taken all reasonable steps to obtain up to date and accurate information for all of the entities given in this registration. I understand that if my client knowingly provides false information and cannot demonstrate that they have taken all reasonable steps, they could be subject to penalties.")
+        doc.text() must include("I confirm that the information my client has given is true and complete to the best of their knowledge. I will make sure it is kept up to date, including any change of address. If I find out that an error has been made or something has changed, I will update the information.")
       }
     }
 
@@ -77,7 +77,7 @@ class AgentDeclarationViewSpec extends QuestionViewBehaviours[AgentDeclaration] 
       "have a warning" in {
         val doc = asDocument(applyView(form))
 
-        doc.text() must include("I confirm that my client has taken all reasonable steps to obtain up to date and accurate information for all of the entities given in this registration. I understand that if my client knowingly provides false information and cannot demonstrate that they have taken all reasonable steps, they could be subject to penalties.")
+        doc.text() must include("I confirm that the information my client has given is true and complete to the best of their knowledge. I will make sure it is kept up to date, including any change of address. If I find out that an error has been made or something has changed, I will update the information.")
       }
     }
   }

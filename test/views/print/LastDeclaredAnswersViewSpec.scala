@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.print
 
 import play.api.Application
 import play.twirl.api.HtmlFormat
@@ -39,6 +39,8 @@ class LastDeclaredAnswersViewSpec extends ViewBehaviours {
     )
 
     behave like pageWithBackLink(applyView)
+
+    behave like pageWithAPrintButton(applyView)
 
     behave like pageWithContinueButton(applyView)
   }

@@ -42,6 +42,7 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
   private def getEstateUrl(utr: String) : String = s"/estates/$utr"
+  private def getTransformedEstateUrl(utr: String) : String = s"/estates/$utr/transformed"
 
   "Estates Connector" when {
 
@@ -211,12 +212,12 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
 
             val personalRepInd = data.estate.entities.personalRepresentative.estatePerRepInd.get
 
-            personalRepInd.lineNo mustBe "1"
-            personalRepInd.bpMatchStatus.get mustBe "01"
+            personalRepInd.lineNo.value mustBe "1"
+            personalRepInd.bpMatchStatus.value mustBe "01"
             personalRepInd.entityStart mustBe LocalDate.parse("2017-02-28")
             personalRepInd.name mustBe NameType("Alister", None, "Mc'Govern")
             personalRepInd.dateOfBirth mustBe LocalDate.parse("1980-06-01")
-            personalRepInd.identification.nino.get mustBe "JS123456A"
+            personalRepInd.identification.nino.value mustBe "JS123456A"
             personalRepInd.phoneNumber mustBe "078888888"
 
             data.estate.entities.personalRepresentative.estatePerRepOrg mustBe None
@@ -224,13 +225,207 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
             val deceased = data.estate.entities.deceased
 
             deceased.lineNo mustBe "1"
-            deceased.bpMatchStatus.get mustBe "01"
+            deceased.bpMatchStatus.value mustBe "01"
             deceased.entityStart mustBe LocalDate.parse("2017-02-28")
             deceased.name mustBe NameType("Wilbert", None, "Jefferies")
             deceased.dateOfDeath mustBe LocalDate.parse("2016-04-06")
-            deceased.identification.get.nino.get mustBe "JS123456A"
+            deceased.identification.value.nino.value mustBe "JS123456A"
 
-            data.estate.administrationEndDate.get mustBe LocalDate.parse("2017-06-01")
+            data.estate.administrationEndDate.value mustBe LocalDate.parse("2017-06-01")
+
+            data.estate.periodTaxDues mustBe "01"
+        }
+
+        application.stop()
+      }
+    }
+
+    "get transformed estate" must {
+
+      "return EstateFound response" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        val utr = "10000000008"
+
+        server.stubFor(
+          get(urlEqualTo(getTransformedEstateUrl(utr)))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+                .withBody(
+                  """
+                    |{
+                    |  "responseHeader": {
+                    |    "status": "In Processing",
+                    |    "formBundleNo": "1"
+                    |  }
+                    |}
+                    |""".stripMargin
+                )
+            )
+        )
+
+        val result  = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
+        result mustBe Processing
+
+        application.stop()
+      }
+
+      "return NoContent response" in {
+
+        val utr = "6666666666"
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        server.stubFor(
+          get(urlEqualTo(getTransformedEstateUrl(utr)))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.NO_CONTENT)
+            )
+        )
+
+        val result  = Await.result(connector.getTransformedEstate(utr),Duration.Inf)
+        result mustBe SorryThereHasBeenAProblem
+
+        application.stop()
+      }
+
+      "return NotFound response" in {
+
+        val utr = "10000000008"
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        server.stubFor(
+          get(urlEqualTo(getTransformedEstateUrl(utr)))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.NOT_FOUND)
+            )
+        )
+
+        val result  = Await.result(connector.getTransformedEstate(utr),Duration.Inf)
+        result mustBe UtrNotFound
+
+        application.stop()
+      }
+
+      "return ServiceUnavailable response" in {
+
+        val utr = "10000000008"
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        server.stubFor(
+          get(urlEqualTo(getTransformedEstateUrl(utr)))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.SERVICE_UNAVAILABLE)
+            )
+        )
+
+        val result  = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
+        result mustBe EstatesServiceUnavailable
+
+        application.stop()
+      }
+
+      "must return playback data inside a Processed estate" in {
+
+        val utr = "2000000000"
+        val payload = Source.fromFile(getClass.getResource("/display-estate.json").getPath).mkString
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        server.stubFor(
+          get(urlEqualTo(getTransformedEstateUrl(utr)))
+            .willReturn(okJson(payload))
+        )
+
+        val processed = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
+
+        inside(processed) {
+          case Processed(data, bundleNumber) =>
+
+            bundleNumber mustBe "1"
+
+            data.matchData.utr mustBe "2000000000"
+
+            val correspondence = data.correspondence
+
+            correspondence.abroadIndicator mustBe false
+            correspondence.name mustBe "Estates 02"
+            correspondence.address mustBe AddressType("Address line 1", "Town or city", None, None, Some("Z99 2YY"), "GB")
+
+            val declaration = data.declaration
+
+            declaration.name mustBe NameType("Alister", Some("Stuart"), "Mc'Govern")
+            declaration.address mustBe AddressType("Address line 1", "Address line 2", Some("Address line 3"), Some("Town or city"), Some("Z99 2YY"), "GB")
+
+            val personalRepInd = data.estate.entities.personalRepresentative.estatePerRepInd.get
+
+            personalRepInd.lineNo.value mustBe "1"
+            personalRepInd.bpMatchStatus.value mustBe "01"
+            personalRepInd.entityStart mustBe LocalDate.parse("2017-02-28")
+            personalRepInd.name mustBe NameType("Alister", None, "Mc'Govern")
+            personalRepInd.dateOfBirth mustBe LocalDate.parse("1980-06-01")
+            personalRepInd.identification.nino.value mustBe "JS123456A"
+            personalRepInd.phoneNumber mustBe "078888888"
+
+            data.estate.entities.personalRepresentative.estatePerRepOrg mustBe None
+
+            val deceased = data.estate.entities.deceased
+
+            deceased.lineNo mustBe "1"
+            deceased.bpMatchStatus.value mustBe "01"
+            deceased.entityStart mustBe LocalDate.parse("2017-02-28")
+            deceased.name mustBe NameType("Wilbert", None, "Jefferies")
+            deceased.dateOfDeath mustBe LocalDate.parse("2016-04-06")
+            deceased.identification.value.nino.value mustBe "JS123456A"
+
+            data.estate.administrationEndDate.value mustBe LocalDate.parse("2017-06-01")
 
             data.estate.periodTaxDues mustBe "01"
         }
