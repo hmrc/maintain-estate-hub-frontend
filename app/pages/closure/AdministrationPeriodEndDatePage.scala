@@ -16,24 +16,14 @@
 
 package pages.closure
 
-import models.UserAnswers
+import java.time.LocalDate
+
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object HasAdministrationPeriodEndedYesNoPage extends QuestionPage[Boolean] {
+case object AdministrationPeriodEndDatePage extends QuestionPage[LocalDate] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "hasAdministrationPeriodEndedYesNo"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    value match {
-      case Some(false) =>
-        userAnswers.remove(AdministrationPeriodEndDatePage)
-      case _ =>
-        super.cleanup(value, userAnswers)
-    }
-  }
+  override def toString: String = "administrationPeriodEndDate"
 }

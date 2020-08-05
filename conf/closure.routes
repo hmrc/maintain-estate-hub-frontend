@@ -1,3 +1,6 @@
 
 GET         /has-administration-period-ended            controllers.closure.HasAdministrationPeriodEndedYesNoController.onPageLoad()
 POST        /has-administration-period-ended            controllers.closure.HasAdministrationPeriodEndedYesNoController.onSubmit()
+
+GET         /administration-period-end-date             controllers.closure.AdministrationPeriodEndDateController.onPageLoad()
+POST        /administration-period-end-date             controllers.closure.AdministrationPeriodEndDateController.onSubmit()

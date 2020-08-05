@@ -64,7 +64,7 @@ class HasAdministrationPeriodEndedYesNoController @Inject()(
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
             if (value) {
-              Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+              Redirect(controllers.closure.routes.AdministrationPeriodEndDateController.onPageLoad())
             } else {
               Redirect(controllers.routes.WhatIsNextController.onPageLoad())
             }

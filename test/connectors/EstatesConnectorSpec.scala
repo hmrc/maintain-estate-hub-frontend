@@ -27,6 +27,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Inside, MustMatchers, OptionValues}
 import org.scalatestplus.play.PlaySpec
 import play.api.http.Status
+import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.WireMockHelper
@@ -290,6 +291,58 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
         result.map(response => response.status mustBe BAD_REQUEST)
 
         application.stop()
+      }
+
+    }
+
+    "get date of death" must {
+
+      val utr = "utr"
+
+      "return a date when the result is a date" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        val expectedResult: LocalDate = LocalDate.parse("1996-02-03")
+
+        server.stubFor(
+          get(urlEqualTo(s"/estates/$utr/date-of-death"))
+            .willReturn(okJson(Json.toJson(expectedResult).toString))
+        )
+
+        val result = Await.result(connector.getDateOfDeath(utr), Duration.Inf)
+        result mustBe expectedResult
+      }
+
+      "return min date when the result is not a date" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        val expectedResult: String = "not a date"
+
+        server.stubFor(
+          get(urlEqualTo(s"/estates/$utr/date-of-death"))
+            .willReturn(okJson(Json.toJson(expectedResult).toString))
+        )
+
+        val result = Await.result(connector.getDateOfDeath(utr), Duration.Inf)
+        result mustBe frontendAppConfig.minDate
       }
 
     }

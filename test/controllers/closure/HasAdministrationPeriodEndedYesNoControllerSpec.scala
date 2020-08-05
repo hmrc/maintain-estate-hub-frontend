@@ -33,10 +33,11 @@ import scala.concurrent.Future
 
 class HasAdministrationPeriodEndedYesNoControllerSpec extends SpecBase {
 
-  val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("closure.hasAdministrationPeriodEnded")
-  lazy val yesNoRoute: String = routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
-  val utr: String = "utr"
+  private val formProvider = new YesNoFormProvider()
+  private val form: Form[Boolean] = formProvider.withPrefix("closure.hasAdministrationPeriodEnded")
+  private lazy val yesNoRoute: String = routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
+  private val utr: String = "utr"
+  private val validAnswer: Boolean = true
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(UTRPage, utr).success.value
 
@@ -62,8 +63,6 @@ class HasAdministrationPeriodEndedYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val validAnswer: Boolean = true
-
       val userAnswers = emptyUserAnswers.set(HasAdministrationPeriodEndedYesNoPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -84,10 +83,6 @@ class HasAdministrationPeriodEndedYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when YES is submitted" in {
 
-      val mockRepository = mock[SessionRepository]
-
-      when(mockRepository.set(any())) thenReturn Future.successful(true)
-
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(POST, yesNoRoute)
@@ -97,16 +92,12 @@ class HasAdministrationPeriodEndedYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.closure.routes.AdministrationPeriodEndDateController.onPageLoad().url
 
       application.stop()
     }
 
     "redirect to the next page when NO is submitted" in {
-
-      val mockRepository = mock[SessionRepository]
-
-      when(mockRepository.set(any())) thenReturn Future.successful(true)
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -148,7 +139,7 @@ class HasAdministrationPeriodEndedYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request = FakeRequest(POST, yesNoRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 

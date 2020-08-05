@@ -22,7 +22,7 @@ import config.FrontendAppConfig
 import javax.inject.Inject
 import models.declaration.VariationResponse
 import models.http.{EstateResponse, EstateStatusReads}
-import play.api.libs.json.{JsValue, Json, Writes}
+import play.api.libs.json.{JsSuccess, JsValue, Json, Writes}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -36,6 +36,8 @@ class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   private def closeUrl(utr: String) = s"${config.estatesUrl}/estates/close/$utr"
 
+  private def getDateOfDeathUrl(utr: String) = s"${config.estatesUrl}/estates/$utr/date-of-death"
+
   def getEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
     http.GET[EstateResponse](getEstateUrl(utr))(EstateStatusReads.httpReads, hc, ec)
   }
@@ -46,6 +48,13 @@ class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   def close(utr: String, closeDate: LocalDate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](closeUrl(utr), Json.toJson(closeDate))
+  }
+
+  def getDateOfDeath(utr: String)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[LocalDate] = {
+    http.GET[JsValue](getDateOfDeathUrl(utr)).map(_.validate[LocalDate] match {
+      case JsSuccess(dateOfDeath, _) => dateOfDeath
+      case _ => config.minDate
+    })
   }
 
 }
