@@ -339,3 +339,9 @@ confirmationPage.subheading1 = What happens next
 confirmationPage.paragraph1 = Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact the personal representative.
 confirmationPage.agent.you.can = You can
 confirmationPage.agent.link = return to register and maintain an estate for a client.
+
+closure.hasAdministrationPeriodEnded.title = Has the administration period ended?
+closure.hasAdministrationPeriodEnded.heading = Has the administration period ended?
+# TODO - amend hint when content has been agreed upon
+closure.hasAdministrationPeriodEnded.hint = The administration period usually ends for tax purposes when the residue of the estate is ascertained. The residue of the estate is ascertained when the net balance of the estate has been identified and sufficient funds have been provided to enable any liabilities to be paid.
+closure.hasAdministrationPeriodEnded.error.required = Select yes if the administration period has ended

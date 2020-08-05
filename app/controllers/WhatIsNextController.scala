@@ -18,7 +18,6 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
-import connectors.{EstatesConnector, EstatesStoreConnector}
 import controllers.actions.Actions
 import forms.WhatIsNextFormProvider
 import models.{Enumerable, WhatIsNext}
@@ -40,9 +39,7 @@ class WhatIsNextController @Inject()(
                                       formProvider: WhatIsNextFormProvider,
                                       val controllerComponents: MessagesControllerComponents,
                                       view: WhatIsNextView,
-                                      config: FrontendAppConfig,
-                                      estatesConnector: EstatesConnector,
-                                      estatesStoreConnector: EstatesStoreConnector
+                                      config: FrontendAppConfig
                                     )(implicit ec: ExecutionContext)
 
   extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
@@ -74,8 +71,7 @@ class WhatIsNextController @Inject()(
           } yield value match {
             case WhatIsNext.DeclareNewPersonalRep => Redirect(config.addNewPersonalRepUrl(request.utr))
             case WhatIsNext.MakeChanges => Redirect(config.amendExistingPersonalRepUrl(request.utr))
-            case WhatIsNext.CloseEstate => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
-            case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+            case WhatIsNext.CloseEstate => Redirect(controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad())
           }
         }
       )
