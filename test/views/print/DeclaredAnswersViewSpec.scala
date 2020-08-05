@@ -27,10 +27,10 @@ class DeclaredAnswersViewSpec extends ViewBehaviours {
 
   val view: DeclaredAnswersView = application.injector.instanceOf[DeclaredAnswersView]
 
-  val applyView: HtmlFormat.Appendable =
-    view.apply(Nil, Nil)(fakeRequest, messages)
+  "Declared view for an individual" must {
 
-  "Declared view" must {
+    val applyView: HtmlFormat.Appendable =
+      view.apply("TVN", "27 August 2020", None, Nil, Nil)(fakeRequest, messages)
 
     behave like normalPage(
       applyView,
@@ -39,5 +39,38 @@ class DeclaredAnswersViewSpec extends ViewBehaviours {
     )
 
     behave like pageWithBackLink(applyView)
+
+    behave like pageWithAPrintButton(applyView)
+
+    "have content" in {
+      val doc = asDocument(applyView)
+
+      doc.text() must include("Declaration reference number is: TVN")
+      doc.text() must include("The estate’s declaration was sent on 27 August 2020")
+    }
+  }
+
+  "Declared view for an agent" must {
+
+    val applyView: HtmlFormat.Appendable =
+      view.apply("TVN", "27 August 2020", Some("crn"), Nil, Nil)(fakeRequest, messages)
+
+    behave like normalPage(
+      applyView,
+      "declared",
+      "informationFirstRegistered"
+    )
+
+    behave like pageWithBackLink(applyView)
+
+    behave like pageWithAPrintButton(applyView)
+
+    "have content" in {
+      val doc = asDocument(applyView)
+
+      doc.text() must include("Declaration reference number is: TVN")
+      doc.text() must include("The estate’s declaration was sent on 27 August 2020")
+      doc.text() must include("Client reference number: crn")
+    }
   }
 }

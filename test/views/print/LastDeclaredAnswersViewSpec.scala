@@ -40,6 +40,8 @@ class LastDeclaredAnswersViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
 
+    behave like pageWithAPrintButton(applyView)
+
     behave like pageWithContinueButton(applyView)
   }
 }

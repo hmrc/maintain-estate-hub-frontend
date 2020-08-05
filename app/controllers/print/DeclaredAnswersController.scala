@@ -25,6 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.MessagesControllerComponents
 import printers.PrintHelper
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import viewmodels.DateFormatter
 import views.html.print.DeclaredAnswersView
 
 import scala.concurrent.ExecutionContext
@@ -47,7 +48,13 @@ class DeclaredAnswersController @Inject()(
           val personalRep = print.personalRepresentative(estate)
           val estateName = print.estateName(estate)
 
-          Ok(view(personalRep, estateName))
+          Ok(view(
+            request.tvn,
+            DateFormatter.formatDate(request.submissionDate),
+            request.clientReferenceNumber,
+            personalRep,
+            estateName
+          ))
         case estate =>
           Logger.warn(s"[DeclaredAnswersController] unable to render declared answers due to estate being in state: $estate")
           Redirect(controllers.routes.EstateStatusController.problemWithService())

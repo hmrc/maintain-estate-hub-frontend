@@ -21,7 +21,11 @@ main_template: MainTemplate,
 formHelper: FormWithCSRF
 )
 
-@(personalRepresentative: Seq[Section], estateName: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(tvn: String,
+  declarationSent: String,
+  crn: Option[String],
+  personalRepresentative: Seq[Section],
+  estateName: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @main_template(
 title = messages("declared.title")
@@ -34,6 +38,20 @@ title = messages("declared.title")
     <div class="section">
         <p>@components.button_print()</p>
     </div>
+
+    <p class="declarationReferenceNumber bold">
+        <span>@messages("declared.p1", tvn)</span>
+    </p>
+
+    @crn.map{ c =>
+        <p class="agentClientRef">
+            <span>@messages("declared.p2", c)</span>
+        </p>
+    }
+
+    <p>@messages("declared.p3", declarationSent)</p>
+
+
 
     @for(section <- personalRepresentative){
         @{

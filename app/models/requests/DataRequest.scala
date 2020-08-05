@@ -47,4 +47,5 @@ case class TvnRequest[A](request: Request[A],
                          user: User,
                          utr: String,
                          tvn: String,
+                         clientReferenceNumber: Option[String],
                          submissionDate: LocalDateTime) extends WrappedRequest[A](request)

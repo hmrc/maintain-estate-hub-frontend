@@ -208,12 +208,12 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
 
             val personalRepInd = data.estate.entities.personalRepresentative.estatePerRepInd.get
 
-            personalRepInd.lineNo mustBe "1"
-            personalRepInd.bpMatchStatus.get mustBe "01"
+            personalRepInd.lineNo.value mustBe "1"
+            personalRepInd.bpMatchStatus.value mustBe "01"
             personalRepInd.entityStart mustBe LocalDate.parse("2017-02-28")
             personalRepInd.name mustBe NameType("Alister", None, "Mc'Govern")
             personalRepInd.dateOfBirth mustBe LocalDate.parse("1980-06-01")
-            personalRepInd.identification.nino.get mustBe "JS123456A"
+            personalRepInd.identification.nino.value mustBe "JS123456A"
             personalRepInd.phoneNumber mustBe "078888888"
 
             data.estate.entities.personalRepresentative.estatePerRepOrg mustBe None
@@ -221,13 +221,13 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
             val deceased = data.estate.entities.deceased
 
             deceased.lineNo mustBe "1"
-            deceased.bpMatchStatus.get mustBe "01"
+            deceased.bpMatchStatus.value mustBe "01"
             deceased.entityStart mustBe LocalDate.parse("2017-02-28")
             deceased.name mustBe NameType("Wilbert", None, "Jefferies")
             deceased.dateOfDeath mustBe LocalDate.parse("2016-04-06")
-            deceased.identification.get.nino.get mustBe "JS123456A"
+            deceased.identification.value.nino.value mustBe "JS123456A"
 
-            data.estate.administrationEndDate.get mustBe LocalDate.parse("2017-06-01")
+            data.estate.administrationEndDate.value mustBe LocalDate.parse("2017-06-01")
 
             data.estate.periodTaxDues mustBe "01"
         }
