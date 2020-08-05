@@ -357,6 +357,11 @@ closure.hasAdministrationPeriodEnded.heading = Has the administration period end
 closure.hasAdministrationPeriodEnded.hint = The administration period usually ends for tax purposes when the residue of the estate is ascertained. The residue of the estate is ascertained when the net balance of the estate has been identified and sufficient funds have been provided to enable any liabilities to be paid.
 closure.hasAdministrationPeriodEnded.error.required = Select yes if the administration period has ended
 
+closure.administrationPeriodEndDateNeeded.title = You need the administration period end date to close this estate
+closure.administrationPeriodEndDateNeeded.heading = You need the administration period end date to close this estate
+closure.administrationPeriodEndDateNeeded.p = If you need help using the service
+closure.administrationPeriodEndDateNeeded.link = contact the deceased estate helpline (open in new tab or window)
+
 closure.administrationPeriodEndDate.title = What is the date the administration period ended?
 closure.administrationPeriodEndDate.heading = What is the date the administration period ended?
 closure.administrationPeriodEndDate.hint = For example, 31 3 1980

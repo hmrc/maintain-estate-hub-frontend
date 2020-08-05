@@ -19,17 +19,12 @@ package controllers.closure
 import base.SpecBase
 import forms.YesNoFormProvider
 import models.UserAnswers
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import pages.UTRPage
 import pages.closure.HasAdministrationPeriodEndedYesNoPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
 import views.html.closure.HasAdministrationPeriodEndedYesNoView
-
-import scala.concurrent.Future
 
 class HasAdministrationPeriodEndedYesNoControllerSpec extends SpecBase {
 
@@ -92,7 +87,7 @@ class HasAdministrationPeriodEndedYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.closure.routes.AdministrationPeriodEndDateController.onPageLoad().url
+      redirectLocation(result).value mustEqual routes.AdministrationPeriodEndDateController.onPageLoad().url
 
       application.stop()
     }
@@ -108,7 +103,7 @@ class HasAdministrationPeriodEndedYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.WhatIsNextController.onPageLoad().url
+      redirectLocation(result).value mustEqual routes.AdministrationPeriodEndDateNeededController.onPageLoad().url
 
       application.stop()
     }

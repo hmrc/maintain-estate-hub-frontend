@@ -4,3 +4,5 @@ POST        /has-administration-period-ended            controllers.closure.HasA
 
 GET         /administration-period-end-date             controllers.closure.AdministrationPeriodEndDateController.onPageLoad()
 POST        /administration-period-end-date             controllers.closure.AdministrationPeriodEndDateController.onSubmit()
+
+GET         /administration-period-end-date-needed      controllers.closure.AdministrationPeriodEndDateNeededController.onPageLoad()

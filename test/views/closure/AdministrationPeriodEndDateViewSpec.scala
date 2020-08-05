@@ -30,7 +30,7 @@ class AdministrationPeriodEndDateViewSpec extends QuestionViewBehaviours[LocalDa
   private val trustStartDate = LocalDate.parse("2019-02-03")
   override val form: Form[LocalDate] = new DateFormProvider().withConfig(messageKeyPrefix, trustStartDate)
 
-  "DateLastAssetSharedOut view" must {
+  "DateLastAssetSharedOut View" must {
 
     val view = viewFor[AdministrationPeriodEndDateView](Some(emptyUserAnswers))
 

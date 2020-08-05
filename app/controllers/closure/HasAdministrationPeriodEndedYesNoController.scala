@@ -66,7 +66,7 @@ class HasAdministrationPeriodEndedYesNoController @Inject()(
             if (value) {
               Redirect(controllers.closure.routes.AdministrationPeriodEndDateController.onPageLoad())
             } else {
-              Redirect(controllers.routes.WhatIsNextController.onPageLoad())
+              Redirect(controllers.closure.routes.AdministrationPeriodEndDateNeededController.onPageLoad())
             }
           }
         }
