@@ -37,6 +37,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       assertContainsText(doc, "What happens next")
 
+      assertContainsTextForId(doc, "print-declared", "Print or save a declared copy of the estate’s registration")
+
       assertContainsText(doc, "Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact the personal representative.")
     }
 
