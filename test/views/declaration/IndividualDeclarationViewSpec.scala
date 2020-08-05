@@ -39,6 +39,7 @@ class IndividualDeclarationViewSpec extends QuestionViewBehaviours[IndividualDec
         view.apply(form, declarationEmailEnabled = true)(fakeRequest, messages)
 
       behave like normalPage(applyView(form), messageKeyPrefix, "paragraph1", "paragraph2")
+      println(">>" + applyView(form))
 
       behave like pageWithBackLink(applyView(form))
 
