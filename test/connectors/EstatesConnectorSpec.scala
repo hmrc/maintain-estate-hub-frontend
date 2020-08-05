@@ -27,6 +27,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Inside, MustMatchers, OptionValues}
 import org.scalatestplus.play.PlaySpec
 import play.api.http.Status
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.WireMockHelper
 
@@ -36,6 +37,7 @@ import scala.io.Source
 
 class EstatesConnectorSpec extends PlaySpec with MustMatchers
   with OptionValues with Generators with SpecBase with WireMockHelper with ScalaFutures with Inside {
+
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
   private def getEstateUrl(utr: String) : String = s"/estates/$utr"
@@ -234,6 +236,62 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
 
         application.stop()
       }
+    }
+
+    "close" must {
+
+      def url(utr: String) = s"/estates/close/$utr"
+      val utr: String = "utr"
+      val closeDate: LocalDate = LocalDate.parse("2000-01-01")
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        server.stubFor(
+          post(urlEqualTo(url(utr)))
+            .willReturn(ok)
+        )
+
+        val result = connector.close(utr, closeDate)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        server.stubFor(
+          post(urlEqualTo(url(utr)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.close(utr, closeDate)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
     }
   }
 
