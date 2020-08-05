@@ -16,8 +16,10 @@
 
 package controllers.confirmation
 
+import java.time.LocalDateTime
+
 import base.SpecBase
-import pages.TVNPage
+import pages.{SubmissionDatePage, TVNPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.confirmation.ConfirmationView
@@ -32,6 +34,7 @@ class ConfirmationControllerSpec extends SpecBase {
 
       val playbackAnswers = emptyUserAnswers
         .set(TVNPage, fakeTvn).success.value
+        .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
 
       val application = applicationBuilder(userAnswers = Some(playbackAnswers)).build()
 

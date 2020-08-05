@@ -22,8 +22,8 @@ import models._
 
 object FakeData {
 
-  lazy val correspondenceAddressUk = AddressType("line1", "line2", None, None, Some("NE991ZZ"), "GB")
-  lazy val correspondenceAddressNonUk = AddressType("line1", "line2", Some("line3"), None, None, "DE")
+  lazy val correspondenceAddressUk: AddressType = AddressType("line1", "line2", None, None, Some("NE991ZZ"), "GB")
+  lazy val correspondenceAddressNonUk: AddressType = AddressType("line1", "line2", Some("line3"), None, None, "DE")
 
   lazy val personalRepresentativeIndividualNino : EstatePerRepIndType = EstatePerRepIndType(
     name = NameType("Adam", None, "Conder"),
@@ -34,7 +34,7 @@ object FakeData {
       address = None
     ),
     email = Some("email@test.com"),
-    lineNo = "1",
+    lineNo = Some("1"),
     bpMatchStatus = Some("01"),
     entityStart = LocalDate.of(2020, 4, 10),
     phoneNumber = "+447838383823"
@@ -49,7 +49,7 @@ object FakeData {
       address = Some(AddressType("line1", "line2", Some("line3"), None, None, "FR"))
     ),
     email = Some("email@test.com"),
-    lineNo = "1",
+    lineNo = Some("1"),
     bpMatchStatus = Some("01"),
     entityStart = LocalDate.of(2020, 4, 10),
     phoneNumber = "+447838383823"
@@ -64,7 +64,7 @@ object FakeData {
       address = Some(AddressType("lane 1", "lane 2", None, None, Some("NE211ZZ"), "GB"))
     ),
     email = Some("email@test.com"),
-    lineNo = "1",
+    lineNo = Some("1"),
     bpMatchStatus = Some("01"),
     entityStart = LocalDate.of(2020, 4, 10),
     phoneNumber = "+447838383823"
@@ -77,7 +77,7 @@ object FakeData {
       address = None
     ),
     email = None,
-    lineNo = "1",
+    lineNo = Some("1"),
     bpMatchStatus = Some("01"),
     entityStart = LocalDate.of(2020, 4, 10),
     phoneNumber = "+447838383823"
@@ -90,7 +90,7 @@ object FakeData {
       address = Some(AddressType("line1", "line2", None, None, Some("NE991ZZ"), "GB"))
     ),
     email = Some("email@test.com"),
-    lineNo = "1",
+    lineNo = Some("1"),
     bpMatchStatus = Some("01"),
     entityStart = LocalDate.of(2020, 4, 10),
     phoneNumber = "+447838383823"
@@ -103,7 +103,7 @@ object FakeData {
       address = Some(AddressType("line1", "line2", Some("line3"), None, None, "FR"))
     ),
     email = Some("email@test.com"),
-    lineNo = "1",
+    lineNo = Some("1"),
     bpMatchStatus = Some("01"),
     entityStart = LocalDate.of(2020, 4, 10),
     phoneNumber = "+447838383823"

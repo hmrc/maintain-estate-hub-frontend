@@ -16,6 +16,8 @@
 
 package models.requests
 
+import java.time.LocalDateTime
+
 import models.UserAnswers
 import models.declaration.Address
 import play.api.mvc.{Request, WrappedRequest}
@@ -44,4 +46,6 @@ case class TvnRequest[A](request: Request[A],
                          userAnswers: UserAnswers,
                          user: User,
                          utr: String,
-                         tvn: String) extends WrappedRequest[A](request)
+                         tvn: String,
+                         clientReferenceNumber: Option[String],
+                         submissionDate: LocalDateTime) extends WrappedRequest[A](request)
