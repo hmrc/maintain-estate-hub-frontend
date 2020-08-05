@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.print
 
 import play.api.Application
 import play.twirl.api.HtmlFormat

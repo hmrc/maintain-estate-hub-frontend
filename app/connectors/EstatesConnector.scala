@@ -29,11 +29,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   private def getEstateUrl(utr: String) = s"${config.estatesUrl}/estates/$utr"
+  private def getTransformedEstateUrl(utr: String) = s"${config.estatesUrl}/estates/$utr/transformed"
 
   private def declareUrl(utr: String) = s"${config.estatesUrl}/estates/declare/$utr"
 
   def getEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
     http.GET[EstateResponse](getEstateUrl(utr))(EstateStatusReads.httpReads, hc, ec)
+  }
+
+  def getTransformedEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
+    http.GET[EstateResponse](getTransformedEstateUrl(utr))(EstateStatusReads.httpReads, hc, ec)
   }
 
   def declare(utr: String, payload: JsValue)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {

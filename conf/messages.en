@@ -227,6 +227,13 @@ print.personalRepresentativeOrg.email.checkYourAnswersLabel = What is {0}’s em
 print.estate.name = Estate name
 print.estate.name.checkYourAnswersLabel = What is the estate’s name?
 
+
+# Declared answers
+
+declared.title = Declared copy of the estate’s registration
+declared.heading = Declared copy of the estate’s registration
+declared.informationFirstRegistered = No further updates to estate name, the person who died, complex estate and years of tax liability are required through this service.
+
 agentNotAuthorised.title = Sorry, you cannot access this estate
 agentNotAuthorised.heading = Sorry, you cannot access this estate
 agentNotAuthorised.subHeading = This estate’s UTR: {0}

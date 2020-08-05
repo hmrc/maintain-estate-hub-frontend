@@ -16,6 +16,8 @@
 
 package controllers.actions
 
+import java.time.LocalDateTime
+
 import base.SpecBase
 import models.UserAnswers
 import models.requests.{DataRequestWithUTR, IdentifierRequest, OrganisationUser, TvnRequest}
@@ -23,7 +25,7 @@ import org.mockito.Mockito._
 import org.scalatest.EitherValues
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TVNPage
+import pages.{SubmissionDatePage, TVNPage}
 import play.api.mvc.Result
 import play.api.test.Helpers
 import repositories.SessionRepository
@@ -58,7 +60,7 @@ class RequireTvnActionSpec extends SpecBase with MockitoSugar with ScalaFutures 
       }
     }
 
-    "there is a tvn in the cache" must {
+    "there is a tvn and submission date in the cache" must {
 
       "refine the request" in {
 
@@ -66,6 +68,7 @@ class RequireTvnActionSpec extends SpecBase with MockitoSugar with ScalaFutures 
 
         val userAnswers = emptyUserAnswers
           .set(TVNPage, "tvn").success.value
+          .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
 
         val user = OrganisationUser("id", Enrolments(Set()))
         val request = DataRequestWithUTR(fakeRequest, userAnswers, user, "utr")
