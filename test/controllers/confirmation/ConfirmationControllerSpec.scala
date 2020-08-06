@@ -18,11 +18,19 @@ package controllers.confirmation
 
 import java.time.LocalDateTime
 
-import base.SpecBase
+import base.{FakeData, SpecBase}
+import connectors.EstatesConnector
+import models.PersonalRepresentativeType
+import models.http.Processed
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.{SubmissionDatePage, TVNPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.confirmation.ConfirmationView
+import play.api.inject.bind
+
+import scala.concurrent.Future
 
 class ConfirmationControllerSpec extends SpecBase {
 
@@ -36,7 +44,24 @@ class ConfirmationControllerSpec extends SpecBase {
         .set(TVNPage, fakeTvn).success.value
         .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
 
-      val application = applicationBuilder(userAnswers = Some(playbackAnswers)).build()
+      val mockConnector = mock[EstatesConnector]
+
+      lazy val data = FakeData.fakeGetEstateWithPersonalRep(
+        PersonalRepresentativeType(
+          estatePerRepInd = Some(FakeData.personalRepresentativeIndividualNino),
+          estatePerRepOrg = None
+        ),
+        correspondenceAddress = FakeData.correspondenceAddressUk
+      )
+
+      when(mockConnector.getTransformedEstate(any())(any(), any()))
+        .thenReturn(Future.successful(Processed(data, "formBundleNo")))
+
+      val application = applicationBuilder(userAnswers = Some(playbackAnswers))
+        .overrides(
+          bind[EstatesConnector].to(mockConnector)
+        )
+        .build()
 
       val request = FakeRequest(GET, controllers.confirmation.routes.ConfirmationController.onPageLoad().url)
 
@@ -47,7 +72,7 @@ class ConfirmationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(fakeTvn, isAgent = false, "#")(fakeRequest, messages).toString
+        view("Adam Conder", fakeTvn, isAgent = false, "#")(fakeRequest, messages).toString
 
       application.stop()
     }

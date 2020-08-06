@@ -82,7 +82,8 @@ object Estate {
 case class GetEstate(matchData: MatchData,
                      correspondence: Correspondence,
                      declaration: Declaration,
-                     estate: Estate)
+                     estate: Estate,
+                     trustEndDate: Option[LocalDate])
 
 object GetEstate {
   implicit val formats: Format[GetEstate] = Json.format[GetEstate]
@@ -96,6 +97,8 @@ case class NameType(firstName: String,
     val middle = middleName.map(" " + _ + " ").getOrElse(" ")
     s"${firstName}$middle${lastName}"
   }
+
+  def displayName: String = s"$firstName $lastName"
 
 }
 
