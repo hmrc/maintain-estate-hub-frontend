@@ -21,12 +21,12 @@ import config.FrontendAppConfig
 import connectors.EstatesConnector
 import controllers.actions.Actions
 import forms.WhatIsNextFormProvider
-import models.requests.DataRequestWithUTR
+import models.WhatIsNext._
 import models.{Enumerable, WhatIsNext}
 import pages.WhatIsNextPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.WhatIsNextView
@@ -63,30 +63,34 @@ class WhatIsNextController @Inject()(
   def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
     implicit request =>
 
+      def clearTransforms(value: WhatIsNext): Future[Any] = {
+        if (request.userAnswers.get(WhatIsNextPage).contains(value)) {
+          Future.successful(())
+        } else {
+          connector.clearTransformations(request.utr)
+        }
+      }
+
+      def redirectUrl(value: WhatIsNext): String = {
+        value match {
+          case DeclareNewPersonalRep => config.addNewPersonalRepUrl(request.utr)
+          case MakeChanges => config.amendExistingPersonalRepUrl(request.utr)
+          case CloseEstate => controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
+        }
+      }
+
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors))),
 
-        newValue => {
+        value => {
 
           for {
-            _ <- if (request.userAnswers.get(WhatIsNextPage).contains(newValue)) {
-              Future.successful(())
-            } else {
-              connector.clearTransformations(request.utr)
-            }
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsNextPage, newValue))
+            _ <- clearTransforms(value)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsNextPage, value))
             _ <- repository.set(updatedAnswers)
-          } yield redirect(newValue)
+          } yield Redirect(redirectUrl(value))
         }
       )
-  }
-
-  private def redirect(value: WhatIsNext)(implicit request: DataRequestWithUTR[AnyContent]): Result = {
-    Redirect(value match {
-      case WhatIsNext.DeclareNewPersonalRep => config.addNewPersonalRepUrl(request.utr)
-      case WhatIsNext.MakeChanges => config.amendExistingPersonalRepUrl(request.utr)
-      case WhatIsNext.CloseEstate => controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
-    })
   }
 }
