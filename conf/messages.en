@@ -371,3 +371,7 @@ closure.administrationPeriodEndDate.error.required = The date the administration
 closure.administrationPeriodEndDate.error.invalid = Enter a real date
 closure.administrationPeriodEndDate.error.future = The date the administration period ended must be today or in the past
 closure.administrationPeriodEndDate.error.past = The date the administration period ended cannot be before the start date of the estate
+
+closure.changePersonalRepDetailsYesNo.title = Do you want to change the personal representative details before closing?
+closure.changePersonalRepDetailsYesNo.heading = Do you want to change the personal representative details before closing?
+closure.changePersonalRepDetailsYesNo.error.required = Select yes if you want to change the personal representative details before closing

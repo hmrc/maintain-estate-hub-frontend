@@ -20,16 +20,16 @@ import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.closure.HasAdministrationPeriodEndedYesNoView
+import views.html.closure.{ChangePersonalRepDetailsYesNoView, HasAdministrationPeriodEndedYesNoView}
 
-class HasAdministrationPeriodEndedYesNoViewSpec extends YesNoViewBehaviours {
+class ChangePersonalRepDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "closure.hasAdministrationPeriodEnded"
+  val messageKeyPrefix = "closure.changePersonalRepDetailsYesNo"
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "HasAdministrationPeriodEndedYesNo View" must {
+  "ChangePersonalRepDetailsYesNo View" must {
 
-    val view = viewFor[HasAdministrationPeriodEndedYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[ChangePersonalRepDetailsYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form)(fakeRequest, messages)
@@ -39,8 +39,6 @@ class HasAdministrationPeriodEndedYesNoViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(form, applyView, messageKeyPrefix)
-
-    behave like pageWithHint(form, applyView, messageKeyPrefix)
 
     behave like pageWithASubmitButton(applyView(form))
   }

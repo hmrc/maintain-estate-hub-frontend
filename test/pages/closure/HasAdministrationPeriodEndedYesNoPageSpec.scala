@@ -33,9 +33,11 @@ class HasAdministrationPeriodEndedYesNoPageSpec extends PageBehaviours {
     "implement cleanup logic when NO selected" in {
       val userAnswers = emptyUserAnswers
         .set(AdministrationPeriodEndDatePage, LocalDate.parse("2020-01-01"))
+        .flatMap(_.set(ChangePersonalRepDetailsYesNoPage, true))
         .flatMap(_.set(HasAdministrationPeriodEndedYesNoPage, false))
 
       userAnswers.get.get(AdministrationPeriodEndDatePage) mustNot be(defined)
+      userAnswers.get.get(ChangePersonalRepDetailsYesNoPage) mustNot be(defined)
     }
   }
 }

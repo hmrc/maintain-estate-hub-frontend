@@ -113,7 +113,7 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.closure.routes.ChangePersonalRepDetailsYesNoController.onPageLoad().url
 
       application.stop()
     }

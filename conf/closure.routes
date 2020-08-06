@@ -7,3 +7,6 @@ POST        /administration-period-end-date             controllers.closure.Admi
 
 GET         /administration-period-end-date-needed      controllers.closure.AdministrationPeriodEndDateNeededController.onPageLoad()
 POST        /administration-period-end-date-needed      controllers.closure.AdministrationPeriodEndDateNeededController.cleanupAndRedirect()
+
+GET         /change-personal-rep-details                controllers.closure.ChangePersonalRepDetailsYesNoController.onPageLoad()
+POST        /change-personal-rep-details                controllers.closure.ChangePersonalRepDetailsYesNoController.onSubmit()

@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package pages.closure
+package pages
 
-import java.time.LocalDate
-
-import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object AdministrationPeriodEndDatePage extends QuestionPage[LocalDate] {
-
-  override def path: JsPath = basePath \ toString
-
-  override def toString: String = "administrationPeriodEndDate"
+package object closure {
+  val basePath: JsPath = JsPath \ 'closure
 }

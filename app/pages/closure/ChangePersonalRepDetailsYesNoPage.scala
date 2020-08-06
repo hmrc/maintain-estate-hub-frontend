@@ -16,14 +16,12 @@
 
 package pages.closure
 
-import java.time.LocalDate
-
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object AdministrationPeriodEndDatePage extends QuestionPage[LocalDate] {
+case object ChangePersonalRepDetailsYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = basePath \ toString
 
-  override def toString: String = "administrationPeriodEndDate"
+  override def toString: String = "changePersonalRepDetailsYesNo"
 }

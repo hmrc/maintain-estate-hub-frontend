@@ -76,7 +76,7 @@ class AdministrationPeriodEndDateController @Inject()(
               updatedAnswers <- Future.fromTry(request.userAnswers.set(AdministrationPeriodEndDatePage, date))
               _ <- sessionRepository.set(updatedAnswers)
               _ <- connector.close(request.utr, date)
-            } yield Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+            } yield Redirect(controllers.closure.routes.ChangePersonalRepDetailsYesNoController.onPageLoad())
         )
       }
 

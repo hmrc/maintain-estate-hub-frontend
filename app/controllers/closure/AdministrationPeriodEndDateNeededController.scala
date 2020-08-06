@@ -19,7 +19,6 @@ package controllers.closure
 import com.google.inject.Inject
 import controllers.actions._
 import pages.WhatIsNextPage
-import pages.closure.HasAdministrationPeriodEndedYesNoPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -47,7 +46,7 @@ class AdministrationPeriodEndDateNeededController @Inject()(
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers
           .remove(WhatIsNextPage)
-          .flatMap(_.remove(HasAdministrationPeriodEndedYesNoPage))
+          .flatMap(_.deleteAtPath(pages.closure.basePath))
         )
         _ <- sessionRepository.set(updatedAnswers)
       } yield {
