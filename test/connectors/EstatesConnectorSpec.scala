@@ -541,6 +541,56 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
       }
 
     }
+
+    "get close date" must {
+
+      val utr = "utr"
+
+      "return a date when there is a close estate transform" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        val expectedResult: Option[LocalDate] = Some(LocalDate.parse("1996-02-03"))
+
+        server.stubFor(
+          get(urlEqualTo(s"/estates/$utr/close-date"))
+            .willReturn(okJson(Json.toJson(expectedResult).toString))
+        )
+
+        val result = Await.result(connector.getCloseDate(utr), Duration.Inf)
+        result mustBe expectedResult
+      }
+
+      "return None when there is no close estate transform" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        server.stubFor(
+          get(urlEqualTo(s"/estates/$utr/close-date"))
+            .willReturn(okJson(Json.obj().toString))
+        )
+
+        val result = Await.result(connector.getCloseDate(utr), Duration.Inf)
+        result mustBe None
+      }
+
+    }
   }
 
 }
