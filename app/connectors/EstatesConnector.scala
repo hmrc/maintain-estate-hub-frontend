@@ -31,6 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   private def getEstateUrl(utr: String) = s"${config.estatesUrl}/estates/$utr"
+
   private def getTransformedEstateUrl(utr: String) = s"${config.estatesUrl}/estates/$utr/transformed"
 
   private def declareUrl(utr: String) = s"${config.estatesUrl}/estates/declare/$utr"
@@ -38,6 +39,8 @@ class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
   private def closeUrl(utr: String) = s"${config.estatesUrl}/estates/close/$utr"
 
   private def getDateOfDeathUrl(utr: String) = s"${config.estatesUrl}/estates/$utr/date-of-death"
+
+  private def clearTransformationsUrl(utr: String) = s"${config.estatesUrl}/estates/$utr/clear-transformations"
 
   def getEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
     http.GET[EstateResponse](getEstateUrl(utr))(EstateStatusReads.httpReads, hc, ec)
@@ -60,6 +63,10 @@ class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
       case JsSuccess(dateOfDeath, _) => dateOfDeath
       case _ => config.minDate
     })
+  }
+
+  def clearTransformations(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    http.POSTEmpty[HttpResponse](clearTransformationsUrl(utr))
   }
 
 }

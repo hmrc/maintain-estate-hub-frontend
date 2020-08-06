@@ -541,6 +541,60 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
       }
 
     }
+
+    "clear transformations" must {
+
+      def url(utr: String) = s"/estates/$utr/clear-transformations"
+      val utr: String = "utr"
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        server.stubFor(
+          post(urlEqualTo(url(utr)))
+            .willReturn(ok)
+        )
+
+        val result = connector.clearTransformations(utr)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.estates.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[EstatesConnector]
+
+        server.stubFor(
+          post(urlEqualTo(url(utr)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.clearTransformations(utr)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+    }
   }
 
 }
