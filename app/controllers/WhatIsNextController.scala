@@ -71,12 +71,10 @@ class WhatIsNextController @Inject()(
         }
       }
 
-      def redirectUrl(value: WhatIsNext): String = {
-        value match {
-          case DeclareNewPersonalRep => config.addNewPersonalRepUrl(request.utr)
-          case MakeChanges => config.amendExistingPersonalRepUrl(request.utr)
-          case CloseEstate => controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
-        }
+      def redirectUrl(value: WhatIsNext): String = value match {
+        case DeclareNewPersonalRep => config.addNewPersonalRepUrl(request.utr)
+        case MakeChanges => config.amendExistingPersonalRepUrl(request.utr)
+        case CloseEstate => controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
       }
 
       form.bindFromRequest().fold(
