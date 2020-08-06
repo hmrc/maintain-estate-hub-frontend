@@ -18,13 +18,15 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
+import connectors.EstatesConnector
 import controllers.actions.Actions
 import forms.WhatIsNextFormProvider
+import models.requests.DataRequestWithUTR
 import models.{Enumerable, WhatIsNext}
 import pages.WhatIsNextPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.WhatIsNextView
@@ -39,7 +41,8 @@ class WhatIsNextController @Inject()(
                                       formProvider: WhatIsNextFormProvider,
                                       val controllerComponents: MessagesControllerComponents,
                                       view: WhatIsNextView,
-                                      config: FrontendAppConfig
+                                      config: FrontendAppConfig,
+                                      connector: EstatesConnector
                                     )(implicit ec: ExecutionContext)
 
   extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
@@ -64,16 +67,26 @@ class WhatIsNextController @Inject()(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors))),
 
-        value => {
+        newValue => {
+
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsNextPage, value))
+            _ <- if (request.userAnswers.get(WhatIsNextPage).contains(newValue)) {
+              Future.successful(())
+            } else {
+              connector.clearTransformations(request.utr)
+            }
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsNextPage, newValue))
             _ <- repository.set(updatedAnswers)
-          } yield value match {
-            case WhatIsNext.DeclareNewPersonalRep => Redirect(config.addNewPersonalRepUrl(request.utr))
-            case WhatIsNext.MakeChanges => Redirect(config.amendExistingPersonalRepUrl(request.utr))
-            case WhatIsNext.CloseEstate => Redirect(controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad())
-          }
+          } yield redirect(newValue)
         }
       )
+  }
+
+  private def redirect(value: WhatIsNext)(implicit request: DataRequestWithUTR[AnyContent]): Result = {
+    Redirect(value match {
+      case WhatIsNext.DeclareNewPersonalRep => config.addNewPersonalRepUrl(request.utr)
+      case WhatIsNext.MakeChanges => config.amendExistingPersonalRepUrl(request.utr)
+      case WhatIsNext.CloseEstate => controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
+    })
   }
 }
