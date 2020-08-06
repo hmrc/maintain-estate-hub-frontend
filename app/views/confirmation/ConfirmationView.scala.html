@@ -21,7 +21,7 @@
     main_template: MainTemplate
 )
 
-@(tvn: String, isAgent: Boolean, agentOverviewUrl: String)(implicit request: Request[_], messages: Messages)
+@(name: String, tvn: String, isAgent: Boolean, agentOverviewUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${messages("confirmationPage.title", tvn)}"
@@ -39,7 +39,7 @@
 
     <h2>@messages("confirmationPage.subheading1")</h2>
 
-    <p>@messages("confirmationPage.paragraph1")</p>
+    <p>@messages("confirmationPage.paragraph1", name)</p>
 
     @if(isAgent: Boolean) {
         @messages("confirmationPage.agent.you.can") @components.link(agentOverviewUrl, "agent-overview", "confirmationPage.agent.link", false)

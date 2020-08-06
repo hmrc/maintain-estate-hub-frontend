@@ -33,13 +33,12 @@ class ConfirmationViewSpec extends ViewBehaviours {
       assertContainsText(doc, s"Declaration received")
       assertContainsText(doc, s"Your reference is:")
       assertContainsText(doc, s"$tvn")
-      assertContainsText(doc, "Print or save a declared copy of the estate’s registration")
 
       assertContainsText(doc, "What happens next")
 
-      assertContainsTextForId(doc, "print-declared", "Print or save a declared copy of the estate’s registration")
+      assertContainsTextForId(doc, "print-declared", "Print or save a declared copy of the estate’s declaration")
 
-      assertContainsText(doc, "Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact the personal representative.")
+      assertContainsText(doc, "Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact Adam.")
     }
 
   }
@@ -59,6 +58,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
     val view = viewFor[ConfirmationView](Some(emptyUserAnswers))
 
     val applyView = view.apply(
+      "Adam",
       tvn = tvn,
       isAgent = true,
       agentOverviewUrl = "#"
@@ -73,6 +73,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
     val view = viewFor[ConfirmationView](Some(emptyUserAnswers))
 
     val applyView = view.apply(
+      "Adam",
       tvn = tvn,
       isAgent = true,
       agentOverviewUrl = "#"
