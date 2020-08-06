@@ -31,7 +31,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   private def getEstateUrl(utr: String) = s"${config.estatesUrl}/estates/$utr"
-
   private def getTransformedEstateUrl(utr: String) = s"${config.estatesUrl}/estates/$utr/transformed"
 
   private def declareUrl(utr: String) = s"${config.estatesUrl}/estates/declare/$utr"
@@ -39,8 +38,6 @@ class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
   private def closeUrl(utr: String) = s"${config.estatesUrl}/estates/close/$utr"
 
   private def getDateOfDeathUrl(utr: String) = s"${config.estatesUrl}/estates/$utr/date-of-death"
-
-  private def getCloseDateUrl(utr: String) = s"${config.estatesUrl}/estates/$utr/close-date"
 
   def getEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
     http.GET[EstateResponse](getEstateUrl(utr))(EstateStatusReads.httpReads, hc, ec)
@@ -62,13 +59,6 @@ class EstatesConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
     http.GET[JsValue](getDateOfDeathUrl(utr)).map(_.validate[LocalDate] match {
       case JsSuccess(dateOfDeath, _) => dateOfDeath
       case _ => config.minDate
-    })
-  }
-
-  def getCloseDate(utr: String)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[Option[LocalDate]] = {
-    http.GET[JsValue](getCloseDateUrl(utr)).map(_.validate[LocalDate] match {
-      case JsSuccess(closeDate, _) => Some(closeDate)
-      case _ => None
     })
   }
 
