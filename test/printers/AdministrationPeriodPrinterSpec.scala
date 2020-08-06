@@ -24,19 +24,27 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 class AdministrationPeriodPrinterSpec extends SpecBase {
 
+  private val printer: AdministrationPeriodPrinter = injector.instanceOf[AdministrationPeriodPrinter]
+
   "administration period printer" must {
 
-      "print" in {
-        val printer = injector.instanceOf[AdministrationPeriodPrinter]
+    "print if close date exists" in {
 
-        val result = printer.period(Some(LocalDate.parse("2020-01-01")))
+      val result = printer.period(Some(LocalDate.parse("2020-01-01")))
 
-        result.value mustBe AnswerSection(
-          headingKey = Some("Administration period"),
-          rows = Seq(
-            AnswerRow(Html("What is the date the administration period ended?"), Html("1 January 2020"))
-          )
+      result mustBe Some(AnswerSection(
+        headingKey = Some("Administration period"),
+        rows = Seq(
+          AnswerRow(Html("What is the date the administration period ended?"), Html("1 January 2020"))
         )
-      }
+      ))
     }
+
+    "not print if close date doesn't exist" in {
+
+      val result = printer.period(None)
+
+      result mustBe None
+    }
+  }
 }
