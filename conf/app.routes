@@ -1,5 +1,7 @@
 # microservice specific routes
 
+->         /closure                                     closure.Routes
+
 GET        /                                            controllers.IndexController.onPageLoad
 
 GET        /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)

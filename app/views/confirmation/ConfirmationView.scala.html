@@ -14,14 +14,16 @@
  * limitations under the License.
  *@
 
-@import models.NormalMode
 @import controllers.declaration.routes._
+@import config.FrontendAppConfig
+@import models.NormalMode
 
 @this(
+    appConfig: FrontendAppConfig,
     main_template: MainTemplate
 )
 
-@(name: String, tvn: String, isAgent: Boolean, agentOverviewUrl: String)(implicit request: Request[_], messages: Messages)
+@(name: String, tvn: String, isAgent: Boolean, isClosing: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${messages("confirmationPage.title", tvn)}"
@@ -41,7 +43,13 @@
 
     <p>@messages("confirmationPage.paragraph1", name)</p>
 
+    @if(isClosing) {
+        <p>@messages("confirmationPage.paragraph2")</p>
+
+        @components.paragraph_link("confirmationPage.paragraph3", appConfig.estatesHelplineUrl, "helpline", "confirmationPage.paragraph3.link", true)
+    }
+
     @if(isAgent: Boolean) {
-        @messages("confirmationPage.agent.you.can") @components.link(agentOverviewUrl, "agent-overview", "confirmationPage.agent.link", false)
+        @components.paragraph_link("confirmationPage.agent.you.can", appConfig.agentOverviewUrl, "agent-overview", "confirmationPage.agent.link", false)
     }
 }

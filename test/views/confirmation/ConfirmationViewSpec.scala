@@ -48,10 +48,23 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       val doc = asDocument(view)
       val agentOverviewLink = doc.getElementById("agent-overview")
-      assertAttributeValueForElement(agentOverviewLink, "href", "#")
-      assertContainsTextForId(doc, "agent-overview", "return to register and maintain an estate for a client.")
+      assertAttributeValueForElement(agentOverviewLink, "href", frontendAppConfig.agentOverviewUrl)
+      assertContainsTextForId(doc, "agent-overview", "return to register and maintain an estate for a client")
     }
 
+  }
+
+  private def closingConfirmationPage(view: HtmlFormat.Appendable) : Unit = {
+    "display paragraphs relevant to closing the estate" in {
+
+      val doc = asDocument(view)
+      assertContainsText(doc, "Your request to close this estate will be processed and access to its online register will be removed.")
+      assertContainsText(doc, "If this has been done in error, you can")
+
+      val estatesHelplineLink = doc.getElementById("helpline")
+      assertAttributeValueForElement(estatesHelplineLink, "href", frontendAppConfig.estatesHelplineUrl)
+      assertContainsTextForId(doc, "helpline", "contact the deceased estate helpline to reopen the records (opens in a new tab)")
+    }
   }
 
   "Confirmation view for an agent" must {
@@ -61,7 +74,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
       "Adam",
       tvn = tvn,
       isAgent = true,
-      agentOverviewUrl = "#"
+      isClosing = false
     )(fakeRequest, messages)
 
     behave like confirmationPage(applyView)
@@ -76,10 +89,23 @@ class ConfirmationViewSpec extends ViewBehaviours {
       "Adam",
       tvn = tvn,
       isAgent = true,
-      agentOverviewUrl = "#"
+      isClosing = false
     )(fakeRequest, messages)
 
     behave like confirmationPage(applyView)
+  }
+
+  "Confirmation view when closing" must {
+    val view = viewFor[ConfirmationView](Some(emptyUserAnswers))
+
+    val applyView = view.apply(
+      "Adam",
+      tvn = tvn,
+      isAgent = false,
+      isClosing = true
+    )(fakeRequest, messages)
+
+    behave like closingConfirmationPage(applyView)
   }
 
 }

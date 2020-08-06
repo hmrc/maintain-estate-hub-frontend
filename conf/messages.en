@@ -349,5 +349,32 @@ confirmationPage.printsave.link = Print or save a declared copy of the estate’
 confirmationPage.subheading1 = What happens next
 confirmationPage.paragraph1 = Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact {0}.
 confirmationPage.personalRepresentative.default = the personal representative
+confirmationPage.paragraph2 = Your request to close this estate will be processed and access to its online register will be removed.
+confirmationPage.paragraph3 = If this has been done in error, you can
+confirmationPage.paragraph3.link = contact the deceased estate helpline to reopen the records (opens in a new tab)
 confirmationPage.agent.you.can = You can
-confirmationPage.agent.link = return to register and maintain an estate for a client.
+confirmationPage.agent.link = return to register and maintain an estate for a client
+
+closure.hasAdministrationPeriodEnded.title = Has the administration period ended?
+closure.hasAdministrationPeriodEnded.heading = Has the administration period ended?
+closure.hasAdministrationPeriodEnded.hint = This ends once the estate’s liabilities have been paid and anything left over has been worked out.
+closure.hasAdministrationPeriodEnded.error.required = Select yes if the administration period has ended
+
+closure.administrationPeriodEndDateNeeded.title = You need the administration period end date to close this estate
+closure.administrationPeriodEndDateNeeded.heading = You need the administration period end date to close this estate
+closure.administrationPeriodEndDateNeeded.p = If you need help using the service
+closure.administrationPeriodEndDateNeeded.link = contact the deceased estate helpline (open in new tab or window)
+
+closure.administrationPeriodEndDate.title = What is the date the administration period ended?
+closure.administrationPeriodEndDate.heading = What is the date the administration period ended?
+closure.administrationPeriodEndDate.hint = For example, 31 3 1980
+closure.administrationPeriodEndDate.error.required.all = Enter the date the administration period ended
+closure.administrationPeriodEndDate.error.required.two = The date the administration period ended must include a {0} and a {1}
+closure.administrationPeriodEndDate.error.required = The date the administration period ended must include a {0}
+closure.administrationPeriodEndDate.error.invalid = Enter a real date
+closure.administrationPeriodEndDate.error.future = The date the administration period ended must be today or in the past
+closure.administrationPeriodEndDate.error.past = The date the administration period ended cannot be before the start date of the estate
+
+closure.changePersonalRepDetailsYesNo.title = Do you want to change the personal representative details before closing?
+closure.changePersonalRepDetailsYesNo.heading = Do you want to change the personal representative details before closing?
+closure.changePersonalRepDetailsYesNo.error.required = Select yes if you want to change the personal representative details before closing

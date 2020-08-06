@@ -16,35 +16,35 @@
 
 package controllers.confirmation
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime}
 
 import base.{FakeData, SpecBase}
 import connectors.EstatesConnector
-import models.PersonalRepresentativeType
 import models.http.Processed
+import models.requests.AgentUser
+import models.{PersonalRepresentativeType, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import pages.{SubmissionDatePage, TVNPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.Enrolments
 import views.html.confirmation.ConfirmationView
-import play.api.inject.bind
 
 import scala.concurrent.Future
 
 class ConfirmationControllerSpec extends SpecBase {
 
+  private val fakeTvn = "XCTVN0000004912"
+
+  private val playbackAnswers: UserAnswers = emptyUserAnswers
+    .set(TVNPage, fakeTvn).success.value
+    .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
+
   "Confirmation Controller" must {
 
     "return OK and the correct view for a onPageLoad when TVN is available" in {
-
-      val fakeTvn = "XCTVN0000004912"
-
-      val playbackAnswers = emptyUserAnswers
-        .set(TVNPage, fakeTvn).success.value
-        .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
-
-      val mockConnector = mock[EstatesConnector]
 
       lazy val data = FakeData.fakeGetEstateWithPersonalRep(
         PersonalRepresentativeType(
@@ -54,12 +54,12 @@ class ConfirmationControllerSpec extends SpecBase {
         correspondenceAddress = FakeData.correspondenceAddressUk
       )
 
-      when(mockConnector.getTransformedEstate(any())(any(), any()))
+      when(fakeConnector.getTransformedEstate(any())(any(), any()))
         .thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
       val application = applicationBuilder(userAnswers = Some(playbackAnswers))
         .overrides(
-          bind[EstatesConnector].to(mockConnector)
+          bind[EstatesConnector].to(fakeConnector)
         )
         .build()
 
@@ -72,7 +72,42 @@ class ConfirmationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view("Adam Conder", fakeTvn, isAgent = false, "#")(fakeRequest, messages).toString
+        view("Adam Conder", fakeTvn, isAgent = false, isClosing = false)(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct view for an agent user closing the estate" in {
+
+      lazy val data = FakeData.fakeGetEstateWithPersonalRep(
+        PersonalRepresentativeType(
+          estatePerRepInd = Some(FakeData.personalRepresentativeIndividualNino),
+          estatePerRepOrg = None
+        ),
+        correspondenceAddress = FakeData.correspondenceAddressUk,
+        trustEndDate = Some(LocalDate.parse("2020-08-06"))
+      )
+
+      when(fakeConnector.getTransformedEstate(any())(any(), any()))
+        .thenReturn(Future.successful(Processed(data, "formBundleNo")))
+
+      val application = applicationBuilderForUser(
+        userAnswers = Some(playbackAnswers),
+        user = AgentUser("id", Enrolments(Set()), "arn")
+      ).overrides(
+          bind[EstatesConnector].to(fakeConnector)
+      ).build()
+
+      val request = FakeRequest(GET, controllers.confirmation.routes.ConfirmationController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ConfirmationView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view("Adam Conder", fakeTvn, isAgent = true, isClosing = true)(fakeRequest, messages).toString
 
       application.stop()
     }
