@@ -109,7 +109,9 @@ object FakeData {
     phoneNumber = "+447838383823"
   )
 
-  def fakeGetEstateWithPersonalRep(personalRep: PersonalRepresentativeType, correspondenceAddress: AddressType): GetEstate = GetEstate(
+  def fakeGetEstateWithPersonalRep(personalRep: PersonalRepresentativeType,
+                                   correspondenceAddress: AddressType,
+                                   trustEndDate: Option[LocalDate] = None): GetEstate = GetEstate(
     matchData = MatchData("1234567890"),
     correspondence = Correspondence(
       abroadIndicator = false,
@@ -134,7 +136,7 @@ object FakeData {
         )
       )
     ),
-    trustEndDate = None
+    trustEndDate = trustEndDate
   )
 
 }

@@ -17,13 +17,12 @@
 package controllers.confirmation
 
 import com.google.inject.{Inject, Singleton}
-import config.FrontendAppConfig
 import connectors.EstatesConnector
 import controllers.actions.Actions
-import models.{EstatePerRepIndType, EstatePerRepOrgType, PersonalRepresentativeType}
 import models.http.Processed
+import models.{EstatePerRepIndType, EstatePerRepOrgType, PersonalRepresentativeType}
 import play.api.Logger
-import play.api.i18n.{I18nSupport, Lang, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -37,7 +36,6 @@ class ConfirmationController @Inject()(
                                         actions: Actions,
                                         val controllerComponents: MessagesControllerComponents,
                                         confirmationView: ConfirmationView,
-                                        config: FrontendAppConfig,
                                         estatesConnector: EstatesConnector
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
@@ -61,7 +59,7 @@ class ConfirmationController @Inject()(
       estatesConnector.getTransformedEstate(request.utr) map {
         case Processed(estate, _) =>
           val name = personalRepName(estate.estate.entities.personalRepresentative)
-          Ok(confirmationView(name, request.tvn, isAgent, agentOverviewUrl = config.agentOverviewUrl))
+          Ok(confirmationView(name, request.tvn, isAgent, estate.trustEndDate.isDefined))
         case _ =>
           Logger.warn(s"[Confirmation] unable to render confirmation")
           Redirect(controllers.routes.EstateStatusController.problemWithService())

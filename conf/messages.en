@@ -349,8 +349,11 @@ confirmationPage.printsave.link = Print or save a declared copy of the estate’
 confirmationPage.subheading1 = What happens next
 confirmationPage.paragraph1 = Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact {0}.
 confirmationPage.personalRepresentative.default = the personal representative
+confirmationPage.paragraph2 = Your request to close this estate will be processed and access to its online register will be removed.
+confirmationPage.paragraph3 = If this has been done in error, you can
+confirmationPage.paragraph3.link = contact the Deceased Estates helpline to reopen the records (opens in a new tab)
 confirmationPage.agent.you.can = You can
-confirmationPage.agent.link = return to register and maintain an estate for a client.
+confirmationPage.agent.link = return to register and maintain an estate for a client
 
 closure.hasAdministrationPeriodEnded.title = Has the administration period ended?
 closure.hasAdministrationPeriodEnded.heading = Has the administration period ended?
