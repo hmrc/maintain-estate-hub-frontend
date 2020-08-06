@@ -133,7 +133,8 @@ object FakeData {
           entityStart = LocalDate.of(2020, 4, 10)
         )
       )
-    )
+    ),
+    trustEndDate = None
   )
 
 }

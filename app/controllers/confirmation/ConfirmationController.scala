@@ -45,12 +45,11 @@ class ConfirmationController @Inject()(
                              (implicit request: Request[_]): String = {
     personalRepresentative match {
       case PersonalRepresentativeType(Some(EstatePerRepIndType(name, _, _, _, _, _, _, _)), None) =>
-        s"${name.firstName} ${name.lastName}"
+        name.displayName
       case PersonalRepresentativeType(None, Some(EstatePerRepOrgType(name, _, _, _, _, _, _))) =>
         name
       case _ =>
-        val lang = request.lang
-        messagesApi("confirmationPage.personalRepresentative.default")(lang)
+        messagesApi("confirmationPage.personalRepresentative.default")(request.lang)
     }
   }
 
