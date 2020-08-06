@@ -227,12 +227,17 @@ print.personalRepresentativeOrg.email.checkYourAnswersLabel = What is {0}’s em
 print.estate.name = Estate name
 print.estate.name.checkYourAnswersLabel = What is the estate’s name?
 
+print.administrationPeriod = Administration period
+print.administrationPeriod.checkYourAnswersLabel = What is the date the administration period ended?
+
 
 # Declared answers
 
 declared.title = Declared copy of the estate’s registration
 declared.heading = Declared copy of the estate’s registration
 declared.informationFirstRegistered = No further updates to estate name, the person who died, complex estate and years of tax liability are required through this service.
+declared.final.title = Final declared copy of the estate’s registration
+declared.final.heading = Final declared copy of the estate’s registration
 
 declared.p1 = Declaration reference number is: {0}
 declared.p2 = Client reference number: {0}
