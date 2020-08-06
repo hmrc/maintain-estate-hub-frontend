@@ -17,23 +17,26 @@
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 
 @this(
-main_template: MainTemplate,
-formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(tvn: String,
-  declarationSent: String,
-  crn: Option[String],
-  personalRepresentative: Seq[Section],
-  estateName: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(
+    tvn: String,
+    declarationSent: String,
+    crn: Option[String],
+    administrationPeriodAndPersonalRep: Seq[Section],
+    estateName: Seq[Section],
+    prefix: String
+)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-title = messages("declared.title")
+    title = messages(s"$prefix.title")
 ) {
 
     @components.back_link()
 
-    @components.heading("declared.heading", headingSize = "heading-large")
+    @components.heading(s"$prefix.heading", headingSize = "heading-large")
 
     <div class="section">
         <p>@components.button_print()</p>
@@ -51,9 +54,7 @@ title = messages("declared.title")
 
     <p>@messages("declared.p3", declarationSent)</p>
 
-
-
-    @for(section <- personalRepresentative){
+    @for(section <- administrationPeriodAndPersonalRep){
         @{
             section match {
                 case a: AnswerSection => components.answer_section(a)

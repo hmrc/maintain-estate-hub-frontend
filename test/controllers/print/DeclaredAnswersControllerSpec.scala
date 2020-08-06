@@ -16,7 +16,7 @@
 
 package controllers.print
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime}
 
 import base.{FakeData, SpecBase}
 import connectors.EstatesConnector
@@ -38,77 +38,109 @@ class DeclaredAnswersControllerSpec extends SpecBase {
   lazy val mockEstatesConnector: EstatesConnector = mock[EstatesConnector]
   lazy val mockPrintHelper: PrintHelper = mock[PrintHelper]
 
-  "DeclaredController" must {
+  when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
+  when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
+  when(mockPrintHelper.administrationPeriod(any())(any())).thenReturn(Nil)
 
-    "return OK and the correct view for a GET" in {
+  "DeclaredController" when {
 
-      lazy val data = FakeData.fakeGetEstateWithPersonalRep(
-        PersonalRepresentativeType(
-        estatePerRepInd = Some(FakeData.personalRepresentativeIndividualNino),
-        estatePerRepOrg = None
-        ),
-        correspondenceAddress = FakeData.correspondenceAddressUk
-      )
+    val userAnswers = emptyUserAnswers
+      .set(TVNPage, "tvn").success.value
+      .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
 
-      val userAnswers = emptyUserAnswers
-        .set(TVNPage, "tvn").success.value
-        .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
+    "not closing" must {
 
-      val application = applicationBuilder(Some(userAnswers))
-        .overrides(
-          bind[EstatesConnector].toInstance(mockEstatesConnector),
-          bind[PrintHelper].toInstance(mockPrintHelper)
+      "return OK and the correct view for a GET" in {
+
+        lazy val data = FakeData.fakeGetEstateWithPersonalRep(
+          PersonalRepresentativeType(
+            estatePerRepInd = Some(FakeData.personalRepresentativeIndividualNino),
+            estatePerRepOrg = None
+          ),
+          correspondenceAddress = FakeData.correspondenceAddressUk
         )
-        .build()
 
-      when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
+        val application = applicationBuilder(Some(userAnswers))
+          .overrides(
+            bind[EstatesConnector].toInstance(mockEstatesConnector),
+            bind[PrintHelper].toInstance(mockPrintHelper)
+          ).build()
 
-      when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
-      when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
+        when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
-      val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      val view = application.injector.instanceOf[DeclaredAnswersView]
+        val view = application.injector.instanceOf[DeclaredAnswersView]
 
-      status(result) mustEqual OK
+        status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view("tvn", "5 October 2010", None, Nil, Nil)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual
+          view("tvn", "5 October 2010", None, Nil, Nil, "declared")(fakeRequest, messages).toString
 
-      application.stop()
+        application.stop()
+      }
     }
 
-    "redirect to problem with the service when unable to retrieve estate" in {
+    "closing" must {
 
-      val userAnswers = emptyUserAnswers
-        .set(TVNPage, "tvn").success.value
-        .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
+      "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(Some(userAnswers))
-        .overrides(
-          bind[EstatesConnector].toInstance(mockEstatesConnector),
-          bind[PrintHelper].toInstance(mockPrintHelper)
+        lazy val data = FakeData.fakeGetEstateWithPersonalRep(
+          PersonalRepresentativeType(
+            estatePerRepInd = Some(FakeData.personalRepresentativeIndividualNino),
+            estatePerRepOrg = None
+          ),
+          correspondenceAddress = FakeData.correspondenceAddressUk,
+          trustEndDate = Some(LocalDate.parse("2020-08-06"))
         )
-        .build()
 
-      when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(SorryThereHasBeenAProblem))
+        val application = applicationBuilder(Some(userAnswers))
+          .overrides(
+            bind[EstatesConnector].toInstance(mockEstatesConnector),
+            bind[PrintHelper].toInstance(mockPrintHelper)
+          ).build()
 
-      when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
-      when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
+        when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
-      val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+        val view = application.injector.instanceOf[DeclaredAnswersView]
 
-      redirectLocation(result).value mustBe controllers.routes.EstateStatusController.problemWithService().url
+        status(result) mustEqual OK
 
-      application.stop()
+        contentAsString(result) mustEqual
+          view("tvn", "5 October 2010", None, Nil, Nil, "declared.final")(fakeRequest, messages).toString
+
+        application.stop()
+      }
     }
 
+    "unable to retrieve estate" must {
+
+      "redirect to problem with the service" in {
+
+        val application = applicationBuilder(Some(userAnswers))
+          .overrides(
+            bind[EstatesConnector].toInstance(mockEstatesConnector),
+            bind[PrintHelper].toInstance(mockPrintHelper)
+          ).build()
+
+        when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(SorryThereHasBeenAProblem))
+
+        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustBe controllers.routes.EstateStatusController.problemWithService().url
+
+        application.stop()
+      }
+    }
   }
-
 }

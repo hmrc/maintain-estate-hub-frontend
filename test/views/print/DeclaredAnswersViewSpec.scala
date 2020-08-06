@@ -27,50 +27,69 @@ class DeclaredAnswersViewSpec extends ViewBehaviours {
 
   val view: DeclaredAnswersView = application.injector.instanceOf[DeclaredAnswersView]
 
-  "Declared view for an individual" must {
+  "Declared view" when {
 
-    val applyView: HtmlFormat.Appendable =
-      view.apply("TVN", "27 August 2020", None, Nil, Nil)(fakeRequest, messages)
+    val prefix: String = "declared"
 
-    behave like normalPage(
-      applyView,
-      "declared",
-      "informationFirstRegistered"
-    )
+    "an individual" must {
 
-    behave like pageWithBackLink(applyView)
+      val applyView: HtmlFormat.Appendable =
+        view.apply("TVN", "27 August 2020", None, Nil, Nil, prefix)(fakeRequest, messages)
 
-    behave like pageWithAPrintButton(applyView)
+      behave like normalPage(
+        applyView,
+        prefix,
+        "informationFirstRegistered"
+      )
 
-    "have content" in {
-      val doc = asDocument(applyView)
+      behave like pageWithBackLink(applyView)
 
-      doc.text() must include("Declaration reference number is: TVN")
-      doc.text() must include("The estate’s declaration was sent on 27 August 2020")
+      behave like pageWithAPrintButton(applyView)
+
+      "have content" in {
+        val doc = asDocument(applyView)
+
+        doc.text() must include("Declaration reference number is: TVN")
+        doc.text() must include("The estate’s declaration was sent on 27 August 2020")
+      }
+    }
+
+    "an agent" must {
+
+      val applyView: HtmlFormat.Appendable =
+        view.apply("TVN", "27 August 2020", Some("crn"), Nil, Nil, prefix)(fakeRequest, messages)
+
+      behave like normalPage(
+        applyView,
+        prefix,
+        "informationFirstRegistered"
+      )
+
+      behave like pageWithBackLink(applyView)
+
+      behave like pageWithAPrintButton(applyView)
+
+      "have content" in {
+        val doc = asDocument(applyView)
+
+        doc.text() must include("Declaration reference number is: TVN")
+        doc.text() must include("The estate’s declaration was sent on 27 August 2020")
+        doc.text() must include("Client reference number: crn")
+      }
     }
   }
 
-  "Declared view for an agent" must {
+  "Final declared view" must {
+
+    val prefix: String = "declared.final"
 
     val applyView: HtmlFormat.Appendable =
-      view.apply("TVN", "27 August 2020", Some("crn"), Nil, Nil)(fakeRequest, messages)
-
-    behave like normalPage(
-      applyView,
-      "declared",
-      "informationFirstRegistered"
-    )
-
-    behave like pageWithBackLink(applyView)
-
-    behave like pageWithAPrintButton(applyView)
+      view.apply("TVN", "27 August 2020", None, Nil, Nil, prefix)(fakeRequest, messages)
 
     "have content" in {
       val doc = asDocument(applyView)
 
-      doc.text() must include("Declaration reference number is: TVN")
-      doc.text() must include("The estate’s declaration was sent on 27 August 2020")
-      doc.text() must include("Client reference number: crn")
+      doc.text() must include("Final declared copy of the estate’s registration")
     }
   }
 }

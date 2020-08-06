@@ -22,7 +22,7 @@ import javax.inject.Inject
 import models.http.Processed
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import printers.PrintHelper
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewmodels.DateFormatter
@@ -31,15 +31,15 @@ import views.html.print.DeclaredAnswersView
 import scala.concurrent.ExecutionContext
 
 class DeclaredAnswersController @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                actions: Actions,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: DeclaredAnswersView,
-                                                print: PrintHelper,
-                                                estatesConnector: EstatesConnector
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                           override val messagesApi: MessagesApi,
+                                           actions: Actions,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           view: DeclaredAnswersView,
+                                           print: PrintHelper,
+                                           estatesConnector: EstatesConnector
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad() = actions.requireTvn.async {
+  def onPageLoad(): Action[AnyContent] = actions.requireTvn.async {
     implicit request =>
 
       estatesConnector.getTransformedEstate(request.utr) map {
@@ -47,13 +47,15 @@ class DeclaredAnswersController @Inject()(
 
           val personalRep = print.personalRepresentative(estate)
           val estateName = print.estateName(estate)
+          val administrationPeriod = print.administrationPeriod(estate)
 
           Ok(view(
-            request.tvn,
-            DateFormatter.formatDate(request.submissionDate),
-            request.clientReferenceNumber,
-            personalRep,
-            estateName
+            tvn = request.tvn,
+            declarationSent = DateFormatter.formatDate(request.submissionDate),
+            crn = request.clientReferenceNumber,
+            administrationPeriodAndPersonalRep = administrationPeriod ++ personalRep,
+            estateName = estateName,
+            prefix = if (estate.isClosing) "declared.final" else "declared"
           ))
         case estate =>
           Logger.warn(s"[DeclaredAnswersController] unable to render declared answers due to estate being in state: $estate")

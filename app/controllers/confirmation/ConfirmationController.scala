@@ -59,7 +59,7 @@ class ConfirmationController @Inject()(
       estatesConnector.getTransformedEstate(request.utr) map {
         case Processed(estate, _) =>
           val name = personalRepName(estate.estate.entities.personalRepresentative)
-          Ok(confirmationView(name, request.tvn, isAgent, estate.trustEndDate.isDefined))
+          Ok(confirmationView(name, request.tvn, isAgent, estate.isClosing))
         case _ =>
           Logger.warn(s"[Confirmation] unable to render confirmation")
           Redirect(controllers.routes.EstateStatusController.problemWithService())

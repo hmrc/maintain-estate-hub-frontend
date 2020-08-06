@@ -83,7 +83,10 @@ case class GetEstate(matchData: MatchData,
                      correspondence: Correspondence,
                      declaration: Declaration,
                      estate: Estate,
-                     trustEndDate: Option[LocalDate])
+                     trustEndDate: Option[LocalDate]) {
+
+  def isClosing: Boolean = trustEndDate.isDefined
+}
 
 object GetEstate {
   implicit val formats: Format[GetEstate] = Json.format[GetEstate]
