@@ -63,7 +63,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       val estatesHelplineLink = doc.getElementById("helpline")
       assertAttributeValueForElement(estatesHelplineLink, "href", frontendAppConfig.estatesHelplineUrl)
-      assertContainsTextForId(doc, "helpline", "contact the Deceased Estates helpline to reopen the records (opens in a new tab)")
+      assertContainsTextForId(doc, "helpline", "contact the deceased estate helpline to reopen the records (opens in a new tab)")
     }
   }
 

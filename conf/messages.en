@@ -351,7 +351,7 @@ confirmationPage.paragraph1 = Keep a note of your reference in case you need to 
 confirmationPage.personalRepresentative.default = the personal representative
 confirmationPage.paragraph2 = Your request to close this estate will be processed and access to its online register will be removed.
 confirmationPage.paragraph3 = If this has been done in error, you can
-confirmationPage.paragraph3.link = contact the Deceased Estates helpline to reopen the records (opens in a new tab)
+confirmationPage.paragraph3.link = contact the deceased estate helpline to reopen the records (opens in a new tab)
 confirmationPage.agent.you.can = You can
 confirmationPage.agent.link = return to register and maintain an estate for a client
 
