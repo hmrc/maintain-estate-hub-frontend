@@ -18,14 +18,17 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
+import connectors.EstatesConnector
 import controllers.actions.Actions
 import forms.WhatIsNextFormProvider
+import models.WhatIsNext._
 import models.{Enumerable, WhatIsNext}
 import pages.WhatIsNextPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.WhatIsNextView
 
@@ -39,7 +42,8 @@ class WhatIsNextController @Inject()(
                                       formProvider: WhatIsNextFormProvider,
                                       val controllerComponents: MessagesControllerComponents,
                                       view: WhatIsNextView,
-                                      config: FrontendAppConfig
+                                      config: FrontendAppConfig,
+                                      connector: EstatesConnector
                                     )(implicit ec: ExecutionContext)
 
   extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
@@ -60,19 +64,31 @@ class WhatIsNextController @Inject()(
   def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
     implicit request =>
 
+      def clearTransforms(value: WhatIsNext): Future[HttpResponse] = {
+        if (request.userAnswers.get(WhatIsNextPage).contains(value)) {
+          Future.successful(HttpResponse(OK))
+        } else {
+          connector.clearTransformations(request.utr)
+        }
+      }
+
+      def redirectUrl(value: WhatIsNext): String = value match {
+        case DeclareNewPersonalRep => config.addNewPersonalRepUrl(request.utr)
+        case MakeChanges => config.amendExistingPersonalRepUrl(request.utr)
+        case CloseEstate => controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
+      }
+
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors))),
 
         value => {
+
           for {
+            _ <- clearTransforms(value)
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsNextPage, value))
             _ <- repository.set(updatedAnswers)
-          } yield value match {
-            case WhatIsNext.DeclareNewPersonalRep => Redirect(config.addNewPersonalRepUrl(request.utr))
-            case WhatIsNext.MakeChanges => Redirect(config.amendExistingPersonalRepUrl(request.utr))
-            case WhatIsNext.CloseEstate => Redirect(controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad())
-          }
+          } yield Redirect(redirectUrl(value))
         }
       )
   }

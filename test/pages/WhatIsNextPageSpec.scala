@@ -16,8 +16,12 @@
 
 package pages
 
-import models.WhatIsNext
+import java.time.LocalDate
+
+import models.{UserAnswers, WhatIsNext}
+import models.WhatIsNext._
 import pages.behaviours.PageBehaviours
+import pages.closure.{AdministrationPeriodEndDatePage, ChangePersonalRepDetailsYesNoPage, HasAdministrationPeriodEndedYesNoPage}
 
 class WhatIsNextPageSpec extends PageBehaviours {
 
@@ -28,5 +32,34 @@ class WhatIsNextPageSpec extends PageBehaviours {
     beSettable[WhatIsNext](WhatIsNextPage)
 
     beRemovable[WhatIsNext](WhatIsNextPage)
+
+    "implement cleanup logic" when {
+
+      val baseAnswers: UserAnswers = emptyUserAnswers
+        .set(WhatIsNextPage, CloseEstate).success.value
+        .set(HasAdministrationPeriodEndedYesNoPage, true).success.value
+        .set(AdministrationPeriodEndDatePage, LocalDate.parse("2020-01-01")).success.value
+        .set(ChangePersonalRepDetailsYesNoPage, true).success.value
+
+      "DeclareNewPersonalRep selected" in {
+
+        val userAnswers = baseAnswers
+          .set(WhatIsNextPage, DeclareNewPersonalRep).success.value
+
+        userAnswers.get(HasAdministrationPeriodEndedYesNoPage) mustNot be(defined)
+        userAnswers.get(AdministrationPeriodEndDatePage) mustNot be(defined)
+        userAnswers.get(ChangePersonalRepDetailsYesNoPage) mustNot be(defined)
+      }
+
+      "MakeChanges selected" in {
+
+        val userAnswers = baseAnswers
+          .set(WhatIsNextPage, MakeChanges).success.value
+
+        userAnswers.get(HasAdministrationPeriodEndedYesNoPage) mustNot be(defined)
+        userAnswers.get(AdministrationPeriodEndDatePage) mustNot be(defined)
+        userAnswers.get(ChangePersonalRepDetailsYesNoPage) mustNot be(defined)
+      }
+    }
   }
 }
