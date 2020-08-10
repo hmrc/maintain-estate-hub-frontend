@@ -29,9 +29,7 @@
 
     @components.back_link()
 
-    @components.sub_heading("maintainThisEstate.subheading", utr)
-
-    @components.heading("maintainThisEstate.heading")
+    @components.heading_with_caption(headingKey = "maintainThisEstate.heading", caption = "maintainThisEstate.caption", captionParam = utr)
 
     <p>@messages("maintainThisEstate.p1.a") <span class="weight-bold">@utr</span> @messages("maintainThisEstate.p1.b")</p>
 

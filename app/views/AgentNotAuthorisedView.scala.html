@@ -28,9 +28,7 @@
     title = messages("agentNotAuthorised.title")
 ) {
 
-    @components.sub_heading("agentNotAuthorised.subHeading", utr)
-
-    @components.heading("agentNotAuthorised.heading")
+    @components.heading_with_caption(headingKey = "agentNotAuthorised.heading", caption = "agentNotAuthorised.caption", captionParam = utr)
 
     <p>@messages("agentNotAuthorised.p1")</p>
 
