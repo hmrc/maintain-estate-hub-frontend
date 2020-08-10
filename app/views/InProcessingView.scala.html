@@ -30,9 +30,7 @@
 
     @components.back_link()
 
-    @components.sub_heading("inProcessing.subHeading", utr)
-
-    @components.heading("inProcessing.heading")
+    @components.heading_with_caption(headingKey = "inProcessing.heading", caption = "inProcessing.caption", captionParam = utr)
 
     <p>@messages("inProcessing.p1")</p>
 

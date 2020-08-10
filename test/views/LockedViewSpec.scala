@@ -29,12 +29,10 @@ class LockedViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(utr)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "locked","p1", "p2", "link1")
-
-    "display the correct subheading" in {
-      val doc = asDocument(applyView)
-      assertContainsText(doc, messages("locked.subheading", utr))
-    }
+    behave like normalPageTitleWithCaption(applyView,
+      "locked",
+      utr,
+      "p1", "p2", "link1")
 
   }
 

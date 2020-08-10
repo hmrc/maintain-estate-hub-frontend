@@ -30,9 +30,7 @@
 
     @components.back_link()
 
-    @components.sub_heading("accountNotLinked.subHeading", utr)
-
-    @components.heading("accountNotLinked.heading")
+    @components.heading_with_caption(headingKey = "accountNotLinked.heading", caption = "accountNotLinked.caption", captionParam = utr)
 
     <p>@messages("accountNotLinked.p1")</p>
 

@@ -37,8 +37,9 @@ class InProcessingViewSpec extends ViewBehaviours {
 
       behave like pageWithSubHeading(applyView, s"This estate’s UTR: $fakeUtr")
 
-      behave like normalPage(applyView,
+      behave like normalPageTitleWithCaption(applyView,
         "inProcessing",
+        fakeUtr,
         "p1", "p2", "p3", "p3.link", "p4", "p4.link"
       )
     }
@@ -55,8 +56,9 @@ class InProcessingViewSpec extends ViewBehaviours {
 
       behave like pageWithSubHeading(applyView, s"This estate’s UTR: $fakeUtr")
 
-      behave like normalPage(applyView,
+      behave like normalPageTitleWithCaption(applyView,
         "inProcessing",
+        fakeUtr,
         "p1", "p2", "p3", "p3.link"
       )
     }

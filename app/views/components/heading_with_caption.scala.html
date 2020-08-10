@@ -14,17 +14,6 @@
  * limitations under the License.
  *@
 
-@this(
-    main_template: MainTemplate
-)
+@(headingKey: String, headingSize: String = "govuk-heading-xl", caption: String, captionParam: String = "")(implicit messages: Messages)
 
-@(utr: String)(implicit request: Request[_], messages: Messages)
-
-@main_template(
-    title = messages("locked.title")
-    ) {
-
-    @components.heading_with_caption(headingKey = "locked.heading", caption = "locked.caption", captionParam = utr)
-    <p>@messages("locked.p1")</p>
-    <p>@messages("locked.p2") <a target="_blank" href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/bereavement-and-deceased-estate">@messages("locked.link1")</a>.</p>
-}
+<h1 class="@headingSize">@components.sub_heading(caption, captionParam)@messages(headingKey)</h1>

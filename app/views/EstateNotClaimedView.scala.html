@@ -28,9 +28,7 @@
     title = messages("estateNotClaimed.title")
 ) {
 
-    @components.sub_heading("estateNotClaimed.subHeading", utr)
-
-    @components.heading("estateNotClaimed.heading")
+    @components.heading_with_caption(headingKey = "estateNotClaimed.heading", caption = "estateNotClaimed.caption", captionParam = utr)
 
     <p>@messages("estateNotClaimed.p1")</p>
 

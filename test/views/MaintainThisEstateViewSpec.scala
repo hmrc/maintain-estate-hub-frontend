@@ -38,9 +38,10 @@ class MaintainThisEstateViewSpec extends ViewBehaviours {
 
     behave like pageWithSubHeading(applyView, fakeUtr)
 
-    behave like normalPage(
+    behave like normalPageTitleWithCaption(
       applyView,
       "maintainThisEstate",
+      fakeUtr,
       "p1.a", "p1.b", "p2", "p3", "p4", "p4.a"
     )
 
