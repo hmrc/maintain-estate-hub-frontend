@@ -32,7 +32,7 @@ case class EstatePerRepIndType(name: NameType,
                                identification: IdentificationType,
                                phoneNumber: String,
                                email: Option[String],
-                               lineNo: String,
+                               lineNo: Option[String],
                                bpMatchStatus: Option[String],
                                entityStart: LocalDate)
 
@@ -44,7 +44,7 @@ case class EstatePerRepOrgType(orgName: String,
                                phoneNumber: String,
                                email: Option[String] = None,
                                identification: IdentificationOrgType,
-                               lineNo: String,
+                               lineNo: Option[String],
                                bpMatchStatus: Option[String],
                                entityStart: LocalDate)
 
@@ -82,7 +82,11 @@ object Estate {
 case class GetEstate(matchData: MatchData,
                      correspondence: Correspondence,
                      declaration: Declaration,
-                     estate: Estate)
+                     estate: Estate,
+                     trustEndDate: Option[LocalDate]) {
+
+  def isClosing: Boolean = trustEndDate.isDefined
+}
 
 object GetEstate {
   implicit val formats: Format[GetEstate] = Json.format[GetEstate]
@@ -96,6 +100,8 @@ case class NameType(firstName: String,
     val middle = middleName.map(" " + _ + " ").getOrElse(" ")
     s"${firstName}$middle${lastName}"
   }
+
+  def displayName: String = s"$firstName $lastName"
 
 }
 

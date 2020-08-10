@@ -16,6 +16,8 @@
 
 package config
 
+import java.time.LocalDate
+
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
@@ -61,6 +63,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val estatesUrl: String = configuration.get[Service]("microservice.services.estates").baseUrl
   lazy val estatesAuthUrl: String = configuration.get[Service]("microservice.services.estates-auth").baseUrl
 
+  lazy val declarationEmailEnabled: Boolean = configuration.get[Boolean]("microservice.services.features.declaration.email.enabled")
+
   def addNewPersonalRepUrl(utr: String): String = configuration.get[String]("urls.maintainPersonalRep") + s"/$utr/add-new-personal-rep"
   def amendExistingPersonalRepUrl(utr: String): String = configuration.get[String]("urls.maintainPersonalRep") + s"/$utr/amend-existing-personal-rep"
 
@@ -77,4 +81,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   def routeToSwitchLanguage: String => Call =
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
+
+  private val minDay: Int = configuration.get[Int]("dates.minimum.day")
+  private val minMonth: Int = configuration.get[Int]("dates.minimum.month")
+  private val minYear: Int = configuration.get[Int]("dates.minimum.year")
+  lazy val minDate: LocalDate = LocalDate.of(minYear, minMonth, minDay)
 }

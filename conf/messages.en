@@ -20,6 +20,7 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
+error.postcodeInvalid = Enter a real postcode
 
 index.title = maintain-estate-hub-frontend
 index.heading = maintain-estate-hub-frontend
@@ -41,6 +42,50 @@ site.service_name = Register and Maintain an Estate
 site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
 site.sign_out_of_account = Sign out of this account
+site.warning = Warning
+site.confirm-send = Confirm and send
+
+site.address.uk.title = What is the address?
+site.address.uk.heading = What is {0}’s address?
+site.address.uk.line1 = Address line 1
+site.address.uk.line2 = Address line 2
+site.address.uk.line3 = Address line 3 (optional)
+site.address.uk.line4 = Address line 4 (optional)
+site.address.uk.postcode = Postcode
+site.address.uk.postcode.hint = For example AB1 1AB
+
+
+ukAddress.error.line1.required = Enter address line 1
+ukAddress.error.line2.required = Enter address line 2
+ukAddress.error.postcode.required = Enter a postcode
+ukAddress.error.line1.length = Address line 1 must be 35 characters or less
+ukAddress.error.line2.length = Address line 2 must be 35 characters or less
+ukAddress.error.line3.length = Address line 3 must be 35 characters or less
+ukAddress.error.line4.length = Address line 4 must be 35 characters or less
+ukAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line4.invalidCharacters = Address line 4 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.postcode.invalidCharacters = Enter a real postcode
+
+
+site.address.international.title = What is the address?
+site.address.international.heading = What is {0}’s address?
+site.address.international.line1 = Address line 1
+site.address.international.line2 = Address line 2
+site.address.international.line3 = Address line 3 (optional)
+site.address.international.country = Country
+site.address.international.country.select = Select a country
+
+internationalAddress.error.line1.required = Enter address line 1
+internationalAddress.error.line2.required = Enter address line 2
+internationalAddress.error.country.required = Select a country
+internationalAddress.error.line1.length = Address line 1 must be 35 characters or less
+internationalAddress.error.line2.length = Address line 2 must be 35 characters or less
+internationalAddress.error.line3.length = Address line 3 must be 35 characters or less
+internationalAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+internationalAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+internationalAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 site.print-or-save = Print or save this page
 site.button.continue.maintaining = Continue maintaining this estate
@@ -63,7 +108,7 @@ declarationWhatNext.declare.hint = Declare a new personal representative.
 declarationWhatNext.make-changes = Make changes to the current personal representative
 declarationWhatNext.make-changes.hint = Update the details of the personal representative.
 declarationWhatNext.close-estate = Close the estate and declare
-declarationWhatNext.close-estate.hint = Tell HMRC when the administration persiod ended for the estate and apply any changes to the personal representative before a final declaration.
+declarationWhatNext.close-estate.hint = Tell HMRC when the administration period ended for the estate and apply any changes to the personal representative before a final declaration.
 declarationWhatNext.error.required = Select what you want to do next
 
 utrDoesNotMatchRecords.title = Sorry, you cannot access this estate
@@ -182,6 +227,22 @@ print.personalRepresentativeOrg.email.checkYourAnswersLabel = What is {0}’s em
 print.estate.name = Estate name
 print.estate.name.checkYourAnswersLabel = What is the estate’s name?
 
+print.administrationPeriod = Administration period
+print.administrationPeriod.checkYourAnswersLabel = What is the date the administration period ended?
+
+
+# Declared answers
+
+declared.title = Declared copy of the estate’s registration
+declared.heading = Declared copy of the estate’s registration
+declared.informationFirstRegistered = No further updates to estate name, the person who died, complex estate and years of tax liability are required through this service.
+declared.final.title = Final declared copy of the estate’s registration
+declared.final.heading = Final declared copy of the estate’s registration
+
+declared.p1 = Declaration reference number is: {0}
+declared.p2 = Client reference number: {0}
+declared.p3 = The estate’s declaration was sent on {0}
+
 agentNotAuthorised.title = Sorry, you cannot access this estate
 agentNotAuthorised.heading = Sorry, you cannot access this estate
 agentNotAuthorised.caption = This estate’s UTR: {0}
@@ -212,3 +273,113 @@ estateNotClaimed.b2.p3.link = contact the deceased estate helpline
 estateNotClaimed.b2.p4 = You can
 estateNotClaimed.b2.p4.link = return to register and maintain an estate for a client
 
+
+problemDeclaring.heading = Sorry, there is a problem with the service
+problemDeclaring.title = Sorry, there is a problem with the service
+problemDeclaring.p1 = Try again later.
+problemDeclaring.p2 = If you need need help with the service
+problemDeclaring.p3 = You can
+problemDeclaring.contact.link = contact the deceased estate helpline (opens in a new window or tab)
+problemDeclaring.return.link = return to register and maintain an estate for a client
+
+
+agencyRegisteredAddressUkYesNo.title = Is your agency’s registered address in the UK?
+agencyRegisteredAddressUkYesNo.heading = Is your agency’s registered address in the UK?
+agencyRegisteredAddressUkYesNo.error.required = Select yes if your agency’s registered address is in the UK
+
+agencyRegisteredAddressUk.title = What is your agency’s registered address?
+agencyRegisteredAddressUk.heading = What is your agency’s registered address?
+
+agencyRegisteredAddressInternational.title = What is your agency’s registered address?
+agencyRegisteredAddressInternational.heading = What is your agency’s registered address?
+
+
+declaration.title = Declaration
+declaration.heading = Declaration
+declaration.subheading.personal = Personal details
+declaration.subheading.agent = Agent’s details
+
+
+declaration.agencyName = Your agency name
+declaration.error.agencyName.required = Enter your agency name
+declaration.error.agencyName.invalid = Your agency name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+declaration.error.agencyName.length = Your agency name must be 56 characters or less
+
+
+declaration.telephoneNumber = Your agency telephone
+declaration.error.telephoneNumber.required = Enter your agency telephone
+declaration.error.telephoneNumber.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+
+
+declaration.crn = Internal reference for this client
+declaration.error.crn.required = Enter internal reference for this client
+declaration.error.crn.invalid = Internal reference for this client must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+declaration.error.crn.length = Internal reference for this client must be 56 characters or less
+
+
+declaration.firstName = Your first name
+declaration.error.firstName.required = Enter your first name
+declaration.error.firstName.invalid = Your first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+declaration.error.firstName.length = Your first name must be 35 characters or less
+
+
+declaration.middleName = Your middle names (optional)
+declaration.error.middleName.length = Your middle names must be 35 characters or less
+declaration.error.middleName.invalid = Your middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
+
+declaration.lastName = Your last name
+declaration.error.lastName.required = Enter your last name
+declaration.error.lastName.invalid = Your last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+declaration.error.lastName.length = Your last name must be 35 characters or less
+
+
+declaration.email = Email address (optional)
+declaration.error.email.length = Your email must be 35 characters or less
+declaration.error.email.invalid = Enter a valid email address with no spaces, like name@example.com
+
+
+declaration.paragraph1 = Please give us your email address to get a confirmation of your declaration.
+declaration.paragraph2 = If you do not enter your email address, you will not receive a confirmation email with the declaration reference number.
+
+declaration.individual.warning = I confirm that the information I have given is true and complete to the best of my knowledge. I will make sure it is kept up to date, including any change of address. If I find out that I have made an error or something has changed, I will update the information.
+
+declaration.agent.warning = I confirm that the information my client has given is true and complete to the best of their knowledge. I will make sure it is kept up to date, including any change of address. If I find out that an error has been made or something has changed, I will update the information.
+
+
+confirmationPage.title = Declaration received
+confirmationPage.heading = Declaration received
+confirmationPage.heading2 = Your reference is:
+confirmationPage.printsave.link = Print or save a declared copy of the estate’s declaration
+confirmationPage.subheading1 = What happens next
+confirmationPage.paragraph1 = Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact {0}.
+confirmationPage.personalRepresentative.default = the personal representative
+confirmationPage.paragraph2 = Your request to close this estate will be processed and access to its online register will be removed.
+confirmationPage.paragraph3 = If this has been done in error, you can
+confirmationPage.paragraph3.link = contact the deceased estate helpline to reopen the records (opens in a new tab)
+confirmationPage.agent.you.can = You can
+confirmationPage.agent.link = return to register and maintain an estate for a client
+
+closure.hasAdministrationPeriodEnded.title = Has the administration period ended?
+closure.hasAdministrationPeriodEnded.heading = Has the administration period ended?
+closure.hasAdministrationPeriodEnded.hint = This ends once the estate’s liabilities have been paid and anything left over has been worked out.
+closure.hasAdministrationPeriodEnded.error.required = Select yes if the administration period has ended
+
+closure.administrationPeriodEndDateNeeded.title = You need the administration period end date to close this estate
+closure.administrationPeriodEndDateNeeded.heading = You need the administration period end date to close this estate
+closure.administrationPeriodEndDateNeeded.p = If you need help using the service
+closure.administrationPeriodEndDateNeeded.link = contact the deceased estate helpline (open in new tab or window)
+
+closure.administrationPeriodEndDate.title = What is the date the administration period ended?
+closure.administrationPeriodEndDate.heading = What is the date the administration period ended?
+closure.administrationPeriodEndDate.hint = For example, 31 3 1980
+closure.administrationPeriodEndDate.error.required.all = Enter the date the administration period ended
+closure.administrationPeriodEndDate.error.required.two = The date the administration period ended must include a {0} and a {1}
+closure.administrationPeriodEndDate.error.required = The date the administration period ended must include a {0}
+closure.administrationPeriodEndDate.error.invalid = Enter a real date
+closure.administrationPeriodEndDate.error.future = The date the administration period ended must be today or in the past
+closure.administrationPeriodEndDate.error.past = The date the administration period ended cannot be before the start date of the estate
+
+closure.changePersonalRepDetailsYesNo.title = Do you want to change the personal representative details before closing?
+closure.changePersonalRepDetailsYesNo.heading = Do you want to change the personal representative details before closing?
+closure.changePersonalRepDetailsYesNo.error.required = Select yes if you want to change the personal representative details before closing

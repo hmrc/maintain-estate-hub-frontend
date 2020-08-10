@@ -16,16 +16,14 @@
 
 package printers
 
-import config.annotations.AllCountries
 import javax.inject.Inject
 import models.GetEstate
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
 class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativePrinter,
                             estateNamePrinter: EstateNamePrinter,
-                            @AllCountries countryOptions: CountryOptions){
+                            administrationPeriodPrinter: AdministrationPeriodPrinter){
 
   def estateName(getEstate: GetEstate)(implicit messages: Messages): Seq[AnswerSection] =
     estateNamePrinter.name(getEstate.correspondence).toList
@@ -42,5 +40,8 @@ class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativ
       personalRepresentativePrinter.business(business, correspondenceAddress)
     ).flatten
   }
+
+  def administrationPeriod(getEstate: GetEstate)(implicit messages: Messages): Seq[AnswerSection] =
+    administrationPeriodPrinter.period(getEstate.trustEndDate).toList
 
 }

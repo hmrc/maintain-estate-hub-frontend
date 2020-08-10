@@ -63,6 +63,13 @@ final case class UserAnswers(
         page.cleanup(None, updatedAnswers)
     }
   }
+
+  def deleteAtPath(path: JsPath): Try[UserAnswers] = {
+    data.removeObject(path).map(obj => copy(data = obj)).fold(
+      _ => Success(this),
+      result => Success(result)
+    )
+  }
 }
 
 object UserAnswers {

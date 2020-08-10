@@ -18,8 +18,12 @@ package controllers
 
 import base.SpecBase
 import config.FrontendAppConfig
+import connectors.EstatesConnector
 import forms.WhatIsNextFormProvider
 import models.WhatIsNext
+import models.WhatIsNext.CloseEstate
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{reset, verify, when, times}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{UTRPage, WhatIsNextPage}
 import play.api.data.Form
@@ -27,7 +31,10 @@ import play.api.inject.bind
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HttpResponse
 import views.html.WhatIsNextView
+
+import scala.concurrent.Future
 
 class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
 
@@ -39,6 +46,8 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
   lazy val onSubmit: Call = routes.WhatIsNextController.onSubmit()
 
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+
+  when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
 
   "WhatIsNext Controller" must {
 
@@ -106,7 +115,9 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers = emptyUserAnswers
         .set(UTRPage, utr).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers), utr = utr).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers), utr = utr)
+        .overrides(bind[EstatesConnector].toInstance(fakeConnector))
+        .build()
 
       implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
         .withFormUrlEncodedBody(("value", "declare"))
@@ -127,7 +138,9 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers = emptyUserAnswers
         .set(UTRPage, utr).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers), utr = utr).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers), utr = utr)
+        .overrides(bind[EstatesConnector].toInstance(fakeConnector))
+        .build()
 
       implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
         .withFormUrlEncodedBody(("value", "make-changes"))
@@ -141,7 +154,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to Feature unavailable when user selects 'CloseEstate'" in {
+    "redirect to has administration period ended when user selects 'CloseEstate'" in {
 
       val utr = "0987654321"
 
@@ -149,7 +162,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
         .set(UTRPage, utr).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[FrontendAppConfig].toInstance(mockAppConfig))
+        .overrides(bind[EstatesConnector].toInstance(fakeConnector))
         .build()
 
       implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
@@ -159,7 +172,93 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustBe controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustBe controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "clear transformations if user changes selection" in {
+
+      reset(fakeConnector)
+      when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+
+      val utr = "0987654321"
+
+      val userAnswers = emptyUserAnswers
+        .set(UTRPage, utr).success.value
+        .set(WhatIsNextPage, CloseEstate).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[EstatesConnector].toInstance(fakeConnector)
+        )
+        .build()
+
+      implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
+        .withFormUrlEncodedBody(("value", WhatIsNext.MakeChanges.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      verify(fakeConnector, times(1)).clearTransformations(any())(any(), any())
+
+      application.stop()
+    }
+
+    "clear transformations if no previous selection" in {
+
+      reset(fakeConnector)
+      when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+
+      val utr = "0987654321"
+
+      val userAnswers = emptyUserAnswers
+        .set(UTRPage, utr).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[EstatesConnector].toInstance(fakeConnector)
+        )
+        .build()
+
+      implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
+        .withFormUrlEncodedBody(("value", WhatIsNext.MakeChanges.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      verify(fakeConnector, times(1)).clearTransformations(any())(any(), any())
+
+      application.stop()
+    }
+
+    "not clear transformations if user makes same selection" in {
+
+      reset(fakeConnector)
+      when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+
+      val utr = "0987654321"
+
+      val userAnswers = emptyUserAnswers
+        .set(UTRPage, utr).success.value
+        .set(WhatIsNextPage, CloseEstate).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[EstatesConnector].toInstance(fakeConnector)
+        )
+        .build()
+
+      implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, onSubmit.url)
+        .withFormUrlEncodedBody(("value", WhatIsNext.CloseEstate.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      verify(fakeConnector, times(0)).clearTransformations(any())(any(), any())
 
       application.stop()
     }

@@ -16,6 +16,7 @@
 
 package views.behaviours
 
+import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.ViewSpecBase
 
@@ -59,6 +60,29 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view)
           assertNotRenderedById(doc, "cymraeg-switch")
         }
+      }
+    }
+  }
+
+  def pageWithHint[A](form: Form[A],
+                      createView: Form[A] => HtmlFormat.Appendable,
+                      expectedHintKey: String): Unit = {
+
+    "behave like a page with hint text" in {
+
+      val doc = asDocument(createView(form))
+      assertContainsHint(doc, "value", Some(messages(s"$expectedHintKey.hint")))
+    }
+  }
+
+  def pageWithAPrintButton(view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with a print button" must {
+
+      "have a print button" in {
+
+        val doc = asDocument(view)
+        assertRenderedById(doc, "print")
       }
     }
   }

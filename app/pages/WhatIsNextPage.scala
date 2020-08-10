@@ -16,13 +16,24 @@
 
 package pages
 
-import models.WhatIsNext
+import models.WhatIsNext._
+import models.{UserAnswers, WhatIsNext}
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object WhatIsNextPage extends QuestionPage[WhatIsNext] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "whatIsNext"
+
+  override def cleanup(value: Option[WhatIsNext], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(DeclareNewPersonalRep) | Some(MakeChanges)  =>
+        userAnswers.deleteAtPath(pages.closure.basePath)
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 
 }

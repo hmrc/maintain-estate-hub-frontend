@@ -14,32 +14,27 @@
  * limitations under the License.
  */
 
-package views
+package views.declaration
 
-import play.api.Application
-import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.auth.core.AffinityGroup
 import views.behaviours.ViewBehaviours
-import views.html.print.LastDeclaredAnswersView
+import views.html.declaration.ProblemDeclaringView
 
-class LastDeclaredAnswersViewSpec extends ViewBehaviours {
+class ProblemDeclaringViewSpec extends ViewBehaviours {
 
-  val application: Application = applicationBuilder().build()
+  "ProblemDeclaring view" must {
 
-  val view: LastDeclaredAnswersView = application.injector.instanceOf[LastDeclaredAnswersView]
+    val view = viewFor[ProblemDeclaringView](Some(emptyUserAnswers))
 
-  val applyView: HtmlFormat.Appendable =
-    view.apply(Nil, Nil)(fakeRequest, messages)
+    val applyView = view.apply(AffinityGroup.Agent)(fakeRequest, messages)
 
-  "Last declared view" must {
-
-    behave like normalPage(
-      applyView,
-      "lastDeclared",
-      "informationFirstRegistered"
+    behave like normalPage(applyView,
+      "problemDeclaring",
+      "p1",
+      "p2",
+      "contact.link",
+      "p3",
+      "return.link"
     )
-
-    behave like pageWithBackLink(applyView)
-
-    behave like pageWithContinueButton(applyView)
   }
 }
