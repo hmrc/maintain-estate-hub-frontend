@@ -129,7 +129,7 @@ object FakeData {
           name = NameType("Deceased", None, "Last"),
           dateOfBirth = Some(LocalDate.of(2010, 5, 3)),
           dateOfDeath = LocalDate.of(2020, 10, 12),
-          identification = None,
+          identification = IdentificationType(None, None, None),
           lineNo = "1",
           bpMatchStatus = Some("01"),
           entityStart = LocalDate.of(2020, 4, 10)

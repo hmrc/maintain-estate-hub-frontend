@@ -230,6 +230,16 @@ print.estate.name.checkYourAnswersLabel = What is the estate’s name?
 print.administrationPeriod = Administration period
 print.administrationPeriod.checkYourAnswersLabel = What is the date the administration period ended?
 
+print.deceasedPerson = Person who died
+print.deceasedPerson.name.checkYourAnswersLabel = What is the name of the person who died?
+print.deceasedPerson.dateOfDeath.checkYourAnswersLabel = What is {0}’s date of death?
+print.deceasedPerson.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
+print.deceasedPerson.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
+print.deceasedPerson.ninoYesNo.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
+print.deceasedPerson.nino.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
+print.deceasedPerson.addressYesNo.checkYourAnswersLabel = Do you know {0}’s last known address?
+print.deceasedPerson.addressUkYesNo.checkYourAnswersLabel = Was {0}’s last known address in the UK?
+print.deceasedPerson.address.checkYourAnswersLabel = What is {0}’s last known address?
 
 # Declared answers
 

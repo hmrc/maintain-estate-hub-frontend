@@ -44,4 +44,8 @@ class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativ
   def administrationPeriod(getEstate: GetEstate)(implicit messages: Messages): Seq[AnswerSection] =
     administrationPeriodPrinter.period(getEstate.trustEndDate).toList
 
+  def deceasedPerson(getEstate: GetEstate)(implicit messages: Messages) : Seq[AnswerSection] = {
+    ???
+  }
+
 }

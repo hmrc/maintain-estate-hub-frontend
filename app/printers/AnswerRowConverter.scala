@@ -44,6 +44,16 @@ class AnswerRowConverter(countryOptions: CountryOptions, messageArgs: String*) {
       ).toOption
   }
 
+  def dateQuestion(date: Option[LocalDate], labelKey: String)
+                  (implicit messages:Messages): Option[AnswerRow] = {
+    date map { d =>
+      AnswerRow(
+        HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs:_*)),
+        HtmlFormat.escape(d.format(AnswersFormatters.dateFormatter))
+      )
+    }
+  }
+
   def stringQuestion(value: String, labelKey: String)
   (implicit messages:Messages): Option[AnswerRow] = {
     AnswerRow(
