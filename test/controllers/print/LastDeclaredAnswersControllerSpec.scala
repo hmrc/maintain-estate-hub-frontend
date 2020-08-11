@@ -35,6 +35,10 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
   lazy val mockEstatesConnector : EstatesConnector = mock[EstatesConnector]
   lazy val mockPrintHelper: PrintHelper = mock[PrintHelper]
 
+  when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
+  when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
+  when(mockPrintHelper.deceasedPerson(any())(any())).thenReturn(Nil)
+
   "LastDeclaredController" must {
 
     "return OK and the correct view for a GET" in {
@@ -55,9 +59,6 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
         .build()
 
       when(mockEstatesConnector.getEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
-
-      when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
-      when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
 
       val request = FakeRequest(GET, controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url)
 
@@ -82,9 +83,6 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
         .build()
 
       when(mockEstatesConnector.getEstate(any())(any(), any())).thenReturn(Future.successful(SorryThereHasBeenAProblem))
-
-      when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
-      when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
 
       val request = FakeRequest(GET, controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url)
 

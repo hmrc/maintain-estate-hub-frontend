@@ -23,7 +23,8 @@ import viewmodels.AnswerSection
 
 class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativePrinter,
                             estateNamePrinter: EstateNamePrinter,
-                            administrationPeriodPrinter: AdministrationPeriodPrinter){
+                            administrationPeriodPrinter: AdministrationPeriodPrinter,
+                            deceasedPersonPrinter: DeceasedPersonPrinter){
 
   def estateName(getEstate: GetEstate)(implicit messages: Messages): Seq[AnswerSection] =
     estateNamePrinter.name(getEstate.correspondence).toList
@@ -45,7 +46,7 @@ class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativ
     administrationPeriodPrinter.period(getEstate.trustEndDate).toList
 
   def deceasedPerson(getEstate: GetEstate)(implicit messages: Messages) : Seq[AnswerSection] = {
-    ???
+    deceasedPersonPrinter.deceasedPerson(getEstate.estate.entities.deceased).toList
   }
 
 }

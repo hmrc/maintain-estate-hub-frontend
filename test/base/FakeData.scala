@@ -109,6 +109,62 @@ object FakeData {
     phoneNumber = "+447838383823"
   )
 
+  lazy val deceasedPersonWithMinimalData: EstateWillType = EstateWillType(
+    name = NameType("John", None, "Smith"),
+    dateOfBirth = None,
+    dateOfDeath = LocalDate.parse("2020-01-01"),
+    identification = IdentificationType(
+      nino = None,
+      passport = None,
+      address = None
+    ),
+    lineNo = "1",
+    bpMatchStatus = Some("01"),
+    entityStart = LocalDate.parse("2020-02-03")
+  )
+
+  lazy val deceasedPersonWithDateOfBirthAndNino: EstateWillType = EstateWillType(
+    name = NameType("John", None, "Smith"),
+    dateOfBirth = Some(LocalDate.parse("1996-02-03")),
+    dateOfDeath = LocalDate.parse("2020-01-01"),
+    identification = IdentificationType(
+      nino = Some("AA000000A"),
+      passport = None,
+      address = None
+    ),
+    lineNo = "1",
+    bpMatchStatus = Some("01"),
+    entityStart = LocalDate.parse("2020-02-03")
+  )
+
+  lazy val deceasedPersonWithUkAddress: EstateWillType = EstateWillType(
+    name = NameType("John", None, "Smith"),
+    dateOfBirth = None,
+    dateOfDeath = LocalDate.parse("2020-01-01"),
+    identification = IdentificationType(
+      nino = None,
+      passport = None,
+      address = Some(AddressType("1", "British Lane", None, None, Some("NE1 1NE"), "GB"))
+    ),
+    lineNo = "1",
+    bpMatchStatus = Some("01"),
+    entityStart = LocalDate.parse("2020-02-03")
+  )
+
+  lazy val deceasedPersonWithNonUkAddress: EstateWillType = EstateWillType(
+    name = NameType("John", None, "Smith"),
+    dateOfBirth = None,
+    dateOfDeath = LocalDate.parse("2020-01-01"),
+    identification = IdentificationType(
+      nino = None,
+      passport = None,
+      address = Some(AddressType("2", "German Street", None, None, None, "DE"))
+    ),
+    lineNo = "1",
+    bpMatchStatus = Some("01"),
+    entityStart = LocalDate.parse("2020-02-03")
+  )
+
   def fakeGetEstateWithPersonalRep(personalRep: PersonalRepresentativeType,
                                    correspondenceAddress: AddressType,
                                    trustEndDate: Option[LocalDate] = None): GetEstate = GetEstate(

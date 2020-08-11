@@ -18,7 +18,7 @@ package printers
 
 import config.annotations.AllCountries
 import javax.inject.Inject
-import models.EstateWillType
+import models.{AddressType, EstateWillType}
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
@@ -27,19 +27,30 @@ class DeceasedPersonPrinter @Inject()(@AllCountries countryOptions: CountryOptio
 
   import ImplicitConverters._
 
-  def period(deceasedPerson: EstateWillType)(implicit messages: Messages): Option[AnswerSection] = {
+  def deceasedPerson(deceasedPerson: EstateWillType)(implicit messages: Messages): Option[AnswerSection] = {
 
     val bound = new AnswerRowConverter(countryOptions, deceasedPerson.name.fullName)
 
     val prefix: String = "print.deceasedPerson"
+
+    val addressQuestions: Seq[Option[AnswerRow]] = deceasedPerson.identification.address match {
+      case Some(address) => Seq(
+        bound.yesNoQuestion(data = true, s"$prefix.addressYesNo"),
+        bound.yesNoQuestion(AddressType.isUK(address), s"$prefix.addressUkYesNo"),
+        bound.addressQuestion(address, s"$prefix.address")
+      )
+      case None if deceasedPerson.identification.nino.isDefined => Nil
+      case _ => Seq(bound.yesNoQuestion(data = false, s"$prefix.addressYesNo"))
+    }
 
     val questions: Seq[AnswerRow] = Seq(
       bound.fullNameQuestion(deceasedPerson.name, s"$prefix.name"),
       bound.dateQuestion(deceasedPerson.dateOfDeath, s"$prefix.dateOfDeath"),
       bound.yesNoQuestion(deceasedPerson.dateOfBirth.isDefined, s"$prefix.dateOfBirthYesNo"),
       bound.dateQuestion(deceasedPerson.dateOfBirth, s"$prefix.dateOfBirth"),
-      ???
-    ).flatten
+      bound.yesNoQuestion(deceasedPerson.identification.nino.isDefined, s"$prefix.ninoYesNo"),
+      bound.ninoQuestion(deceasedPerson.identification.nino, s"$prefix.nino")
+    ).flatten ++ addressQuestions.flatten
 
     questions match {
       case Nil => None
