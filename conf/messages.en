@@ -132,16 +132,14 @@ inProcessing.p3.link = contact the deceased estate helpline
 inProcessing.p4 = You can
 inProcessing.p4.link = return to register and maintain an estate for a client
 
-closed.title = Sorry, you cannot access this estate
-closed.heading = Sorry, you cannot access this estate
+closed.title = You cannot access this estate online as it has been closed
+closed.heading = You cannot access this estate online as it has been closed
 closed.caption = This estate’s UTR: {0}
-closed.p1 = You cannot make changes to this estate as it has been closed.
-closed.p2 = If the estate needs to be registered again, you can return to the
-closed.p2.link = Estate Registration Service here (opens in new window or tab)
-closed.p3 = If you need help with the service
-closed.p3.link = contact the deceased estate helpline
-closed.p4 = You can
-closed.p4.link = return to register and maintain an estate for a client
+closed.p1.beforeLink = If this has been done in error or you need help with the service, you can
+closed.p1.link = contact the bereavement and deceased estate helpline to reopen the estate records (opens in a new tab)
+closed.p1.afterLink = We will contact you or the personal representative if a tax return is needed or we need more information.
+closed.p2 = You can
+closed.p2.link = return to register and maintain an estate for a client
 
 locked.title = We are unable to match the information you gave to the estate register
 locked.heading = We are unable to match the information you gave to the estate register

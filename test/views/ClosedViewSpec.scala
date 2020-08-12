@@ -40,7 +40,7 @@ class ClosedViewSpec extends ViewBehaviours {
       behave like normalPageTitleWithCaption(applyView,
         "closed",
         fakeUtr,
-        "p1", "p2", "p2.link", "p3", "p3.link", "p4", "p4.link"
+        "p1.beforeLink", "p1.link", "p1.afterLink", "p2", "p2.link"
       )
     }
 
@@ -59,7 +59,7 @@ class ClosedViewSpec extends ViewBehaviours {
       behave like normalPageTitleWithCaption(applyView,
         "closed",
         fakeUtr,
-        "p1", "p2", "p2.link", "p3", "p3.link"
+        "p1.beforeLink", "p1.link", "p1.afterLink"
       )
     }
   }
