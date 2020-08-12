@@ -25,7 +25,7 @@ class DeceasedPersonPrinterSpec extends SpecBase {
 
   "deceased person printer" must {
 
-    "print for deceased person with minimal data" in {
+    "print for deceased person with minimal data and middle name" in {
 
       val printer = injector.instanceOf[DeceasedPersonPrinter]
 
@@ -34,7 +34,7 @@ class DeceasedPersonPrinterSpec extends SpecBase {
       result.value mustBe AnswerSection(
         headingKey = Some("Person who died"),
         rows = Seq(
-          AnswerRow(Html("What is the name of the person who died?"), Html("John Smith")),
+          AnswerRow(Html("What is the name of the person who died?"), Html("John James Smith")),
           AnswerRow(Html("What is John Smith’s date of death?"), Html("1 January 2020")),
           AnswerRow(Html("Do you know John Smith’s date of birth?"), Html("No")),
           AnswerRow(Html("Do you know John Smith’s National Insurance number?"), Html("No")),

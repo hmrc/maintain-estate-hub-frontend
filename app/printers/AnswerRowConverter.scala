@@ -28,14 +28,6 @@ class AnswerRowConverter(countryOptions: CountryOptions, messageArgs: String*) {
 
   import ImplicitConverters._
 
-  def fullNameQuestion(data: NameType, labelKey: String)
-                      (implicit messages:Messages): Option[AnswerRow] = {
-      AnswerRow(
-        HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs: _*)),
-        AnswersFormatters.fullName(data)
-      ).toOption
-  }
-
   def dateQuestion(date: LocalDate, labelKey: String)
                   (implicit messages:Messages): Option[AnswerRow] = {
       AnswerRow(
@@ -55,7 +47,7 @@ class AnswerRowConverter(countryOptions: CountryOptions, messageArgs: String*) {
   }
 
   def stringQuestion(value: String, labelKey: String)
-  (implicit messages:Messages): Option[AnswerRow] = {
+                    (implicit messages:Messages): Option[AnswerRow] = {
     AnswerRow(
       HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs: _*)),
       HtmlFormat.escape(value)

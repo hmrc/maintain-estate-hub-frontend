@@ -110,7 +110,7 @@ object FakeData {
   )
 
   lazy val deceasedPersonWithMinimalData: EstateWillType = EstateWillType(
-    name = NameType("John", None, "Smith"),
+    name = NameType("John", Some("James"), "Smith"),
     dateOfBirth = None,
     dateOfDeath = LocalDate.parse("2020-01-01"),
     identification = IdentificationType(

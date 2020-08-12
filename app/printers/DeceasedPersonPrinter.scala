@@ -29,7 +29,7 @@ class DeceasedPersonPrinter @Inject()(@AllCountries countryOptions: CountryOptio
 
   def deceasedPerson(deceasedPerson: EstateWillType)(implicit messages: Messages): Option[AnswerSection] = {
 
-    val bound = new AnswerRowConverter(countryOptions, deceasedPerson.name.fullName)
+    val bound = new AnswerRowConverter(countryOptions, deceasedPerson.name.displayName)
 
     val prefix: String = "print.deceasedPerson"
 
@@ -44,7 +44,7 @@ class DeceasedPersonPrinter @Inject()(@AllCountries countryOptions: CountryOptio
     }
 
     val questions: Seq[AnswerRow] = Seq(
-      bound.fullNameQuestion(deceasedPerson.name, s"$prefix.name"),
+      bound.stringQuestion(deceasedPerson.name.fullName, s"$prefix.name"),
       bound.dateQuestion(deceasedPerson.dateOfDeath, s"$prefix.dateOfDeath"),
       bound.yesNoQuestion(deceasedPerson.dateOfBirth.isDefined, s"$prefix.dateOfBirthYesNo"),
       bound.dateQuestion(deceasedPerson.dateOfBirth, s"$prefix.dateOfBirth"),

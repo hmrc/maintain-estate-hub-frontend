@@ -28,8 +28,6 @@ object AnswersFormatters {
 
   val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
 
-  def fullName(name: NameType) = HtmlFormat.escape(name.fullName)
-
   def yesOrNo(answer: Boolean)(implicit messages: Messages): Html = {
     if (answer) {
       HtmlFormat.escape(messages("site.yes"))
