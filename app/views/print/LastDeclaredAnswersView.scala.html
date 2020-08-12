@@ -17,14 +17,14 @@
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 
 @this(
-main_template: MainTemplate,
-formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(personalRepresentative: Seq[Section], estateName: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(personalRepresentative: Seq[Section], estateNameAndDeceasedPerson: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-title = messages("lastDeclared.title")
+    title = messages("lastDeclared.title")
 ) {
 
     @components.back_link()
@@ -51,7 +51,7 @@ title = messages("lastDeclared.title")
 
     <p>@messages("lastDeclared.informationFirstRegistered")</p>
 
-    @for(section <- estateName){
+    @for(section <- estateNameAndDeceasedPerson){
         @{
             section match {
                 case a: AnswerSection => components.answer_section(a)

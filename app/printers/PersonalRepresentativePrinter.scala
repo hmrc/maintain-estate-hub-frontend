@@ -29,7 +29,7 @@ class PersonalRepresentativePrinter @Inject()(@AllCountries countryOptions: Coun
 
   def individual(perRepInd: Option[EstatePerRepIndType], correspondenceAddress: AddressType)(implicit messages: Messages): Option[AnswerSection] = {
     perRepInd flatMap { ind =>
-      val bound = new AnswerRowConverter(countryOptions, ind.name.fullName)
+      val bound = new AnswerRowConverter(countryOptions, ind.name.displayName)
 
       val address = ind.identification.address match {
         case Some(x) => x
@@ -38,7 +38,7 @@ class PersonalRepresentativePrinter @Inject()(@AllCountries countryOptions: Coun
 
       val questions = Seq(
         bound.stringQuestion(messages("print.personalRepresentative.individual"), "print.personalRepresentative.type"),
-        bound.fullNameQuestion(ind.name, "print.personalRepresentativeInd.name"),
+        bound.stringQuestion(ind.name.fullName, "print.personalRepresentativeInd.name"),
         bound.dateQuestion(ind.dateOfBirth, "print.personalRepresentativeInd.dateOfBirth"),
         bound.yesNoQuestion(ind.identification.nino.isDefined, "print.personalRepresentativeInd.ninoYesNo"),
         bound.ninoQuestion(ind.identification.nino, "print.personalRepresentativeInd.nino"),

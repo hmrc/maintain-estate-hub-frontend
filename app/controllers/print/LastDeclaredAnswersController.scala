@@ -18,12 +18,11 @@ package controllers.print
 
 import connectors.EstatesConnector
 import controllers.actions.Actions
-import handlers.ErrorHandler
 import javax.inject.Inject
 import models.http.Processed
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import printers.PrintHelper
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.print.LastDeclaredAnswersView
@@ -39,7 +38,7 @@ class LastDeclaredAnswersController  @Inject()(
                                                 estatesConnector: EstatesConnector
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad() = actions.authenticatedForUtr.async {
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr.async {
     implicit request =>
 
       estatesConnector.getEstate(request.utr) map {
@@ -47,8 +46,12 @@ class LastDeclaredAnswersController  @Inject()(
 
           val personalRep = print.personalRepresentative(estate)
           val estateName = print.estateName(estate)
+          val deceasedPerson = print.deceasedPerson(estate)
 
-          Ok(view(personalRep, estateName))
+          Ok(view(
+            personalRepresentative = personalRep,
+            estateNameAndDeceasedPerson = estateName ++ deceasedPerson
+          ))
         case estate =>
           Logger.warn(s"[LastDeclaredAnswersController] unable to render last declared answers due to estate being in state: $estate")
           Redirect(controllers.routes.EstateStatusController.problemWithService())

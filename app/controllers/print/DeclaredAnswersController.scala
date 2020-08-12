@@ -48,13 +48,14 @@ class DeclaredAnswersController @Inject()(
           val personalRep = print.personalRepresentative(estate)
           val estateName = print.estateName(estate)
           val administrationPeriod = print.administrationPeriod(estate)
+          val deceasedPerson = print.deceasedPerson(estate)
 
           Ok(view(
             tvn = request.tvn,
             declarationSent = DateFormatter.formatDate(request.submissionDate),
             crn = request.clientReferenceNumber,
             administrationPeriodAndPersonalRep = administrationPeriod ++ personalRep,
-            estateName = estateName,
+            estateNameAndDeceasedPerson = estateName ++ deceasedPerson,
             prefix = if (estate.isClosing) "declared.final" else "declared"
           ))
         case estate =>

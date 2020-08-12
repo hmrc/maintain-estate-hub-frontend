@@ -26,7 +26,7 @@
     declarationSent: String,
     crn: Option[String],
     administrationPeriodAndPersonalRep: Seq[Section],
-    estateName: Seq[Section],
+    estateNameAndDeceasedPerson: Seq[Section],
     prefix: String
 )(implicit request: Request[_], messages: Messages)
 
@@ -65,7 +65,7 @@
 
     <p>@messages("declared.informationFirstRegistered")</p>
 
-    @for(section <- estateName){
+    @for(section <- estateNameAndDeceasedPerson){
         @{
             section match {
                 case a: AnswerSection => components.answer_section(a)

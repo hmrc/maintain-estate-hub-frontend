@@ -41,6 +41,7 @@ class DeclaredAnswersControllerSpec extends SpecBase {
   when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
   when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
   when(mockPrintHelper.administrationPeriod(any())(any())).thenReturn(Nil)
+  when(mockPrintHelper.deceasedPerson(any())(any())).thenReturn(Nil)
 
   "DeclaredController" when {
 

@@ -229,7 +229,7 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
             deceased.entityStart mustBe LocalDate.parse("2017-02-28")
             deceased.name mustBe NameType("Wilbert", None, "Jefferies")
             deceased.dateOfDeath mustBe LocalDate.parse("2016-04-06")
-            deceased.identification.value.nino.value mustBe "JS123456A"
+            deceased.identification.nino.value mustBe "JS123456A"
 
             data.estate.administrationEndDate.value mustBe LocalDate.parse("2017-06-01")
 
@@ -423,7 +423,7 @@ class EstatesConnectorSpec extends PlaySpec with MustMatchers
             deceased.entityStart mustBe LocalDate.parse("2017-02-28")
             deceased.name mustBe NameType("Wilbert", None, "Jefferies")
             deceased.dateOfDeath mustBe LocalDate.parse("2016-04-06")
-            deceased.identification.value.nino.value mustBe "JS123456A"
+            deceased.identification.nino.value mustBe "JS123456A"
 
             data.estate.administrationEndDate.value mustBe LocalDate.parse("2017-06-01")
 
