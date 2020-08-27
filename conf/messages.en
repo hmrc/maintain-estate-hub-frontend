@@ -45,6 +45,11 @@ site.sign_out_of_account = Sign out of this account
 site.warning = Warning
 site.confirm-send = Confirm and send
 
+#timeout dialog
+timeout.title=Your application will time out soon
+timeout.message=We will reset your application if you do not respond in
+timeout.keep-alive-button=Continue application
+
 site.address.uk.title = What is the address?
 site.address.uk.heading = What is {0}’s address?
 site.address.uk.line1 = Address line 1
