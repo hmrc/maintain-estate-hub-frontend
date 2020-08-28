@@ -53,7 +53,9 @@
 
 .app-task-list__task-name {
   display: block;
-  float: left;
+  @include media(450px) {
+    float: left;
+  }
 }
 
 .app-task-list__task-completed {
