@@ -63,11 +63,11 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
           assertRenderedById(doc, "error-summary-heading")
         }
 
-        "show an error in the value field's label" in {
+        "show an error associated to the value field" in {
 
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe s"""${messages("site.error")} ${messages(errorMessage)}"""
+          errorSpan.text mustBe (messages("error.browser.title.prefix") + " " + messages(errorMessage))
         }
 
         "show an error prefix in the browser title" in {
