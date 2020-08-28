@@ -44,7 +44,7 @@ class ProblemDeclaringControllerSpec extends SpecBase {
       status(result) mustEqual INTERNAL_SERVER_ERROR
 
       contentAsString(result) mustEqual
-        view(Organisation)(fakeRequest, messages).toString
+        view(Organisation)(request, messages).toString
 
       application.stop()
     }

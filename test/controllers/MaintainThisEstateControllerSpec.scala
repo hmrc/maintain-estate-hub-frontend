@@ -43,7 +43,7 @@ class MaintainThisEstateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(utr, frontendAppConfig.verifyIdentityForAnEstateUrl(utr))(fakeRequest, messages).toString
+        view(utr, frontendAppConfig.verifyIdentityForAnEstateUrl(utr))(request, messages).toString
 
       application.stop()
     }
@@ -66,7 +66,7 @@ class MaintainThisEstateControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(utr, routes.SessionExpiredController.onPageLoad().url
-        )(fakeRequest, messages).toString
+        )(request, messages).toString
 
       application.stop()
     }

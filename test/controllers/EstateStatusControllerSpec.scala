@@ -99,7 +99,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(fakeUtr, isAgent = true)(fakeRequest, messages).toString
+            view(fakeUtr, isAgent = true)(request, messages).toString
 
           application.stop()
         }
@@ -113,7 +113,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(fakeUtr, isAgent = false)(fakeRequest, messages).toString
+            view(fakeUtr, isAgent = false)(request, messages).toString
 
           application.stop()
         }
@@ -130,7 +130,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(fakeUtr, isAgent = true)(fakeRequest, messages).toString
+            view(fakeUtr, isAgent = true)(request, messages).toString
 
           application.stop()
         }
@@ -144,7 +144,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(fakeUtr, isAgent = false)(fakeRequest, messages).toString
+            view(fakeUtr, isAgent = false)(request, messages).toString
 
           application.stop()
         }
@@ -159,7 +159,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(fakeUtr)(fakeRequest, messages).toString
+          view(fakeUtr)(request, messages).toString
 
         application.stop()
       }
@@ -175,7 +175,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(isAgent = true)(fakeRequest, messages).toString
+            view(isAgent = true)(request, messages).toString
 
           application.stop()
         }
@@ -189,7 +189,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(isAgent = false)(fakeRequest, messages).toString
+            view(isAgent = false)(request, messages).toString
 
           application.stop()
         }
@@ -206,7 +206,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(isAgent = true)(fakeRequest, messages).toString
+            view(isAgent = true)(request, messages).toString
 
           application.stop()
         }
@@ -220,7 +220,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(isAgent = false)(fakeRequest, messages).toString
+            view(isAgent = false)(request, messages).toString
 
           application.stop()
         }
@@ -235,7 +235,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(fakeUtr)(fakeRequest, messages).toString
+          view(fakeUtr)(request, messages).toString
 
         application.stop()
       }

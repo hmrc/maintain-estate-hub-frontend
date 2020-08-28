@@ -72,7 +72,7 @@ class ConfirmationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view("Adam Conder", fakeTvn, isAgent = false, isClosing = false)(fakeRequest, messages).toString
+        view("Adam Conder", fakeTvn, isAgent = false, isClosing = false)(request, messages).toString
 
       application.stop()
     }
@@ -107,7 +107,7 @@ class ConfirmationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view("Adam Conder", fakeTvn, isAgent = true, isClosing = true)(fakeRequest, messages).toString
+        view("Adam Conder", fakeTvn, isAgent = true, isClosing = true)(request, messages).toString
 
       application.stop()
     }

@@ -69,7 +69,7 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(Nil, Nil)(fakeRequest, messages).toString
+        view(Nil, Nil)(request, messages).toString
 
       application.stop()
     }
