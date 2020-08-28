@@ -51,7 +51,7 @@ class IndividualDeclarationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, declarationEmailEnabled = false)(fakeRequest, messages).toString
+        view(form, declarationEmailEnabled = false)(request, messages).toString
 
       application.stop()
     }
@@ -73,7 +73,7 @@ class IndividualDeclarationControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, declarationEmailEnabled = false)(fakeRequest, messages).toString
+        view(boundForm, declarationEmailEnabled = false)(request, messages).toString
 
       application.stop()
     }

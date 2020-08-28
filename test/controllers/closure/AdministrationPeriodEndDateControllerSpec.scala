@@ -73,7 +73,7 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(fakeRequest, messages).toString
+        view(form)(request, messages).toString
 
       application.stop()
     }
@@ -93,7 +93,7 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer))(fakeRequest, messages).toString
+        view(form.fill(validAnswer))(request, messages).toString
 
       application.stop()
     }
@@ -134,7 +134,7 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm)(request, messages).toString
 
       application.stop()
     }

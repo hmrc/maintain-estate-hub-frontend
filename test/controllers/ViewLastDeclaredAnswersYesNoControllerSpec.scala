@@ -56,7 +56,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, utr)(fakeRequest, messages).toString
+        view(form, utr)(request, messages).toString
 
       application.stop()
     }
@@ -76,7 +76,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), utr)(fakeRequest, messages).toString
+        view(form.fill(true), utr)(request, messages).toString
 
       application.stop()
     }
@@ -140,7 +140,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, utr)(fakeRequest, messages).toString
+        view(boundForm, utr)(request, messages).toString
 
       application.stop()
     }

@@ -2,6 +2,8 @@ checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
 checkYourAnswers.guidance = Guidance for check your answers
 
+footer.links.accessibility.text = Accessibility
+
 date.day = Day
 date.month = Month
 date.year = Year

@@ -78,7 +78,7 @@ class DeclaredAnswersControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view("tvn", "5 October 2010", None, Nil, Nil, "declared")(fakeRequest, messages).toString
+          view("tvn", "5 October 2010", None, Nil, Nil, "declared")(request, messages).toString
 
         application.stop()
       }
@@ -114,7 +114,7 @@ class DeclaredAnswersControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view("tvn", "5 October 2010", None, Nil, Nil, "declared.final")(fakeRequest, messages).toString
+          view("tvn", "5 October 2010", None, Nil, Nil, "declared.final")(request, messages).toString
 
         application.stop()
       }

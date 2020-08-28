@@ -43,7 +43,7 @@ class EstateNotClaimedControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(fakeUtr)(fakeRequest, messages).toString
+        view(fakeUtr)(request, messages).toString
 
       application.stop()
     }
