@@ -37,7 +37,7 @@ trait ViewSpecBase extends SpecBase {
   def asDocument(html: Html): Document = Jsoup.parse(html.toString())
 
   def assertEqualsMessage(doc: Document, cssSelector: String, expectedMessageKey: String) =
-    assertEqualsValue(doc, cssSelector, messages(expectedMessageKey))
+    assertEqualsValue(doc, cssSelector, ViewUtils.breadcrumbTitle(messages(expectedMessageKey)))
 
   def assertEqualsValue(doc : Document, cssSelector : String, expectedValue: String) = {
     val elements = doc.select(cssSelector)
