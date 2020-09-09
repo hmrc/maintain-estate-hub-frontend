@@ -40,10 +40,11 @@
             labelAsHeading = true,
             hint = Some(messages("UTR.hint")),
             readerHint = Some(messages("UTR.hint.reader")),
-            labelClass = Some("heading-large")
+            labelClass = Some("heading-large"),
+            optionalHtmlContent = Some(
+                Html(s"""<p>${messages("UTR.linkMessage")} <a href="https://www.gov.uk/find-lost-utr-number" target="_blank">${messages("UTR.linkText")}</a>.</p>""")
+            )
         )
-
-        <p>@messages("UTR.linkMessage") <a href="https://www.gov.uk/find-lost-utr-number" target="_blank">@messages("UTR.linkText")</a>.</p>
 
         @components.submit_button()
     }
