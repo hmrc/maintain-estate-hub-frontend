@@ -18,15 +18,15 @@ package forms.declaration
 
 import forms.Validation
 import forms.behaviours.StringFieldBehaviours
-import models.declaration.AgentDeclaration
+import models.declaration.IndividualDeclaration
 import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
-class AgentDeclarationFormProviderSpec extends StringFieldBehaviours {
+class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
 
   private val prefix: String = "declaration.error"
 
-  private val form: Form[AgentDeclaration] = new AgentDeclarationFormProvider()()
+  private val form: Form[IndividualDeclaration] = new IndividualDeclarationFormProvider()()
 
   ".firstName" must {
 
@@ -87,103 +87,6 @@ class AgentDeclarationFormProviderSpec extends StringFieldBehaviours {
     val requiredKey = s"$prefix.$fieldName.required"
     val lengthKey = s"$prefix.$fieldName.length"
     val maxLength = 35
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      RegexpGen.from(Validation.nameRegex)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-
-    behave like nonEmptyField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
-    )
-  }
-
-  ".agencyName" must {
-
-    val fieldName = "agencyName"
-    val requiredKey = s"$prefix.$fieldName.required"
-    val lengthKey = s"$prefix.$fieldName.length"
-    val maxLength = 56
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      RegexpGen.from(Validation.nameRegex)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-
-    behave like nonEmptyField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
-    )
-  }
-
-  "telephoneNumber" must {
-
-    val fieldName = "telephoneNumber"
-    val requiredKey = s"$prefix.$fieldName.required"
-    val invalidKey = s"$prefix.$fieldName.invalid"
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      validDataGenerator = RegexpGen.from(Validation.telephoneRegex)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-
-    behave like nonEmptyField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
-    )
-
-    behave like telephoneNumberField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey, Seq(fieldName))
-    )
-  }
-
-  "crn" must {
-
-    val fieldName = "crn"
-    val requiredKey = s"$prefix.$fieldName.required"
-    val lengthKey = s"$prefix.$fieldName.length"
-    val maxLength = 56
 
     behave like fieldThatBindsValidData(
       form,
