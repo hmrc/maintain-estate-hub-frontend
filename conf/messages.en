@@ -110,8 +110,8 @@ featureNotAvailable.p2 = You will be able to update these details online in the 
 
 declarationWhatNext.title = What do you want to do next?
 declarationWhatNext.heading = What do you want to do next?
-declarationWhatNext.declare = Add a new personal representative
-declarationWhatNext.declare.hint = Declare a new personal representative.
+declarationWhatNext.declare = Replace the personal representative
+declarationWhatNext.declare.hint = This will remove the existing personal representative.
 declarationWhatNext.make-changes = Make changes to the current personal representative
 declarationWhatNext.make-changes.hint = Update the details of the personal representative.
 declarationWhatNext.close-estate = Close the estate and declare
