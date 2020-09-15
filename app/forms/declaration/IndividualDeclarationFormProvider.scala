@@ -16,37 +16,12 @@
 
 package forms.declaration
 
-import com.google.inject.Inject
 import forms.Validation
-import forms.mappings.Mappings
-import models.NameType
+import models.declaration.IndividualDeclaration
+import play.api.data.Form
 import play.api.data.Forms.{mapping, optional}
-import play.api.data.{Form, Mapping}
 
-class IndividualDeclarationFormProvider @Inject()() extends Mappings {
-
-  private val fullName: Mapping[NameType] = mapping(
-    "firstName" -> text("declaration.error.firstName.required")
-      .verifying(
-        firstError(
-          maxLength(35, s"declaration.error.firstName.length"),
-          isNotEmpty("firstName", s"declaration.error.firstName.required"),
-          regexp(Validation.nameRegex, s"declaration.error.firstName.invalid")
-        )),
-    "middleName" -> optional(text()
-      .verifying(
-        firstError(
-          maxLength(35, s"declaration.error.middleName.length"),
-          regexp(Validation.nameRegex, s"declaration.error.middleName.invalid"))
-      )),
-    "lastName" -> text("declaration.error.lastName.required")
-      .verifying(
-        firstError(
-          maxLength(35, s"declaration.error.lastName.length"),
-          isNotEmpty("lastName", s"declaration.error.lastName.required"),
-          regexp(Validation.nameRegex, s"declaration.error.lastName.invalid")
-        ))
-  )(NameType.apply)(NameType.unapply)
+class IndividualDeclarationFormProvider extends DeclarationFormProvider {
 
   def apply(): Form[models.declaration.IndividualDeclaration] =
     Form(
@@ -54,9 +29,8 @@ class IndividualDeclarationFormProvider @Inject()() extends Mappings {
         "" -> fullName,
         "email" -> optional(text().verifying(
           firstError(
-            maxLength(35, s"declaration.error.email.length"),
-            regexp(Validation.emailRegex, s"declaration.error.email.invalid"))
+            regexp(Validation.emailRegex, "declaration.error.email.invalid"))
         ))
-      )(models.declaration.IndividualDeclaration.apply)(models.declaration.IndividualDeclaration.unapply)
+      )(IndividualDeclaration.apply)(IndividualDeclaration.unapply)
     )
 }

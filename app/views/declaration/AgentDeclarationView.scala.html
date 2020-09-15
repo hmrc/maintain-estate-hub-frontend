@@ -18,9 +18,9 @@
 @import config.FrontendAppConfig
 
 @this(
-        appConfig: FrontendAppConfig,
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    appConfig: FrontendAppConfig,
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
 @(form: Form[_], declarationEmailEnabled: Boolean)(implicit request: Request[_], messages: Messages)
@@ -69,21 +69,21 @@
             </legend>
 
             @components.input_text(
-            field = form("agencyName"),
-            label = messages("declaration.agencyName")
+                field = form("agencyName"),
+                label = messages("declaration.agencyName")
             )
 
             @components.input_text(
-            field = form("telephoneNumber"),
-            label = messages("declaration.telephoneNumber"),
-            inputClass = Some("form-control-3-4"),
-            autoComplete = Some("tel")
+                field = form("telephoneNumber"),
+                label = messages("declaration.telephoneNumber"),
+                inputClass = Some("form-control-3-4"),
+                autoComplete = Some("tel")
             )
 
             @components.input_text(
-            field = form("crn"),
-            label = messages("declaration.crn"),
-            inputClass = Some("form-control-3-4")
+                field = form("crn"),
+                label = messages("declaration.crn"),
+                inputClass = Some("form-control-3-4")
             )
 
         </fieldset>
