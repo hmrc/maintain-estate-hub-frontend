@@ -59,7 +59,7 @@ site.address.uk.line2 = Address line 2
 site.address.uk.line3 = Address line 3 (optional)
 site.address.uk.line4 = Address line 4 (optional)
 site.address.uk.postcode = Postcode
-site.address.uk.postcode.hint = For example AB1 1AB
+site.address.uk.postcode.hint = For example, AB1 1AB.
 
 
 ukAddress.error.line1.required = Enter address line 1
@@ -387,7 +387,7 @@ closure.administrationPeriodEndDateNeeded.link = contact the deceased estate hel
 
 closure.administrationPeriodEndDate.title = What is the date the administration period ended?
 closure.administrationPeriodEndDate.heading = What is the date the administration period ended?
-closure.administrationPeriodEndDate.hint = For example, 31 3 1980
+closure.administrationPeriodEndDate.hint = For example, 31 3 1980.
 closure.administrationPeriodEndDate.error.required.all = Enter the date the administration period ended
 closure.administrationPeriodEndDate.error.required.two = The date the administration period ended must include a {0} and a {1}
 closure.administrationPeriodEndDate.error.required = The date the administration period ended must include a {0}
