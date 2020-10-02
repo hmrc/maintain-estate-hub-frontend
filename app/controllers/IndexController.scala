@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.Actions
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import pages.UTRPage
 import play.api.Logger
 import play.api.i18n.I18nSupport

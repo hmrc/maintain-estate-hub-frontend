@@ -25,8 +25,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.MaintainThisEstateView
 
-import scala.concurrent.ExecutionContext
-
 @Singleton
 class MaintainThisEstateController @Inject()(
                                               override val messagesApi: MessagesApi,
@@ -34,7 +32,7 @@ class MaintainThisEstateController @Inject()(
                                               val controllerComponents: MessagesControllerComponents,
                                               config: FrontendAppConfig,
                                               view: MaintainThisEstateView
-                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                           ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(needsIv: Boolean): Action[AnyContent] = actions.authWithData {
     implicit request =>

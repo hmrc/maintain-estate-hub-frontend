@@ -56,7 +56,7 @@ class AuthenticatedIdentifierAction @Inject()(
   private def authenticateOrganisation[A](internalId: String,
                                           enrolments: Enrolments,
                                           block: IdentifierRequest[A] => Future[Result])
-                                         (implicit request: Request[A], hc: HeaderCarrier) = {
+                                         (implicit request: Request[A]) = {
     block(IdentifierRequest(request, OrganisationUser(internalId, enrolments)))
   }
 
@@ -73,7 +73,7 @@ class AuthenticatedIdentifierAction @Inject()(
         authoriseAgent(internalId, enrolments, block)(request, hc)
 
       case Some(internalId) ~ Some(Organisation) ~ enrolments =>
-        authenticateOrganisation(internalId, enrolments, block)(request, hc)
+        authenticateOrganisation(internalId, enrolments, block)(request)
 
       case Some(_) ~ _ ~ _ =>
         Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))

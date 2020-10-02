@@ -66,7 +66,7 @@ class WhatIsNextController @Inject()(
 
       def clearTransforms(value: WhatIsNext): Future[HttpResponse] = {
         if (request.userAnswers.get(WhatIsNextPage).contains(value)) {
-          Future.successful(HttpResponse(OK))
+          Future.successful(HttpResponse(OK, "Selection unchanged. No need to clear transforms."))
         } else {
           connector.clearTransformations(request.utr)
         }

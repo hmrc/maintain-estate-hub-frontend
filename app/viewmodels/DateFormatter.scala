@@ -19,9 +19,6 @@ package viewmodels
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import com.google.inject.Inject
-import config.FrontendAppConfig
-
 object DateFormatter {
 
   private val format = "d MMMM yyyy"

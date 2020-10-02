@@ -18,7 +18,7 @@ package printers
 
 import java.time.format.DateTimeFormatter
 
-import models.{AddressType, NameType, PassportType}
+import models.{AddressType, PassportType}
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.domain.Nino
@@ -65,7 +65,7 @@ object AnswersFormatters {
   def country(code: String, countryOptions: CountryOptions): Html =
     HtmlFormat.escape(countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse(""))
 
-  def utr(answer: String)(implicit messages: Messages): Html = HtmlFormat.escape(answer)
+  def utr(answer: String): Html = HtmlFormat.escape(answer)
 
   def passportOrIdCard(passport: PassportType, countryOptions: CountryOptions): Html = {
     val lines =

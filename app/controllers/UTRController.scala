@@ -19,7 +19,7 @@ package controllers
 import controllers.actions._
 import forms.UTRFormProvider
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.UserAnswers
 import pages.UTRPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -38,7 +38,6 @@ class UTRController @Inject()(
                                val controllerComponents: MessagesControllerComponents,
                                view: UTRView
                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-
 
   val form = formProvider()
 

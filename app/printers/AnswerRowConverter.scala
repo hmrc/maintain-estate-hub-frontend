@@ -18,7 +18,7 @@ package printers
 
 import java.time.LocalDate
 
-import models.{AddressType, NameType, PassportType}
+import models.{AddressType, PassportType}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import utils.countryOptions.CountryOptions

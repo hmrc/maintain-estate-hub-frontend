@@ -18,11 +18,10 @@ package repositories
 
 import java.time.LocalDateTime
 
-import akka.stream.Materializer
 import javax.inject.Inject
 import models.{MongoDateTimeFormats, UserAnswers}
+import play.api.Configuration
 import play.api.libs.json._
-import play.api.{Configuration, Logger}
 import reactivemongo.api.WriteConcern
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.BSONDocument
@@ -34,8 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DefaultSessionRepository @Inject()(
                                           mongo: MongoDriver,
                                           config: Configuration
-                                        )(implicit ec: ExecutionContext, m: Materializer) extends SessionRepository {
-
+                                        )(implicit ec: ExecutionContext) extends SessionRepository {
 
   private val collectionName: String = "user-answers"
 
