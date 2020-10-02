@@ -47,7 +47,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
 
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-  when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+  when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
 
   "WhatIsNext Controller" must {
 
@@ -180,7 +180,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
     "clear transformations if user changes selection" in {
 
       reset(fakeConnector)
-      when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+      when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val utr = "0987654321"
 
@@ -209,7 +209,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
     "clear transformations if no previous selection" in {
 
       reset(fakeConnector)
-      when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+      when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val utr = "0987654321"
 
@@ -237,7 +237,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
     "not clear transformations if user makes same selection" in {
 
       reset(fakeConnector)
-      when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+      when(fakeConnector.clearTransformations(any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val utr = "0987654321"
 

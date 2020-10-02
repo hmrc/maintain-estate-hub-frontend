@@ -23,7 +23,7 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryWhatIsNext: Arbitrary[WhatIsNext] =
     Arbitrary {
-      Gen.oneOf(WhatIsNext.values.toSeq)
+      Gen.oneOf(WhatIsNext.values)
     }
 
 }

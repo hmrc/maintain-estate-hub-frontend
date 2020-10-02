@@ -17,14 +17,10 @@
 package connectors
 
 import base.SpecBase
-import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo, _}
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo}
 import models.EstateLock
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
-import play.api.http.HeaderNames._
-import play.api.http.MimeTypes._
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.WireMockHelper

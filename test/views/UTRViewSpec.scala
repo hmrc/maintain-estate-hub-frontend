@@ -18,7 +18,6 @@ package views
 
 import forms.UTRFormProvider
 import play.api.data.Form
-import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
 import views.html.UTRView
