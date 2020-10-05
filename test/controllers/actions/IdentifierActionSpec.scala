@@ -19,7 +19,6 @@ package controllers.actions
 import base.SpecBase
 import config.FrontendAppConfig
 import models.FakeUser
-import models.requests.AgentUser
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import play.api.Application

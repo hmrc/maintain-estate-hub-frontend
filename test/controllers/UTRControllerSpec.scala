@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.UTRFormProvider
-import models.{FakeUser, NormalMode}
+import models.FakeUser
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.data.Form
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call}

@@ -17,7 +17,6 @@
 package printers
 
 import base.{FakeData, SpecBase}
-import models.{Correspondence, EstateWillType}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

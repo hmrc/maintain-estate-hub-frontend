@@ -23,6 +23,7 @@ import javax.inject.Inject
 import models.declaration.VariationResponse
 import models.http.{EstateResponse, EstateStatusReads}
 import play.api.libs.json.{JsSuccess, JsValue, Json, Writes}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 

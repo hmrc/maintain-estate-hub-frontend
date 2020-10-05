@@ -19,20 +19,15 @@ package controllers.actions
 import java.time.LocalDateTime
 
 import base.SpecBase
-import models.UserAnswers
-import models.requests.{DataRequestWithUTR, IdentifierRequest, OrganisationUser, TvnRequest}
-import org.mockito.Mockito._
+import models.requests.{DataRequestWithUTR, OrganisationUser, TvnRequest}
 import org.scalatest.EitherValues
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{SubmissionDatePage, TVNPage}
 import play.api.mvc.Result
-import play.api.test.Helpers
-import repositories.SessionRepository
-import uk.gov.hmrc.auth.core.Enrolments
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.Enrolments
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RequireTvnActionSpec extends SpecBase with MockitoSugar with ScalaFutures with EitherValues {

@@ -21,6 +21,7 @@ import config.FrontendAppConfig
 import play.api.Logger
 import play.api.libs.json.{JsValue, Writes}
 import play.api.mvc.ControllerComponents
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 import uk.gov.hmrc.play.bootstrap.http.HttpClient

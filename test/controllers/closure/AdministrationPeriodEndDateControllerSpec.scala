@@ -48,7 +48,7 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
   private def applicationBuilder(userAnswers: UserAnswers): Application = {
 
     when(fakeConnector.getDateOfDeath(any())(any(), any())).thenReturn(Future.successful(startDate))
-    when(fakeConnector.close(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+    when(fakeConnector.close(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
 
     super.applicationBuilder(Some(userAnswers))
     .overrides(

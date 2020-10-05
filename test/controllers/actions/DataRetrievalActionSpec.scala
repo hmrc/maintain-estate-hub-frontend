@@ -25,7 +25,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.Enrolments
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutures {

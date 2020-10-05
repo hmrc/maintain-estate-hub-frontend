@@ -17,8 +17,8 @@
 package controllers
 
 import base.SpecBase
-import models.{FakeUser, NormalMode}
-import models.requests.{AgentUser, OrganisationUser}
+import models.FakeUser
+import models.requests.AgentUser
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}

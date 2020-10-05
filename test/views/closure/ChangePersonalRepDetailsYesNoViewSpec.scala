@@ -20,7 +20,7 @@ import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.closure.{ChangePersonalRepDetailsYesNoView, HasAdministrationPeriodEndedYesNoView}
+import views.html.closure.ChangePersonalRepDetailsYesNoView
 
 class ChangePersonalRepDetailsYesNoViewSpec extends YesNoViewBehaviours {
 

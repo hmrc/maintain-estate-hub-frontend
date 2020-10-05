@@ -17,7 +17,7 @@
 package views
 
 import views.behaviours.ViewBehaviours
-import views.html.{AccountNotLinkedView, InProcessingView}
+import views.html.AccountNotLinkedView
 
 class AccountNotLinkedViewSpec extends ViewBehaviours {
 

@@ -20,7 +20,7 @@ import base.SpecBase
 import pages.UTRPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.{EstateNotClaimedView, MaintainThisEstateView}
+import views.html.EstateNotClaimedView
 
 class EstateNotClaimedControllerSpec extends SpecBase {
 

@@ -27,10 +27,8 @@ import org.scalatestplus.play.guice._
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
-import play.api.libs.json.Json
 import play.api.mvc.PlayBodyParsers
 import play.api.test.FakeRequest
-import utils.countryOptions.{CountryOptions, CountryOptionsNonUK}
 
 import scala.concurrent.ExecutionContext
 
@@ -50,7 +48,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
 
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
-  private def applicationBuilderInterface(userAnswers: Option[UserAnswers] = None,
+  private def applicationBuilderInterface(userAnswers: Option[UserAnswers],
                                           fakeIdentifierAction: IdentifierAction,
                                           utr: String = "utr"
                                          ) : GuiceApplicationBuilder = {

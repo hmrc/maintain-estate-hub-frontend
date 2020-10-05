@@ -22,13 +22,11 @@ import models.requests._
 import org.scalatest.EitherValues
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TVNPage
 import pages.declaration.AgencyRegisteredAddressPage
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.Enrolments
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RequireAgentAddressActionSpec extends SpecBase with MockitoSugar with ScalaFutures with EitherValues {

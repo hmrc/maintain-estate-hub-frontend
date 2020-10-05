@@ -24,13 +24,11 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html._
 
-import scala.concurrent.ExecutionContext
-
 class AgentNotAuthorisedController @Inject()(
                                               val controllerComponents: MessagesControllerComponents,
                                               actions: Actions,
                                               view: AgentNotAuthorisedView
-                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                            ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = actions.authWithData {
     implicit request =>
