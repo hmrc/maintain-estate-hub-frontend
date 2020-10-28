@@ -18,35 +18,36 @@ package models
 
 import play.api.Logger
 import play.api.http.Status.OK
-import uk.gov.hmrc.http.{HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import play.api.libs.json.{Json, OFormat}
+import utils.Session
+
 import scala.language.implicitConversions
 
 case class EstateLock(utr:String, managedByAgent: Boolean, estateLocked:Boolean)
 
 object EstateLock {
+  private val logger: Logger = Logger(getClass)
 
   implicit val formats : OFormat[EstateLock] = Json.format[EstateLock]
 
-  implicit def httpReads(utr : String): HttpReads[Option[EstateLock]] =
-    new HttpReads[Option[EstateLock]] {
-      override def read(method: String, url: String, response: HttpResponse): Option[EstateLock] = {
-        Logger.info(s"[EstateLock] response status received from estates store api: ${response.status}")
+  implicit def httpReads(utr : String)(implicit hc: HeaderCarrier): HttpReads[Option[EstateLock]] =
+    (method: String, url: String, response: HttpResponse) => {
+      logger.info(s"[Session ID: ${Session.id(hc)}] response status received from estates store api: ${response.status}")
 
-        response.status match {
-          case OK =>
-            response.json.asOpt[EstateLock] match {
-              case validClaim @ Some(c) =>
-                if (c.utr.toLowerCase.trim == utr.toLowerCase.trim) {
-                  validClaim
-                } else {
-                  None
-                }
-              case None => None
-            }
-          case _ =>
-            None
-        }
+      response.status match {
+        case OK =>
+          response.json.asOpt[EstateLock] match {
+            case validClaim@Some(c) =>
+              if (c.utr.toLowerCase.trim == utr.toLowerCase.trim) {
+                validClaim
+              } else {
+                None
+              }
+            case None => None
+          }
+        case _ =>
+          None
       }
     }
 

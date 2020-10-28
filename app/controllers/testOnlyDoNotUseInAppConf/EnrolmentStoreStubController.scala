@@ -20,11 +20,12 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import play.api.Logger
 import play.api.libs.json.{JsValue, Writes}
-import play.api.mvc.ControllerComponents
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,11 +35,9 @@ class TestUserConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   object InsertedReads {
     implicit lazy val httpReads: HttpReads[Unit] =
-      new HttpReads[Unit] {
-        override def read(method: String, url: String, response: HttpResponse) = {
-          // Ignore the response from enrolment-store-stub
-          ()
-        }
+      (method: String, url: String, response: HttpResponse) => {
+        // Ignore the response from enrolment-store-stub
+        ()
       }
   }
 
@@ -58,17 +57,18 @@ class EnrolmentStoreStubController @Inject()(
                                               connector: TestUserConnector,
                                               val controllerComponents: ControllerComponents
                                             )(implicit ec: ExecutionContext) extends BackendBaseController {
+  private val logger: Logger = Logger(getClass)
 
-  def insertTestUserIntoEnrolmentStore = Action.async(parse.json) {
+  def insertTestUserIntoEnrolmentStore(): Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      Logger.info(s"[EnrolmentStoreStubController] inserting test user: ${request.body}")
+      logger.info(s"[Session ID: ${Session.id(hc)}] inserting test user: ${request.body}")
       connector.insert(request.body).map(_ => Ok)
   }
 
-  def flush = Action.async {
+  def flush: Action[AnyContent] = Action.async {
     implicit request =>
-    Logger.info(s"[EnrolmentStoreStubController] flushing test users from enrolment-store")
-    connector.delete().map(_ => Ok)
+      logger.info(s"[Session ID: ${Session.id(hc)}] flushing test users from enrolment-store")
+      connector.delete().map(_ => Ok)
   }
 
 }

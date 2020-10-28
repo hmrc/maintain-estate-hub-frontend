@@ -19,7 +19,8 @@ package models.declaration
 import play.api.Logger
 import play.api.http.Status._
 import play.api.libs.json._
-import uk.gov.hmrc.http.{HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
+import utils.Session
 
 sealed trait VariationResponse
 
@@ -32,17 +33,17 @@ object TVN {
 
 object VariationResponse {
 
-  implicit lazy val httpReads: HttpReads[VariationResponse] =
-    new HttpReads[VariationResponse] {
-      override def read(method: String, url: String, response: HttpResponse): VariationResponse = {
-        Logger.info(s"[TVNResponse] response status received from estates api: ${response.status}")
+  private val logger: Logger = Logger(getClass)
 
-        response.status match {
-          case OK =>
-            response.json.as[TVN]
-          case _ =>
-            InternalServerError
-        }
+  implicit def httpReads(implicit hc: HeaderCarrier): HttpReads[VariationResponse] =
+    (method: String, url: String, response: HttpResponse) => {
+      logger.info(s"[Session ID: ${Session.id(hc)}] response status received from estates api: ${response.status}")
+
+      response.status match {
+        case OK =>
+          response.json.as[TVN]
+        case _ =>
+          InternalServerError
       }
     }
 

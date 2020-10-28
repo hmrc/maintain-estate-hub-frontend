@@ -25,6 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import printers.PrintHelper
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.Session
 import views.html.print.LastDeclaredAnswersView
 
 import scala.concurrent.ExecutionContext
@@ -37,6 +38,7 @@ class LastDeclaredAnswersController  @Inject()(
                                                 print: PrintHelper,
                                                 estatesConnector: EstatesConnector
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+  private val logger: Logger = Logger(getClass)
 
   def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr.async {
     implicit request =>
@@ -53,11 +55,11 @@ class LastDeclaredAnswersController  @Inject()(
             estateNameAndDeceasedPerson = estateName ++ deceasedPerson
           ))
         case estate =>
-          Logger.warn(s"[LastDeclaredAnswersController] unable to render last declared answers due to estate being in state: $estate")
+          logger.warn(s"[Session ID: ${Session.id(hc)}] unable to render last declared answers due to estate being in state: $estate")
           Redirect(controllers.routes.EstateStatusController.problemWithService())
       } recover {
         case e =>
-          Logger.error(s"[LastDeclaredAnswersController] unable to render last declared answers due to ${e.getMessage}")
+          logger.error(s"[Session ID: ${Session.id(hc)}] unable to render last declared answers due to ${e.getMessage}")
           Redirect(controllers.routes.EstateStatusController.problemWithService())
       }
 

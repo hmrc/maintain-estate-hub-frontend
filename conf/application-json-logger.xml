@@ -7,6 +7,10 @@
 
     <logger name="uk.gov" level="WARN"/>
 
+    <logger name="controllers" level="${logger.application:-INFO}"/>
+    <logger name="models" level="${logger.application:-INFO}"/>
+    <logger name="services" level="${logger.application:-INFO}"/>
+
     <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>

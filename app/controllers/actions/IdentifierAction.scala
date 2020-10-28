@@ -29,6 +29,7 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
+import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,6 +42,7 @@ class AuthenticatedIdentifierAction @Inject()(
                                                authenticationService: EstateAuthenticationService
                                              )
                                              (implicit val executionContext: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
+  private val logger: Logger = Logger(getClass)
 
   private def authoriseAgent[A](internalId: String,
                                 enrolments: Enrolments,
@@ -61,7 +63,6 @@ class AuthenticatedIdentifierAction @Inject()(
   }
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
-
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
     val retrievals = Retrievals.internalId and
@@ -79,7 +80,7 @@ class AuthenticatedIdentifierAction @Inject()(
         Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
 
       case _ =>
-        Logger.warn(s"[AuthenticatedIdentifierAction] Unable to retrieve retrievals")
+        logger.warn(s"[Session ID: ${Session.id(hc)}] Unable to retrieve retrievals")
         Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     } recover {
       case _: NoActiveSession => Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
