@@ -20,7 +20,8 @@ import models.GetEstate
 import play.api.Logger
 import play.api.http.Status._
 import play.api.libs.json._
-import uk.gov.hmrc.http.{HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
+import utils.Session
 
 sealed trait EstateResponse
 
@@ -35,6 +36,8 @@ case object EstatesServiceUnavailable extends EstateResponse
 case object ServerError extends EstateResponse
 
 object EstateStatusReads {
+
+  private val logger: Logger = Logger(getClass)
 
   implicit object StatusReads extends Reads[EstateStatus] {
     override def reads(json: JsValue): JsResult[EstateStatus] = {
@@ -60,23 +63,21 @@ object EstateStatusReads {
     }
   }
 
-  implicit lazy val httpReads: HttpReads[EstateResponse] =
-    new HttpReads[EstateResponse] {
-      override def read(method: String, url: String, response: HttpResponse): EstateResponse = {
-        Logger.info(s"[EstateStatusReads] response status received from estates status api: ${response.status}")
+  implicit def httpReads(implicit hc: HeaderCarrier): HttpReads[EstateResponse] =
+    (method: String, url: String, response: HttpResponse) => {
+      logger.info(s"[Session ID: ${Session.id(hc)}] response status received from estates status api: ${response.status}")
 
-        response.status match {
-          case OK =>
-            response.json.as[EstateStatus]
-          case NO_CONTENT =>
-            SorryThereHasBeenAProblem
-          case NOT_FOUND =>
-            UtrNotFound
-          case SERVICE_UNAVAILABLE =>
-            EstatesServiceUnavailable
-          case _ =>
-            ServerError
-        }
+      response.status match {
+        case OK =>
+          response.json.as[EstateStatus]
+        case NO_CONTENT =>
+          SorryThereHasBeenAProblem
+        case NOT_FOUND =>
+          UtrNotFound
+        case SERVICE_UNAVAILABLE =>
+          EstatesServiceUnavailable
+        case _ =>
+          ServerError
       }
     }
 }

@@ -26,6 +26,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.Session
 import views.html.confirmation.ConfirmationView
 
 import scala.concurrent.ExecutionContext
@@ -38,6 +39,7 @@ class ConfirmationController @Inject()(
                                         confirmationView: ConfirmationView,
                                         estatesConnector: EstatesConnector
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+  private val logger: Logger = Logger(getClass)
 
   private def personalRepName(personalRepresentative: PersonalRepresentativeType)
                              (implicit request: Request[_]): String = {
@@ -61,11 +63,11 @@ class ConfirmationController @Inject()(
           val name = personalRepName(estate.estate.entities.personalRepresentative)
           Ok(confirmationView(name, request.tvn, isAgent, estate.isClosing))
         case _ =>
-          Logger.warn(s"[Confirmation] unable to render confirmation")
+          logger.warn(s"[[Session ID: ${Session.id(hc)}] unable to render confirmation")
           Redirect(controllers.routes.EstateStatusController.problemWithService())
       } recover {
         case e =>
-          Logger.error(s"[Confirmation] unable to render confirmation due to ${e.getMessage}")
+          logger.error(s"[Session ID: ${Session.id(hc)}] unable to render confirmation due to ${e.getMessage}")
           Redirect(controllers.routes.EstateStatusController.problemWithService())
       }
   }

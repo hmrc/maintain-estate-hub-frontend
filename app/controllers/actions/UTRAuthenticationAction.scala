@@ -25,12 +25,15 @@ import play.api.mvc.{ActionRefiner, BodyParsers, Result}
 import services.EstateAuthenticationService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
+import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
                                             service: EstateAuthenticationService
                                             )(override implicit val executionContext: ExecutionContext) extends UTRAuthenticationAction {
+
+  private val logger: Logger = Logger(getClass)
 
   override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = {
 
@@ -43,7 +46,7 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
           Right(DataRequestWithUTR(b.request, b.userAnswers, b.user, utr))
       }
     } getOrElse {
-      Logger.info(s"[UTRAuthenticationAction] cannot authenticate user due to no cached utr")
+      logger.info(s"[Session ID: ${Session.id(hc)}] cannot authenticate user due to no cached utr")
       Future.successful(Left(Redirect(controllers.routes.IndexController.onPageLoad())))
     }
 

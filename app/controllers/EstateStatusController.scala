@@ -27,6 +27,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.Session
 import views.html._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,6 +44,7 @@ class EstateStatusController @Inject()(
                                         problemWithServiceView: ProblemWithServiceView,
                                         accountNotLinkedView: AccountNotLinkedView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+  private val logger: Logger = Logger(getClass)
 
   def checkStatus(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>
@@ -50,10 +52,10 @@ class EstateStatusController @Inject()(
       enforceUtr() { utr =>
         estateStoreConnector.get(utr).flatMap {
           case Some(lock) if lock.estateLocked =>
-            Logger.info(s"[EstateStatusController] $utr user has failed IV 3 times, locked out for 30 minutes")
+            logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr]  $utr user has failed IV 3 times, locked out for 30 minutes")
             Future.successful(Redirect(controllers.routes.EstateStatusController.locked()))
           case _ =>
-            Logger.info(s"[EstateStatusController] $utr user has not been locked out from IV")
+            logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr user has not been locked out from IV")
             tryToPlayback(utr)
         }
       }
@@ -106,22 +108,22 @@ class EstateStatusController @Inject()(
   }
 
   private def tryToPlayback(utr: String)(implicit request: DataRequest[AnyContent]): Future[Result] = {
-    Logger.info(s"[EstateStatusController] getting estate for $utr")
+    logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] getting estate for $utr")
     connector.getEstate(utr) flatMap {
       case Processed(estate, _) =>
-        Logger.info(s"[EstateStatusController] $utr estate is in a processed state")
+        logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr estate is in a processed state")
         Future.successful(Redirect(controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad()))
       case Processing =>
-        Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being in processing")
+        logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr unable to retrieve estate due it being in processing")
         Future.successful(Redirect(controllers.routes.EstateStatusController.inProcessing()))
       case Closed =>
-        Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due it being closed")
+        logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr unable to retrieve estate due it being closed")
         Future.successful(Redirect(controllers.routes.EstateStatusController.closed()))
       case UtrNotFound =>
-        Logger.info(s"[EstateStatusController] $utr unable to retrieve estate due to UTR not being found")
+        logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr unable to retrieve estate due to UTR not being found")
         Future.successful(Redirect(controllers.routes.EstateStatusController.utrDoesNotMatchRecords()))
       case _ =>
-        Logger.warn(s"[EstateStatusController] $utr unable to retrieve estate due to an error")
+        logger.warn(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr unable to retrieve estate due to an error")
         Future.successful(Redirect(controllers.routes.EstateStatusController.problemWithService()))
     }
   }
@@ -129,10 +131,10 @@ class EstateStatusController @Inject()(
   private def enforceUtr()(block: String => Future[Result])(implicit request: DataRequest[AnyContent]): Future[Result] = {
     request.userAnswers.get(UTRPage) match {
       case None =>
-        Logger.info(s"[EstateStatusController] no UTR in user answers, redirecting to ask for it")
+        logger.info(s"[Session ID: ${Session.id(hc)}] no UTR in user answers, redirecting to ask for it")
         Future.successful(Redirect(routes.UTRController.onPageLoad()))
       case Some(utr) =>
-        Logger.info(s"[EstateStatusController] checking status of estate for $utr")
+        logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] checking status of estate for $utr")
         block(utr)
     }
   }

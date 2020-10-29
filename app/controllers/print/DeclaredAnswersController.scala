@@ -25,6 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import printers.PrintHelper
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.Session
 import viewmodels.DateFormatter
 import views.html.print.DeclaredAnswersView
 
@@ -38,6 +39,8 @@ class DeclaredAnswersController @Inject()(
                                            print: PrintHelper,
                                            estatesConnector: EstatesConnector
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val logger: Logger = Logger(getClass)
 
   def onPageLoad(): Action[AnyContent] = actions.requireTvn.async {
     implicit request =>
@@ -59,11 +62,11 @@ class DeclaredAnswersController @Inject()(
             prefix = if (estate.isClosing) "declared.final" else "declared"
           ))
         case estate =>
-          Logger.warn(s"[DeclaredAnswersController] unable to render declared answers due to estate being in state: $estate")
+          logger.warn(s"[Session ID: ${Session.id(hc)}][UTR: ${request.utr}] unable to render declared answers due to estate being in state: $estate")
           Redirect(controllers.routes.EstateStatusController.problemWithService())
       } recover {
         case e =>
-          Logger.error(s"[DeclaredAnswersController] unable to render declared answers due to ${e.getMessage}")
+          logger.error(s"[Session ID: ${Session.id(hc)}][UTR: ${request.utr}]  unable to render declared answers due to ${e.getMessage}")
           Redirect(controllers.routes.EstateStatusController.problemWithService())
       }
 
