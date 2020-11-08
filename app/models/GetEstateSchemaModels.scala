@@ -115,7 +115,7 @@ case class NameType(firstName: String,
 
   def fullName : String = {
     val middle = middleName.map(" " + _ + " ").getOrElse(" ")
-    s"${firstName}$middle${lastName}"
+    s"$firstName$middle$lastName"
   }
 
   def displayName: String = s"$firstName $lastName"
@@ -135,7 +135,7 @@ case class AddressType(line1: String,
 
 object AddressType {
 
-  def isUK(addressType: AddressType) = addressType.country.toUpperCase == "GB"
+  def isUK(addressType: AddressType): Boolean = addressType.country.toUpperCase == "GB"
 
   implicit val addressTypeFormat: Format[AddressType] = Json.format[AddressType]
 }
