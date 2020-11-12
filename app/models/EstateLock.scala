@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.Logger
+import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import play.api.libs.json.{Json, OFormat}
@@ -26,8 +26,7 @@ import scala.language.implicitConversions
 
 case class EstateLock(utr:String, managedByAgent: Boolean, estateLocked:Boolean)
 
-object EstateLock {
-  private val logger: Logger = Logger(getClass)
+object EstateLock extends Logging {
 
   implicit val formats : OFormat[EstateLock] = Json.format[EstateLock]
 

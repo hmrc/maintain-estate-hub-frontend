@@ -17,7 +17,7 @@
 package models.http
 
 import models.GetEstate
-import play.api.Logger
+import play.api.Logging
 import play.api.http.Status._
 import play.api.libs.json._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
@@ -35,9 +35,7 @@ case object UtrNotFound extends EstateResponse
 case object EstatesServiceUnavailable extends EstateResponse
 case object ServerError extends EstateResponse
 
-object EstateStatusReads {
-
-  private val logger: Logger = Logger(getClass)
+object EstateStatusReads extends Logging {
 
   implicit object StatusReads extends Reads[EstateStatus] {
     override def reads(json: JsValue): JsResult[EstateStatus] = {

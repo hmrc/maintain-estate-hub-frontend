@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import connectors.EstatesAuthConnector
 import models.http.{AuthAgentAllowed, AuthAllowed, AuthDenied}
 import models.requests.DataRequest
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -29,8 +29,7 @@ import utils.Session
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class EstateAuthenticationServiceImpl @Inject()(authConnector: EstatesAuthConnector) extends EstateAuthenticationService {
-  private val logger: Logger = Logger(getClass)
+class EstateAuthenticationServiceImpl @Inject()(authConnector: EstatesAuthConnector) extends EstateAuthenticationService with Logging {
 
   override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] = {
 

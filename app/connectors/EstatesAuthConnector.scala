@@ -22,7 +22,7 @@ import javax.inject.Inject
 import models.http.{AuthInternalServerError, EstatesAuthResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
