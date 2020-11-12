@@ -20,11 +20,11 @@ import controllers.actions.Actions
 import javax.inject.Inject
 import models.UserAnswers
 import pages.UTRPage
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,8 +33,7 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  actions: Actions,
                                  repository: SessionRepository
-                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-  private val logger: Logger = Logger(getClass)
+                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad: Action[AnyContent] = actions.authWithSession.async {
     implicit request =>

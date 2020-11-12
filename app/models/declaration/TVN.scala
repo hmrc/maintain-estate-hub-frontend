@@ -16,7 +16,7 @@
 
 package models.declaration
 
-import play.api.Logger
+import play.api.Logging
 import play.api.http.Status._
 import play.api.libs.json._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
@@ -31,9 +31,7 @@ object TVN {
   implicit val formats : OFormat[TVN] = Json.format[TVN]
 }
 
-object VariationResponse {
-
-  private val logger: Logger = Logger(getClass)
+object VariationResponse extends Logging {
 
   implicit def httpReads(implicit hc: HeaderCarrier): HttpReads[VariationResponse] =
     (method: String, url: String, response: HttpResponse) => {

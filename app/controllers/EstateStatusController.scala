@@ -22,11 +22,11 @@ import javax.inject.Inject
 import models.http._
 import models.requests.DataRequest
 import pages.UTRPage
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Session
 import views.html._
 
@@ -43,8 +43,8 @@ class EstateStatusController @Inject()(
                                         lockedView: LockedView,
                                         problemWithServiceView: ProblemWithServiceView,
                                         accountNotLinkedView: AccountNotLinkedView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-  private val logger: Logger = Logger(getClass)
+                                      )(implicit ec: ExecutionContext
+) extends FrontendBaseController with I18nSupport with Logging {
 
   def checkStatus(): Action[AnyContent] = actions.authWithData.async {
     implicit request =>

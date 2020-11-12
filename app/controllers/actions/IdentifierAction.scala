@@ -19,7 +19,7 @@ package controllers.actions
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import models.requests.{AgentUser, IdentifierRequest, OrganisationUser}
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
 import services.EstateAuthenticationService
@@ -41,8 +41,8 @@ class AuthenticatedIdentifierAction @Inject()(
                                                val parser: BodyParsers.Default,
                                                authenticationService: EstateAuthenticationService
                                              )
-                                             (implicit val executionContext: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
-  private val logger: Logger = Logger(getClass)
+                                             (implicit val executionContext: ExecutionContext
+                                             ) extends IdentifierAction with AuthorisedFunctions with Logging {
 
   private def authoriseAgent[A](internalId: String,
                                 enrolments: Enrolments,

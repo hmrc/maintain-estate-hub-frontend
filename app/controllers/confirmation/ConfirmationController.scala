@@ -21,11 +21,11 @@ import connectors.EstatesConnector
 import controllers.actions.Actions
 import models.http.Processed
 import models.{EstatePerRepIndType, EstatePerRepOrgType, PersonalRepresentativeType}
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Session
 import views.html.confirmation.ConfirmationView
 
@@ -38,8 +38,8 @@ class ConfirmationController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
                                         confirmationView: ConfirmationView,
                                         estatesConnector: EstatesConnector
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-  private val logger: Logger = Logger(getClass)
+                                      )(implicit ec: ExecutionContext
+) extends FrontendBaseController with I18nSupport with Logging {
 
   private def personalRepName(personalRepresentative: PersonalRepresentativeType)
                              (implicit request: Request[_]): String = {

@@ -19,7 +19,7 @@ package controllers.actions
 import com.google.inject.{ImplementedBy, Inject}
 import models.requests.{DataRequest, DataRequestWithUTR}
 import pages.UTRPage
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, BodyParsers, Result}
 import services.EstateAuthenticationService
@@ -31,9 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
                                             service: EstateAuthenticationService
-                                            )(override implicit val executionContext: ExecutionContext) extends UTRAuthenticationAction {
-
-  private val logger: Logger = Logger(getClass)
+                                            )(override implicit val executionContext: ExecutionContext
+) extends UTRAuthenticationAction with Logging {
 
   override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = {
 
