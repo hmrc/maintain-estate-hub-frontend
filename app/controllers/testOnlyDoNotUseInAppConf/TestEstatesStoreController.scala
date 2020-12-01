@@ -19,15 +19,15 @@ package controllers.testOnlyDoNotUseInAppConf
 import connectors.EstatesStoreConnector
 import javax.inject.Inject
 import play.api.Logger
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Session
 
 import scala.concurrent.ExecutionContext
 
 class TestEstatesStoreController @Inject()(connector: EstatesStoreConnector,
-                                           val controllerComponents: ControllerComponents
-                                         )(implicit ec: ExecutionContext) extends BackendBaseController {
+                                           val controllerComponents: MessagesControllerComponents
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController {
   private val logger: Logger = Logger(getClass)
 
   def set4Mld: Action[AnyContent] = Action.async {
