@@ -19,8 +19,8 @@ package connectors
 import config.FrontendAppConfig
 import javax.inject.Inject
 import models.EstateLock
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
+import play.api.libs.json.{JsBoolean, JsValue}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -28,8 +28,16 @@ class EstatesStoreConnector @Inject()(http: HttpClient, config : FrontendAppConf
 
   private val estateLockedUrl: String = config.estatesStoreUrl + "/lock"
 
-  def get(utr : String)(implicit hc : HeaderCarrier, ec : ExecutionContext): Future[Option[EstateLock]] = {
+  private def featuresUrl(feature: String) = s"${config.estatesStoreUrl}/features/$feature"
+
+  def get(utr : String)
+         (implicit hc : HeaderCarrier, ec : ExecutionContext): Future[Option[EstateLock]] = {
     http.GET[Option[EstateLock]](estateLockedUrl)(EstateLock.httpReads(utr), hc, ec)
+  }
+
+  def setFeature(feature: String, state: Boolean)
+                (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
+    http.PUT[JsValue, HttpResponse](featuresUrl(feature), JsBoolean(state))
   }
 
 }
