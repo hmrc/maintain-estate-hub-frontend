@@ -34,6 +34,9 @@ import scala.concurrent.ExecutionContext
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Mocked with ScalaFutures {
 
+  final val ENGLISH = "en"
+  final val WELSH = "cy"
+
   def emptyUserAnswers = TestUserAnswers.emptyUserAnswers
 
   def injector: Injector = app.injector
