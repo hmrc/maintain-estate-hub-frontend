@@ -36,7 +36,7 @@ object AnswersFormatters {
     }
   }
 
-  def address(address: AddressType, countryOptions: CountryOptions): Html = {
+  def address(address: AddressType, countryOptions: CountryOptions)(implicit messages: Messages): Html = {
 
     val lines = address.postCode match {
       case Some(x) if AddressType.isUK(address) =>
@@ -62,12 +62,12 @@ object AnswersFormatters {
 
   def nino(nino: String): Html = HtmlFormat.escape(Nino(nino).formatted)
 
-  def country(code: String, countryOptions: CountryOptions): Html =
+  def country(code: String, countryOptions: CountryOptions)(implicit messages: Messages): Html =
     HtmlFormat.escape(countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse(""))
 
   def utr(answer: String): Html = HtmlFormat.escape(answer)
 
-  def passportOrIdCard(passport: PassportType, countryOptions: CountryOptions): Html = {
+  def passportOrIdCard(passport: PassportType, countryOptions: CountryOptions)(implicit messages: Messages): Html = {
     val lines =
       Seq(
         Some(country(passport.countryOfIssue, countryOptions)),
