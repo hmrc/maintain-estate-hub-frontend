@@ -17,25 +17,24 @@
 package repositories
 
 import java.time.LocalDateTime
-
 import javax.inject.Inject
 import models.{MongoDateTimeFormats, UserAnswers}
 import play.api.Configuration
 import play.api.libs.json._
+import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.WriteConcern
 import reactivemongo.api.indexes.IndexType
+import reactivemongo.play.json.collection.Helpers.idWrites
 import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DefaultSessionRepository @Inject()(
-                                          val mongo: MongoDriver,
+                                          val mongo: ReactiveMongoApi,
                                           val config: Configuration
                                         )(implicit val ec: ExecutionContext)
   extends SessionRepository
     with IndexManager {
-
-  implicit final val jsObjectWrites: OWrites[JsObject] = OWrites[JsObject](identity)
 
   override val collectionName: String = "user-answers"
 
@@ -44,12 +43,12 @@ class DefaultSessionRepository @Inject()(
   private def collection: Future[JSONCollection] =
     for {
       _ <- ensureIndexes
-      res <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+      res <- mongo.database.map(_.collection[JSONCollection](collectionName))
     } yield res
 
   private def ensureIndexes: Future[Unit] = {
     for {
-      collection  <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+      collection  <- mongo.database.map(_.collection[JSONCollection](collectionName))
       _           <- collection.indexesManager.ensure(lastUpdatedIndex)
       _           <- collection.indexesManager.ensure(internalAuthIdIndex)
     } yield ()
