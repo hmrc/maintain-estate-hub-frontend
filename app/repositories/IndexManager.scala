@@ -17,6 +17,7 @@
 package repositories
 
 import play.api.{Configuration, Logging}
+import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -25,7 +26,7 @@ trait IndexManager extends Logging {
 
   val collectionName: String
 
-  val mongo: MongoDriver
+  val mongo: ReactiveMongoApi
 
   val config : Configuration
 
@@ -33,7 +34,7 @@ trait IndexManager extends Logging {
 
   private final def logIndex: Future[Unit] = {
     for {
-      collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+      collection <- mongo.database.map(_.collection[JSONCollection](collectionName))
       indices <- collection.indexesManager.list()
     } yield {
       logger.info(s"[$collectionName] indices found on collection $indices")
@@ -58,7 +59,7 @@ trait IndexManager extends Logging {
       _ <- logIndex
       _ <- if (dropIndexes) {
         for {
-          collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+          collection <- mongo.database.map(_.collection[JSONCollection](collectionName))
           _ <- collection.indexesManager.dropAll()
           _ <- Future.successful(logger.info(s"[$collectionName] dropped indexes"))
           _ <- logIndex
