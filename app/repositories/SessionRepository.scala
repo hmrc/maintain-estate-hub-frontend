@@ -23,19 +23,21 @@ import models.{MongoDateTimeFormats, UserAnswers}
 import play.api.Configuration
 import play.api.libs.json._
 import reactivemongo.api.WriteConcern
-import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.BSONDocument
-import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
+import reactivemongo.api.indexes.IndexType
 import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DefaultSessionRepository @Inject()(
-                                          mongo: MongoDriver,
-                                          config: Configuration
-                                        )(implicit ec: ExecutionContext) extends SessionRepository {
+                                          val mongo: MongoDriver,
+                                          val config: Configuration
+                                        )(implicit val ec: ExecutionContext)
+  extends SessionRepository
+    with IndexManager {
 
-  private val collectionName: String = "user-answers"
+  implicit final val jsObjectWrites: OWrites[JsObject] = OWrites[JsObject](identity)
+
+  override val collectionName: String = "user-answers"
 
   private val cacheTtl = config.get[Int]("mongodb.timeToLiveInSeconds")
 
@@ -45,24 +47,23 @@ class DefaultSessionRepository @Inject()(
       res <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
     } yield res
 
-  private lazy val ensureIndexes = {
+  private def ensureIndexes: Future[Unit] = {
     for {
-      collection              <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
-      createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
-      createdIdIndex          <- collection.indexesManager.ensure(internalAuthIdIndex)
-    } yield createdLastUpdatedIndex && createdIdIndex
+      collection  <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+      _           <- collection.indexesManager.ensure(lastUpdatedIndex)
+      _           <- collection.indexesManager.ensure(internalAuthIdIndex)
+    } yield ()
   }
 
-
-  private val lastUpdatedIndex = Index(
+  private val lastUpdatedIndex = MongoIndex(
     key     = Seq("lastUpdated" -> IndexType.Ascending),
-    name    = Some("user-answers-last-updated-index"),
-    options = BSONDocument("expireAfterSeconds" -> cacheTtl)
+    name    = "user-answers-last-updated-index",
+    expireAfterSeconds = Some(cacheTtl)
   )
 
-  private val internalAuthIdIndex = Index(
+  private val internalAuthIdIndex = MongoIndex(
     key = Seq("internalId" -> IndexType.Ascending),
-    name = Some("internal-auth-id-index")
+    name = "internal-auth-id-index"
   )
 
   override def get(id: String): Future[Option[UserAnswers]] = {
