@@ -24,10 +24,8 @@ import org.mockito.Mockito.verify
 import org.scalatestplus.mockito.MockitoSugar
 import pages.closure.HasAdministrationPeriodEndedYesNoPage
 import pages.{UTRPage, WhatIsNextPage}
-import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
 import views.html.closure.AdministrationPeriodEndDateNeededView
 
 class AdministrationPeriodEndDateNeededControllerSpec extends SpecBase with MockitoSugar {
@@ -63,9 +61,7 @@ class AdministrationPeriodEndDateNeededControllerSpec extends SpecBase with Mock
         .set(WhatIsNextPage, CloseEstate).success.value
         .set(HasAdministrationPeriodEndedYesNoPage, false).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[SessionRepository].toInstance(fakeRepository))
-        .build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(POST, administrationPeriodEndDateNeededRoute)
 

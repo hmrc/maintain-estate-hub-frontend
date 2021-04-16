@@ -29,6 +29,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
 import play.api.mvc.PlayBodyParsers
 import play.api.test.FakeRequest
+import repositories.SessionRepository
 
 import scala.concurrent.ExecutionContext
 
@@ -60,7 +61,8 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to(fakeIdentifierAction),
         bind[UTRAuthenticationAction].toInstance(new FakeUTRAuthenticationAction(utr)),
-        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
+        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
+        bind[SessionRepository].toInstance(fakeRepository)
       )
   }
 
