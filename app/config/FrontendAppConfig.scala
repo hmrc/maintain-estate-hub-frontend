@@ -93,10 +93,5 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   private val minMonth: Int = configuration.get[Int]("dates.minimum.month")
   private val minYear: Int = configuration.get[Int]("dates.minimum.year")
   lazy val minDate: LocalDate = LocalDate.of(minYear, minMonth, minDay)
-
-  private lazy val accessibilityLinkBaseUrl = configuration.get[String]("urls.accessibility")
-  def accessibilityLinkUrl(implicit request: Request[_]): String = {
-    val userAction = URLEncoder.encode(new URI(request.uri).getPath, "UTF-8")
-    s"$accessibilityLinkBaseUrl?userAction=$userAction"
-  }
+  
 }
