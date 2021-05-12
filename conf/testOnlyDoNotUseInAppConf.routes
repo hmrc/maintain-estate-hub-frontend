@@ -17,9 +17,3 @@ POST       /maintain-an-estate/test-only/insert-test-user       controllers.test
 
 + nocsrf
 DELETE     /maintain-an-estate/test-only/test-users   controllers.testOnlyDoNotUseInAppConf.EnrolmentStoreStubController.flush
-
-+ nocsrf
-PUT       /maintain-an-estate/test-only/set-4mld       controllers.testOnlyDoNotUseInAppConf.TestEstatesStoreController.set4Mld
-
-+ nocsrf
-PUT       /maintain-an-estate/test-only/set-5mld       controllers.testOnlyDoNotUseInAppConf.TestEstatesStoreController.set5Mld
