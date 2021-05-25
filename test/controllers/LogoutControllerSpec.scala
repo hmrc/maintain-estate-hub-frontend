@@ -16,25 +16,39 @@
 
 package controllers
 
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import base.SpecBase
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{never, verify}
+import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.Matchers.{eq => eqTo, _}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
-class LogoutControllerSpec extends FreeSpec with MustMatchers with GuiceOneAppPerSuite with OptionValues {
+class LogoutControllerSpec extends SpecBase with MockitoSugar {
 
-  "logout" - {
+  "logout should redirect to feedback and audit" in {
 
-    "must start a new session and redirect" in {
+    val mockAuditConnector = mock[AuditConnector]
 
-      lazy val request = FakeRequest("GET", routes.LogoutController.logout().url)
-        .withSession("foo" -> "bar")
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .overrides(bind[AuditConnector].toInstance(mockAuditConnector))
+      .build()
 
-      val result = route(app, request).value
+    val request = FakeRequest(GET, routes.LogoutController.logout().url)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result).value mustBe "http://localhost:9514/feedback/estates"
-      session(result) mustBe empty
-    }
+    val result = route(application, request).value
+
+    status(result) mustEqual SEE_OTHER
+
+    redirectLocation(result).value mustBe frontendAppConfig.logoutUrl
+
+    verify(mockAuditConnector, never)
+      .sendExplicitAudit(eqTo("estates"), any[Map[String, String]])(any(), any())
+
+    application.stop()
+
   }
+
 }

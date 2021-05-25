@@ -21,7 +21,7 @@ import models.FakeUser
 import models.requests.AgentUser
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
 
 class IndexControllerSpec extends SpecBase {
 
@@ -35,7 +35,8 @@ class IndexControllerSpec extends SpecBase {
 
       val application = applicationBuilderForUser(
         userAnswers = Some(emptyUserAnswers),
-        user = AgentUser("id", Enrolments(Set()), "arn")
+        user = AgentUser("id", Enrolments(Set()), "arn"),
+        affinityGroup = AffinityGroup.Agent
       ).build()
 
       val request = FakeRequest(GET, onPageLoad)
@@ -58,7 +59,8 @@ class IndexControllerSpec extends SpecBase {
             key = "HMRC-TERS-ORG",
             identifiers = Seq(EnrolmentIdentifier(key = "SAUTR", value = utr)),
             state = "Activated")
-          )))
+          ))),
+        affinityGroup = AffinityGroup.Organisation
       ).build()
 
       val request = FakeRequest(GET, onPageLoad)

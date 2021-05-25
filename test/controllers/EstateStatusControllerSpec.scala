@@ -32,7 +32,7 @@ import play.api.libs.json.{JsPath, JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.Enrolments
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
 import views.html._
 
 import scala.concurrent.Future
@@ -66,7 +66,8 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
     override lazy val application: Application =
       applicationBuilderForUser(
         userAnswers = Some(userAnswers),
-        user = AgentUser("id", Enrolments(Set()), "arn")
+        user = AgentUser("id", Enrolments(Set()), "arn"),
+        affinityGroup = AffinityGroup.Agent
       ).overrides(
         bind[EstatesConnector].to(fakeConnector),
         bind[EstatesStoreConnector].to(fakeEstateStoreConnector)
@@ -77,7 +78,8 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
     override lazy val application: Application =
       applicationBuilderForUser(
         userAnswers = Some(userAnswers),
-        user = OrganisationUser("id", Enrolments(Set()))
+        user = OrganisationUser("id", Enrolments(Set())),
+        affinityGroup = AffinityGroup.Organisation
       ).overrides(
         bind[EstatesConnector].to(fakeConnector),
         bind[EstatesStoreConnector].to(fakeEstateStoreConnector)

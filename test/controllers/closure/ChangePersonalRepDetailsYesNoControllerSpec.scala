@@ -25,7 +25,7 @@ import pages.closure.ChangePersonalRepDetailsYesNoPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.Enrolments
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
 import views.html.closure.ChangePersonalRepDetailsYesNoView
 
 class ChangePersonalRepDetailsYesNoControllerSpec extends SpecBase {
@@ -100,7 +100,8 @@ class ChangePersonalRepDetailsYesNoControllerSpec extends SpecBase {
 
         val application = applicationBuilderForUser(
           userAnswers = Some(emptyUserAnswers),
-          user = AgentUser("id", Enrolments(Set()), "arn")
+          user = AgentUser("id", Enrolments(Set()), "arn"),
+          affinityGroup = AffinityGroup.Agent
         ).build()
 
         val request = FakeRequest(POST, yesNoRoute)
@@ -119,7 +120,8 @@ class ChangePersonalRepDetailsYesNoControllerSpec extends SpecBase {
 
         val application = applicationBuilderForUser(
           userAnswers = Some(emptyUserAnswers),
-          user = OrganisationUser("id", Enrolments(Set()))
+          user = OrganisationUser("id", Enrolments(Set())),
+          affinityGroup = AffinityGroup.Organisation
         ).build()
 
         val request = FakeRequest(POST, yesNoRoute)

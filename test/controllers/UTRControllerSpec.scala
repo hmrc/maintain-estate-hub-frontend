@@ -24,7 +24,7 @@ import play.api.data.Form
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
 import views.html.UTRView
 
 class UTRControllerSpec extends SpecBase with MockitoSugar {
@@ -104,7 +104,8 @@ class UTRControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilderForUser(
           userAnswers = Some(emptyUserAnswers),
-          user = FakeUser.organisation(enrolments)
+          user = FakeUser.organisation(enrolments),
+          affinityGroup = AffinityGroup.Organisation
         ).build()
 
       implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, utrRoute).withFormUrlEncodedBody(("value", utr))

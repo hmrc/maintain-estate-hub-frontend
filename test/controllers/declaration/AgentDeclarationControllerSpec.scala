@@ -27,7 +27,7 @@ import play.api.mvc.{AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{DeclarationService, FakeDeclarationService, FakeFailingDeclarationService}
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
 import views.html.declaration.AgentDeclarationView
 
 class AgentDeclarationControllerSpec extends SpecBase {
@@ -45,6 +45,7 @@ class AgentDeclarationControllerSpec extends SpecBase {
 
       val application = applicationBuilderForUser(
         userAnswers = Some(userAnswers),
+        affinityGroup = AffinityGroup.Agent,
         AgentUser("id", Enrolments(Set()), "arn")
       ).build()
 
@@ -68,6 +69,7 @@ class AgentDeclarationControllerSpec extends SpecBase {
 
       val application = applicationBuilderForUser(
         userAnswers = Some(userAnswers),
+        affinityGroup = AffinityGroup.Agent,
         AgentUser("id", Enrolments(Set()), "arn")
       ).build()
 
@@ -99,6 +101,7 @@ class AgentDeclarationControllerSpec extends SpecBase {
 
       val application = applicationBuilderForUser(
         userAnswers = Some(userAnswers),
+        affinityGroup = AffinityGroup.Agent,
         AgentUser("id", enrolments, "arn")
       ).overrides(
         bind[DeclarationService].to(new FakeDeclarationService())
@@ -131,6 +134,7 @@ class AgentDeclarationControllerSpec extends SpecBase {
 
       val application = applicationBuilderForUser(
         userAnswers = Some(userAnswers),
+        affinityGroup = AffinityGroup.Agent,
         AgentUser("id", enrolments, "arn")
       ).overrides(
         bind[DeclarationService].to(new FakeFailingDeclarationService())
