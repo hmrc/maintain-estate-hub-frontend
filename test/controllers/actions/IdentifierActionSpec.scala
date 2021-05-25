@@ -86,7 +86,7 @@ class IdentifierActionSpec extends SpecBase {
     "Agent user has correct enrolled in Agent Services Account" must {
       "allow user to continue" in {
 
-        val application = applicationBuilderForUser(userAnswers = None, FakeUser.agent(agentEnrolment)).build()
+        val application = applicationBuilderForUser(userAnswers = None, AffinityGroup.Agent, FakeUser.agent(agentEnrolment)).build()
 
         val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 

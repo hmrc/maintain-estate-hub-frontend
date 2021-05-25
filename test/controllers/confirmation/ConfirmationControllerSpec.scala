@@ -29,7 +29,7 @@ import pages.{SubmissionDatePage, TVNPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.Enrolments
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
 import views.html.confirmation.ConfirmationView
 
 import scala.concurrent.Future
@@ -93,7 +93,8 @@ class ConfirmationControllerSpec extends SpecBase {
 
       val application = applicationBuilderForUser(
         userAnswers = Some(playbackAnswers),
-        user = AgentUser("id", Enrolments(Set()), "arn")
+        user = AgentUser("id", Enrolments(Set()), "arn"),
+        affinityGroup = AffinityGroup.Agent
       ).overrides(
           bind[EstatesConnector].to(fakeConnector)
       ).build()

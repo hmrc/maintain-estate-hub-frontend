@@ -26,7 +26,7 @@ import play.api.mvc.{AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{DeclarationService, FakeDeclarationService, FakeFailingDeclarationService}
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
 import views.html.declaration.IndividualDeclarationView
 
 class IndividualDeclarationControllerSpec extends SpecBase {
@@ -89,7 +89,8 @@ class IndividualDeclarationControllerSpec extends SpecBase {
       val application =
         applicationBuilderForUser(
           userAnswers = Some(emptyUserAnswers),
-          user = OrganisationUser("internal", enrolments)
+          user = OrganisationUser("internal", enrolments),
+          affinityGroup = AffinityGroup.Organisation
         ).overrides(
           bind[DeclarationService].to(new FakeDeclarationService())
         ).build()
@@ -114,7 +115,8 @@ class IndividualDeclarationControllerSpec extends SpecBase {
       val application =
         applicationBuilderForUser(
           userAnswers = Some(emptyUserAnswers),
-          user = OrganisationUser("internal", enrolments)
+          user = OrganisationUser("internal", enrolments),
+          affinityGroup = AffinityGroup.Organisation
         ).overrides(
           bind[DeclarationService].to(new FakeFailingDeclarationService())
         ).build()
