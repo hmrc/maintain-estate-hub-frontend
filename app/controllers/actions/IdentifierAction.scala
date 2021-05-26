@@ -50,7 +50,7 @@ class AuthenticatedIdentifierAction @Inject()(
                                (implicit request: Request[A], hc: HeaderCarrier) = {
 
     authenticationService.authenticateAgent() flatMap {
-      case Right(arn) => block(IdentifierRequest(request, AffinityGroup.Agent ,AgentUser(internalId, enrolments, arn)))
+      case Right(arn) => block(IdentifierRequest(request ,AgentUser(internalId, enrolments, arn)))
       case Left(result: Result) => Future.successful(result)
     }
   }
@@ -59,7 +59,7 @@ class AuthenticatedIdentifierAction @Inject()(
                                           enrolments: Enrolments,
                                           block: IdentifierRequest[A] => Future[Result])
                                          (implicit request: Request[A]) = {
-    block(IdentifierRequest(request, AffinityGroup.Organisation, OrganisationUser(internalId, enrolments)))
+    block(IdentifierRequest(request, OrganisationUser(internalId, enrolments)))
   }
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {

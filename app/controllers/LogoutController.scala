@@ -48,7 +48,7 @@ class LogoutController @Inject()(appConfig: FrontendAppConfig,
         "sessionId" -> Session.id(hc),
         "event" -> "signout",
         "service" -> "maintain-estate-hub-frontend",
-        "userGroup" -> request.affinityGroup.toString
+        "userGroup" -> request.user.affinityGroup.toString
       )
 
       auditConnector.sendExplicitAudit(

@@ -71,7 +71,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
                                           affinityGroup: AffinityGroup,
                                           user: User): GuiceApplicationBuilder = {
     val parsers = injector.instanceOf[PlayBodyParsers]
-    val fakeIdentifierAction = new FakeUserIdentifierAction(parsers)(affinityGroup, user)
+    val fakeIdentifierAction = new FakeUserIdentifierAction(parsers)(user)
 
     applicationBuilderInterface(userAnswers, fakeIdentifierAction)
   }
