@@ -281,25 +281,6 @@ agentNotAuthorised.p10 = The personal representative needs to correctly answer q
 agentNotAuthorised.p11 = You can return to the service to
 agentNotAuthorised.p11.a = register and maintain an estate for a client
 
-estateNotClaimed.title = Sorry, you cannot access this estate
-estateNotClaimed.heading = Sorry, you cannot access this estate
-estateNotClaimed.caption = This estate’s UTR: {0}
-estateNotClaimed.p1 = The personal representative will need to complete the next two steps so you can maintain the estate online on their behalf.
-estateNotClaimed.b1.heading = Personal representative needs to claim the estate
-estateNotClaimed.b1.p1 = A personal representative needs to log onto the Estate Registration Service using their Government Gateway account. The account they use must be an organisation account, not an individual account.
-estateNotClaimed.b1.p2 = If they do not have an account, they can
-estateNotClaimed.b1.p2.link = register for one here (opens in a new tab)
-estateNotClaimed.b1.p3 = The personal representative needs to correctly answer questions about the estate so HMRC can prove the connection between the personal representative and the estate.
-estateNotClaimed.b1.p4 = The personal representative must complete this step before you can request authorisation from them to maintain the estate.
-estateNotClaimed.b2.heading = Personal representative needs to authorise your online access to the estate
-estateNotClaimed.b2.p1 = Through Agent Services you can create an authorisation link to send to the personal representative.
-estateNotClaimed.b2.p2 = The personal representative needs to use the same Government Gateway organisation account used to claim the estate to approve your request.
-estateNotClaimed.b2.p3 = If you need help with the service
-estateNotClaimed.b2.p3.link = contact the deceased estate helpline
-estateNotClaimed.b2.p4 = You can
-estateNotClaimed.b2.p4.link = return to register and maintain an estate for a client
-
-
 problemDeclaring.heading = Sorry, there is a problem with the service
 problemDeclaring.title = Sorry, there is a problem with the service
 problemDeclaring.p1 = Try again later.
