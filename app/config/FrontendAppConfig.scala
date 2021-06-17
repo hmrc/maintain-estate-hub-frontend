@@ -44,6 +44,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val agentServicesUrl = s"$agentsSubscriptionsUrl?continue=$loginContinueUrl"
 
   lazy val estatesHelplineUrl: String = configuration.get[String]("urls.estatesHelpline")
+  lazy val registerEstateGuidanceUrl: String = configuration.get[String]("urls.registerEstateGuidance")
 
   lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
   lazy val loginUrl: String = configuration.get[String]("urls.login")

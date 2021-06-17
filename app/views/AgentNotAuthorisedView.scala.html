@@ -31,14 +31,35 @@
     @components.heading_with_caption(headingKey = "agentNotAuthorised.heading", caption = "agentNotAuthorised.caption", captionParam = utr)
 
     <p>@messages("agentNotAuthorised.p1")</p>
-
-    <p>@messages("agentNotAuthorised.p2") <a href="@config.agentServicesUrl">@messages("agentNotAuthorised.p2.link")</a>.</p>
-
+    <h2>@messages("agentNotAuthorised.subheading1")</h2>
+    <p>@messages("agentNotAuthorised.p2")</p>
     <p>@messages("agentNotAuthorised.p3")</p>
+    <h3>@messages("agentNotAuthorised.subheading2")</h3>
+    <p>@messages("agentNotAuthorised.p4") <a href="@config.estatesHelplineUrl" target="_blank">@messages("agentNotAuthorised.p4.a")</a>.</p>
+    <p>@messages("agentNotAuthorised.p5")</p>
 
-    <p>@messages("agentNotAuthorised.p4") <a href="@config.estatesHelplineUrl">@messages("agentNotAuthorised.p4.link")</a>.</p>
+    <ul class="list bullet-list">
+        <li>@messages("agentNotAuthorised.bullet.1")</li>
+        <li>@messages("agentNotAuthorised.bullet.2")</li>
+    </ul>
 
-    <p>@messages("agentNotAuthorised.p5") <a href="@config.agentOverviewUrl">@messages("agentNotAuthorised.p5.link")</a>.</p>
+    <p>@messages("agentNotAuthorised.p6")</p>
 
+    <ul class="list bullet-list">
+        <li>@messages("agentNotAuthorised.bullet.3")</li>
+        <li>@messages("agentNotAuthorised.bullet.4")</li>
+    </ul>
+
+    <p>@messages("agentNotAuthorised.p7") <a href="@config.estatesHelplineUrl" target="_blank">@messages("agentNotAuthorised.p7.a")</a>.</p>
+
+    <h2>@messages("agentNotAuthorised.subheading3")</h2>
+
+    <p>@messages("agentNotAuthorised.p8")</p>
+
+    <p>@messages("agentNotAuthorised.p9") <a href="@config.registerEstateGuidanceUrl" target="_blank">@messages("agentNotAuthorised.p9.a")</a>.</p>
+
+    <p>@messages("agentNotAuthorised.p10")</p>
+
+    <p>@messages("agentNotAuthorised.p11") <a href="@config.agentOverviewUrl">@messages("agentNotAuthorised.p11.a")</a>.</p>
 
 }
