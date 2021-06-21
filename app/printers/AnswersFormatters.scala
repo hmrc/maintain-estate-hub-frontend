@@ -16,17 +16,23 @@
 
 package printers
 
-import java.time.format.DateTimeFormatter
-
+import config.annotations.AllCountries
 import models.{AddressType, PassportType}
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.play.language.LanguageUtils
 import utils.countryOptions.CountryOptions
 
-object AnswersFormatters {
+import java.time.LocalDate
+import javax.inject.Inject
 
-  val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+class AnswersFormatters @Inject()(languageUtils: LanguageUtils,
+                                  @AllCountries countryOptions: CountryOptions) {
+
+  def formatDate(date: LocalDate)(implicit messages: Messages): Html = {
+    HtmlFormat.escape(languageUtils.Dates.formatDate(date))
+  }
 
   def yesOrNo(answer: Boolean)(implicit messages: Messages): Html = {
     if (answer) {
@@ -36,7 +42,7 @@ object AnswersFormatters {
     }
   }
 
-  def address(address: AddressType, countryOptions: CountryOptions)(implicit messages: Messages): Html = {
+  def address(address: AddressType)(implicit messages: Messages): Html = {
 
     val lines = address.postCode match {
       case Some(x) if AddressType.isUK(address) =>
@@ -53,7 +59,7 @@ object AnswersFormatters {
           Some(HtmlFormat.escape(address.line2)),
           address.line3.map(HtmlFormat.escape),
           address.line4.map(HtmlFormat.escape),
-          Some(country(address.country, countryOptions))
+          Some(country(address.country))
         ).flatten
     }
 
@@ -62,17 +68,17 @@ object AnswersFormatters {
 
   def nino(nino: String): Html = HtmlFormat.escape(Nino(nino).formatted)
 
-  def country(code: String, countryOptions: CountryOptions)(implicit messages: Messages): Html =
+  def country(code: String)(implicit messages: Messages): Html =
     HtmlFormat.escape(countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse(""))
 
   def utr(answer: String): Html = HtmlFormat.escape(answer)
 
-  def passportOrIdCard(passport: PassportType, countryOptions: CountryOptions)(implicit messages: Messages): Html = {
+  def passportOrIdCard(passport: PassportType)(implicit messages: Messages): Html = {
     val lines =
       Seq(
-        Some(country(passport.countryOfIssue, countryOptions)),
+        Some(country(passport.countryOfIssue)),
         Some(HtmlFormat.escape(passport.number)),
-        Some(HtmlFormat.escape(passport.expirationDate.format(dateFormatter)))
+        Some(formatDate(passport.expirationDate))
       ).flatten
 
     Html(lines.mkString("<br />"))
