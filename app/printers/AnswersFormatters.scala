@@ -19,6 +19,7 @@ package printers
 import config.annotations.AllCountries
 import models.{AddressType, PassportType}
 import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat.escape
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.play.language.LanguageUtils
@@ -26,11 +27,12 @@ import utils.countryOptions.CountryOptions
 
 import java.time.LocalDate
 import javax.inject.Inject
+import scala.util.Try
 
 class AnswersFormatters @Inject()(languageUtils: LanguageUtils,
                                   @AllCountries countryOptions: CountryOptions) {
 
-  def formatDate(date: LocalDate)(implicit messages: Messages): Html = {
+  def date(date: LocalDate)(implicit messages: Messages): Html = {
     HtmlFormat.escape(languageUtils.Dates.formatDate(date))
   }
 
@@ -63,12 +65,15 @@ class AnswersFormatters @Inject()(languageUtils: LanguageUtils,
         ).flatten
     }
 
-    Html(lines.mkString("<br />"))
+    breakLines(lines)
   }
 
-  def nino(nino: String): Html = HtmlFormat.escape(Nino(nino).formatted)
+  def nino(nino: String): Html = {
+    val formatted = Try(Nino(nino).formatted).getOrElse(nino)
+    escape(formatted)
+  }
 
-  def country(code: String)(implicit messages: Messages): Html =
+  private def country(code: String)(implicit messages: Messages): Html =
     HtmlFormat.escape(countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse(""))
 
   def utr(answer: String): Html = HtmlFormat.escape(answer)
@@ -76,11 +81,15 @@ class AnswersFormatters @Inject()(languageUtils: LanguageUtils,
   def passportOrIdCard(passport: PassportType)(implicit messages: Messages): Html = {
     val lines =
       Seq(
-        Some(country(passport.countryOfIssue)),
-        Some(HtmlFormat.escape(passport.number)),
-        Some(formatDate(passport.expirationDate))
-      ).flatten
+        country(passport.countryOfIssue),
+        HtmlFormat.escape(passport.number),
+        date(passport.expirationDate)
+      )
 
+    breakLines(lines)
+  }
+
+  private def breakLines(lines: Seq[Html]): Html = {
     Html(lines.mkString("<br />"))
   }
 

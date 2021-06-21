@@ -32,7 +32,7 @@ class AnswerRowConverter @Inject()(answersFormatters: AnswersFormatters) {
   class Bound(messageArgs: String*)(implicit messages: Messages) {
 
     def dateQuestion(date: LocalDate, labelKey: String): Option[AnswerRow] = {
-      answerRow(date, labelKey, answersFormatters.formatDate).toOption
+      answerRow(date, labelKey, answersFormatters.date).toOption
     }
 
     def dateQuestion(date: Option[LocalDate], labelKey: String): Option[AnswerRow] = {
