@@ -38,7 +38,9 @@ class AgentNotAuthorisedViewSpec extends ViewBehaviours {
     behave like normalPageTitleWithCaption(applyView,
       "agentNotAuthorised",
       fakeUtr,
-      "p1", "p2", "p2.link", "p3", "p4", "p4.link", "p5", "p5.link"
+      "p1", "subheading1", "p2", "p3", "subheading2", "p4", "p5",
+      "bullet.1", "bullet.2", "p6", "bullet.3", "bullet.4", "p7", "p7.a", "subheading3",
+      "p8", "p9", "p9.a", "p10", "p11", "p11.a"
     )
   }
 }
