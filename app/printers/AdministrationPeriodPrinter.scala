@@ -16,21 +16,19 @@
 
 package printers
 
-import java.time.LocalDate
-
-import config.annotations.AllCountries
-import javax.inject.Inject
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
-class AdministrationPeriodPrinter @Inject()(@AllCountries countryOptions: CountryOptions) {
+import java.time.LocalDate
+import javax.inject.Inject
+
+class AdministrationPeriodPrinter @Inject()(answerRowConverter: AnswerRowConverter) {
 
   import ImplicitConverters._
 
   def period(closeDate: Option[LocalDate])(implicit messages: Messages): Option[AnswerSection] = {
 
-      val bound = new AnswerRowConverter(countryOptions)
+    val bound = answerRowConverter.bind()
 
     closeDate match {
       case Some(date) =>

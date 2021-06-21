@@ -16,31 +16,31 @@
 
 package printers
 
-import config.annotations.AllCountries
-import javax.inject.Inject
 import models.Correspondence
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
-class EstateNamePrinter @Inject()(@AllCountries countryOptions: CountryOptions) {
+import javax.inject.Inject
+
+class EstateNamePrinter @Inject()(answerRowConverter: AnswerRowConverter) {
 
   import ImplicitConverters._
 
   def name(correspondence: Correspondence)(implicit messages: Messages): Option[AnswerSection] = {
-      val bound = new AnswerRowConverter(countryOptions)
 
-      val questions = Seq(
-        bound.stringQuestion(correspondence.name, "print.estate.name")
-      ).flatten
+    val bound = answerRowConverter.bind()
 
-      questions match {
-        case Nil => None
-        case _ => AnswerSection(
-          headingKey = Some(messages("print.estate.name")),
-          rows = questions
-        ).toOption
-      }
+    val questions = Seq(
+      bound.stringQuestion(correspondence.name, "print.estate.name")
+    ).flatten
+
+    questions match {
+      case Nil => None
+      case _ => AnswerSection(
+        headingKey = Some(messages("print.estate.name")),
+        rows = questions
+      ).toOption
+    }
   }
 
 }

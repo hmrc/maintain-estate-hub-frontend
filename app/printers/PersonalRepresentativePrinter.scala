@@ -16,20 +16,20 @@
 
 package printers
 
-import config.annotations.AllCountries
-import javax.inject.Inject
 import models.{AddressType, EstatePerRepIndType, EstatePerRepOrgType}
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
-class PersonalRepresentativePrinter @Inject()(@AllCountries countryOptions: CountryOptions) {
+import javax.inject.Inject
+
+class PersonalRepresentativePrinter @Inject()(answerRowConverter: AnswerRowConverter) {
 
   import ImplicitConverters._
 
   def individual(perRepInd: Option[EstatePerRepIndType], correspondenceAddress: AddressType)(implicit messages: Messages): Option[AnswerSection] = {
     perRepInd flatMap { ind =>
-      val bound = new AnswerRowConverter(countryOptions, ind.name.displayName)
+
+      val bound = answerRowConverter.bind(ind.name.displayName)
 
       val address = ind.identification.address match {
         case Some(x) => x
@@ -61,9 +61,9 @@ class PersonalRepresentativePrinter @Inject()(@AllCountries countryOptions: Coun
   }
 
   def business(perRepOrg: Option[EstatePerRepOrgType], correspondenceAddress: AddressType)(implicit messages: Messages): Option[AnswerSection] = {
-
     perRepOrg.flatMap { org =>
-      val bound = new AnswerRowConverter(countryOptions, org.orgName)
+
+      val bound = answerRowConverter.bind(org.orgName)
 
       val address = org.identification.address match {
         case Some(x) => x

@@ -16,85 +16,67 @@
 
 package printers
 
-import java.time.LocalDate
-
 import models.{AddressType, PassportType}
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import utils.countryOptions.CountryOptions
+import play.twirl.api.{Html, HtmlFormat}
+import printers.ImplicitConverters._
 import viewmodels.AnswerRow
 
-class AnswerRowConverter(countryOptions: CountryOptions, messageArgs: String*) {
+import java.time.LocalDate
+import javax.inject.Inject
 
-  import ImplicitConverters._
+class AnswerRowConverter @Inject()(answersFormatters: AnswersFormatters) {
 
-  def dateQuestion(date: LocalDate, labelKey: String)
-                  (implicit messages:Messages): Option[AnswerRow] = {
-      AnswerRow(
-        HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs:_*)),
-        HtmlFormat.escape(date.format(AnswersFormatters.dateFormatter))
-      ).toOption
-  }
+  def bind(messageArgs: String*)(implicit messages: Messages): Bound = new Bound(messageArgs: _*)
 
-  def dateQuestion(date: Option[LocalDate], labelKey: String)
-                  (implicit messages:Messages): Option[AnswerRow] = {
-    date map { d =>
-      AnswerRow(
-        HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs:_*)),
-        HtmlFormat.escape(d.format(AnswersFormatters.dateFormatter))
-      )
+  class Bound(messageArgs: String*)(implicit messages: Messages) {
+
+    def dateQuestion(date: LocalDate, labelKey: String): Option[AnswerRow] = {
+      answerRow(date, labelKey, answersFormatters.date).toOption
     }
-  }
 
-  def stringQuestion(value: String, labelKey: String)
-                    (implicit messages:Messages): Option[AnswerRow] = {
-    AnswerRow(
-      HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs: _*)),
-      HtmlFormat.escape(value)
-    ).toOption
-  }
-
-  def stringQuestion(value: Option[String], labelKey:String)(implicit messages: Messages): Option[AnswerRow] = {
-    value map { v =>
-      AnswerRow(
-        HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs: _*)),
-        HtmlFormat.escape(v)
-      )
+    def dateQuestion(date: Option[LocalDate], labelKey: String): Option[AnswerRow] = {
+      date flatMap { d =>
+        dateQuestion(d, labelKey)
+      }
     }
-  }
 
-  def addressQuestion(value: AddressType, labelKey: String)
-                    (implicit messages:Messages): Option[AnswerRow] = {
-    AnswerRow(
-      HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs: _*)),
-      AnswersFormatters.address(value, countryOptions)
-    ).toOption
-  }
-
-  def yesNoQuestion(data: Boolean, labelKey: String)
-                   (implicit messages:Messages): Option[AnswerRow] = {
-      AnswerRow(
-        HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs: _*)),
-        AnswersFormatters.yesOrNo(data)
-      ).toOption
-  }
-
-  def ninoQuestion(nino: Option[String], labelKey: String)
-                  (implicit messages:Messages): Option[AnswerRow] = {
-    nino map { n =>
-      AnswerRow(
-        HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs:_*)),
-        AnswersFormatters.nino(n)
-      )
+    def stringQuestion(value: String, labelKey: String): Option[AnswerRow] = {
+      answerRow(value, labelKey, HtmlFormat.escape).toOption
     }
-  }
 
-  def passportOrIdCardQuestion(passport: Option[PassportType], labelKey: String)
-                  (implicit messages:Messages): Option[AnswerRow] = {
-    passport map { p =>
+    def stringQuestion(value: Option[String], labelKey: String): Option[AnswerRow] = {
+      value flatMap { v =>
+        stringQuestion(v, labelKey)
+      }
+    }
+
+    def addressQuestion(value: AddressType, labelKey: String): Option[AnswerRow] = {
+      answerRow(value, labelKey, answersFormatters.address).toOption
+    }
+
+    def yesNoQuestion(data: Boolean, labelKey: String): Option[AnswerRow] = {
+      answerRow(data, labelKey, answersFormatters.yesOrNo).toOption
+    }
+
+    def ninoQuestion(nino: Option[String], labelKey: String): Option[AnswerRow] = {
+      nino map { n =>
+        answerRow(n, labelKey, answersFormatters.nino)
+      }
+    }
+
+    def passportOrIdCardQuestion(passport: Option[PassportType], labelKey: String): Option[AnswerRow] = {
+      passport map { p =>
+        answerRow(p, labelKey, answersFormatters.passportOrIdCard)
+      }
+    }
+
+    private def answerRow[T](answer: T,
+                             labelKey: String,
+                             format: T => Html): AnswerRow = {
       AnswerRow(
-        HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs:_*)),
-        AnswersFormatters.passportOrIdCard(p, countryOptions)
+        label = HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs: _*)),
+        answer = format(answer)
       )
     }
   }

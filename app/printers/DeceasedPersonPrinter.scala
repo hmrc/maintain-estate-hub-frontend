@@ -16,20 +16,19 @@
 
 package printers
 
-import config.annotations.AllCountries
-import javax.inject.Inject
 import models.{AddressType, EstateWillType}
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class DeceasedPersonPrinter @Inject()(@AllCountries countryOptions: CountryOptions) {
+import javax.inject.Inject
+
+class DeceasedPersonPrinter @Inject()(answerRowConverter: AnswerRowConverter) {
 
   import ImplicitConverters._
 
   def deceasedPerson(deceasedPerson: EstateWillType)(implicit messages: Messages): Option[AnswerSection] = {
 
-    val bound = new AnswerRowConverter(countryOptions, deceasedPerson.name.displayName)
+    val bound = answerRowConverter.bind(deceasedPerson.name.displayName)
 
     val prefix: String = "print.deceasedPerson"
 
