@@ -19,28 +19,26 @@ package views
 import play.api.Application
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
-import views.html.AgentNotAuthorisedView
+import views.html.OldAgentNotAuthorisedView
 
-class AgentNotAuthorisedViewSpec extends ViewBehaviours {
+class OldAgentNotAuthorisedViewSpec extends ViewBehaviours {
 
   private val fakeUtr: String = "1234567890"
 
   private val application: Application = applicationBuilder().build()
 
-  private val view: AgentNotAuthorisedView = application.injector.instanceOf[AgentNotAuthorisedView]
+  private val view: OldAgentNotAuthorisedView = application.injector.instanceOf[OldAgentNotAuthorisedView]
 
   private val applyView: HtmlFormat.Appendable = view.apply(utr = fakeUtr)(fakeRequest, messages)
 
-  "Agent not authorised view" when {
+  "Old Agent not authorised view" when {
 
     behave like pageWithSubHeading(applyView, fakeUtr)
 
     behave like normalPageTitleWithCaption(applyView,
-      "agentNotAuthorised",
+      "agentNotAuthorised.old",
       fakeUtr,
-      "p1", "subheading1", "p2", "p3", "subheading2", "p4", "p5",
-      "bullet.1", "bullet.2", "p6", "bullet.3", "bullet.4", "p7", "p7.a", "subheading3",
-      "p8", "p9", "p9.a", "p10", "p11", "p11.a"
+      "p1", "p2", "p2.link", "p3", "p4", "p4.link", "p5", "p5.link"
     )
   }
 }
