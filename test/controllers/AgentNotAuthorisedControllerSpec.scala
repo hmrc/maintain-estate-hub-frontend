@@ -20,19 +20,41 @@ import base.SpecBase
 import pages.UTRPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.AgentNotAuthorisedView
+import views.html.{AgentNotAuthorisedView, OldAgentNotAuthorisedView}
 
 class AgentNotAuthorisedControllerSpec extends SpecBase {
 
   "Agent Not Authorised Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct view for a GET  when primary enrolment check enabled" in {
 
       val fakeUtr: String = "0987654321"
 
       val application = applicationBuilder(
         userAnswers = Some(emptyUserAnswers.set(UTRPage, fakeUtr).success.value)
-      ).build()
+      ).configure(Map("microservice.services.features.primaryEnrolmentCheck.enabled" -> true)).build()
+
+      val request = FakeRequest(GET, routes.AgentNotAuthorisedController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[OldAgentNotAuthorisedView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(fakeUtr)(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct view for a GET  when primary enrolment check not enabled" in {
+
+      val fakeUtr: String = "0987654321"
+
+      val application = applicationBuilder(
+        userAnswers = Some(emptyUserAnswers.set(UTRPage, fakeUtr).success.value)
+      ).configure(Map("microservice.services.features.primaryEnrolmentCheck.enabled" -> false)).build()
 
       val request = FakeRequest(GET, routes.AgentNotAuthorisedController.onPageLoad().url)
 

@@ -44,6 +44,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val agentServicesUrl = s"$agentsSubscriptionsUrl?continue=$loginContinueUrl"
 
   lazy val estatesHelplineUrl: String = configuration.get[String]("urls.estatesHelpline")
+  lazy val registerEstateGuidanceUrl: String = configuration.get[String]("urls.registerEstateGuidance")
 
   lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
   lazy val loginUrl: String = configuration.get[String]("urls.login")
@@ -73,6 +74,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val estatesAuthUrl: String = configuration.get[Service]("microservice.services.estates-auth").baseUrl
 
   lazy val declarationEmailEnabled: Boolean = configuration.get[Boolean]("microservice.services.features.declaration.email.enabled")
+  lazy val primaryEnrolmentCheckEnabled: Boolean = configuration.get[Boolean]("microservice.services.features.primaryEnrolmentCheck.enabled")
 
   def addNewPersonalRepUrl(utr: String): String = configuration.get[String]("urls.maintainPersonalRep") + s"/$utr/add-new-personal-rep"
   def amendExistingPersonalRepUrl(utr: String): String = configuration.get[String]("urls.maintainPersonalRep") + s"/$utr/amend-existing-personal-rep"
