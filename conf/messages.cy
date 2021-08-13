@@ -233,7 +233,7 @@ agentNotAuthorised.p7=Os oes angen help arnoch gyda’r gwasanaeth hwn,
 agentNotAuthorised.p7.a=cysylltwch â Gwasanaeth Cwsmeriaid Cymraeg CThEM (yn agor ffenestr neu dab newydd)
 agentNotAuthorised.subheading3=Mae’r cynrychiolydd personol yn gallu cael at yr ystâd
 agentNotAuthorised.p8=Mae’r cynrychiolydd personol yn dal i allu hawlio’r ystâd, bwrw golwg drosti, a’i chynnal gan ddefnyddio’i gyfrif Porth y Llywodraeth. Mae’n rhaid i’r cyfrif a ddefnyddir fod yn gyfrif sefydliad, nid cyfrif unigolyn.
-agentNotAuthorised.p9 = If they do not have an organisation account they can=Os nad oes ganddo gyfrif sefydliad, mae’n gallu
+agentNotAuthorised.p9 = Os nad oes ganddo gyfrif sefydliad, mae’n gallu
 agentNotAuthorised.p9.a=creu cyfrif Porth y Llywodraeth ar-lein (yn agor ffenestr neu dab newydd)
 agentNotAuthorised.p10=Mae angen i’r cynrychiolydd personol ateb cwestiynau am yr ystâd yn gywir fel y gall CThEM brofi’r cysylltiad rhwng y cynrychiolydd personol a’r ystâd.
 agentNotAuthorised.p11=Gallwch fynd yn ôl i’r gwasanaeth er mwyn
