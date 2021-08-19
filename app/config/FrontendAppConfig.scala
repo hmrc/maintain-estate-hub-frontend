@@ -21,24 +21,18 @@ import controllers.routes
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.Call
+import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 
 import java.time.LocalDate
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration) {
+class FrontendAppConfig @Inject() (configuration: Configuration, contactFrontendConfig: ContactFrontendConfig) {
 
   final val ENGLISH = "en"
   final val WELSH = "cy"
   final val UK_COUNTRY_CODE = "GB"
 
-  private val contactHost = configuration.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier = "estates"
-
-  val analyticsToken: String = configuration.get[String](s"google-analytics.token")
-  val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
-  val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
+  val betaFeedbackUrl = s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
   lazy val agentsSubscriptionsUrl: String = configuration.get[String]("urls.agentSubscriptions")
   lazy val agentServicesUrl = s"$agentsSubscriptionsUrl?continue=$loginContinueUrl"
@@ -54,8 +48,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val logoutAudit: Boolean =
     configuration.get[Boolean]("microservice.services.features.auditing.logout")
 
-  lazy val countdownLength: String = configuration.get[String]("timeout.countdown")
-  lazy val timeoutLength: String = configuration.get[String]("timeout.length")
+  lazy val countdownLength: Int = configuration.get[Int]("timeout.countdown")
+  lazy val timeoutLength: Int = configuration.get[Int]("timeout.length")
 
   def redirectToLoginUrl: String = {
     s"$loginUrl?continue=$loginContinueUrl"

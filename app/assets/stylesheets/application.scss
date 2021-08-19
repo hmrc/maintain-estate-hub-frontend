@@ -1,0 +1,29 @@
+@import "lib/govuk-frontend/govuk/base";
+@import "lib/govuk-frontend/govuk/core/typography";
+@import "lib/govuk-frontend/govuk/core/links";
+@import "location-autocomplete.min";
+
+$govuk-global-styles: true;
+
+// ----------------
+// Hide the back link when body does not have .js-enabled
+body:not(.js-enabled) {
+    .govuk-back-link {
+        display: none;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+}
+
+p {
+    @extend .govuk-body;
+}
+
+a {
+    @extend .govuk-link;
+}
+
+h2 {
+    @extend .govuk-heading-m;
+}

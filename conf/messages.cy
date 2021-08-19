@@ -1,3 +1,4 @@
+service.name=Cofrestru a Chynnal Ystâd
 date.day=Diwrnod
 date.month=Mis
 date.year=Blwyddyn
@@ -31,7 +32,6 @@ site.hidden-edit=Newid {0}
 site.no=Na
 site.yes=Iawn
 site.continue=Yn eich blaen
-site.service_name=Cofrestru Ystâd a’i Chynnal
 site.textarea.char_limit=(Y terfyn yw {0} o gymeriadau)
 site.sign_in=Mewngofnodi
 site.sign_out=Allgofnodi
