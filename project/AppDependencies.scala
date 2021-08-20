@@ -10,8 +10,7 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"  % "1.9.0-play-28",
     "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"     % "5.9.0",
     "com.typesafe.play" %% "play-json-joda"                 % "2.7.4",
-    "uk.gov.hmrc"       %% "domain"                         % "6.2.0-play-28",
-    "uk.gov.hmrc"       %% "play-language"                  % "5.1.0-play-28"
+    "uk.gov.hmrc"       %% "domain"                         % "6.2.0-play-28"
   )
 
   val test = Seq(
@@ -28,7 +27,7 @@ object AppDependencies {
 
   def apply(): Seq[ModuleID] = compile ++ test
 
-  val akkaVersion = "2.6.7"
+  val akkaVersion = "2.6.10"
   val akkaHttpVersion = "10.1.12"
 
   val overrides = Seq(

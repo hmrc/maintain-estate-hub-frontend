@@ -17,11 +17,11 @@
 package config
 
 import com.google.inject.AbstractModule
-import config.annotations.{AllCountries, NonUKCountries}
+import config.annotations.NonUKCountries
 import controllers.actions._
 import repositories.{DefaultSessionRepository, SessionRepository}
 import services.{EstateAuthenticationService, EstateAuthenticationServiceImpl}
-import utils.countryOptions.{AllCountryOptions, CountryOptions, CountryOptionsNonUK}
+import utils.countryOptions.{CountryOptions, CountryOptionsNonUK}
 
 class Module extends AbstractModule {
 
@@ -37,7 +37,6 @@ class Module extends AbstractModule {
 
     bind(classOf[EstateAuthenticationService]).to(classOf[EstateAuthenticationServiceImpl]).asEagerSingleton()
 
-    bind(classOf[CountryOptions]).annotatedWith(classOf[AllCountries]).to(classOf[AllCountryOptions])
     bind(classOf[CountryOptions]).annotatedWith(classOf[NonUKCountries]).to(classOf[CountryOptionsNonUK])
   }
 }

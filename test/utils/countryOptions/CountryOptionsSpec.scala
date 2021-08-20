@@ -21,6 +21,7 @@ import com.typesafe.config.ConfigException
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.{Lang, MessagesApi, MessagesImpl}
 import play.api.inject.guice.GuiceApplicationBuilder
+import utils.InputOption
 
 class CountryOptionsSpec extends SpecBase with MockitoSugar {
 

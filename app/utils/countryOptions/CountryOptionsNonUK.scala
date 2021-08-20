@@ -21,6 +21,7 @@ import config.FrontendAppConfig
 import javax.inject.Singleton
 import play.api.Environment
 import play.api.i18n.Messages
+import utils.InputOption
 
 @Singleton
 class CountryOptionsNonUK @Inject()(
