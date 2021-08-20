@@ -32,7 +32,8 @@ govukInput: GovukInput
   autocomplete: Option[String] = None,
   inputMode: Option[String] = None,
   pattern: Option[String] = None,
-  readOnly: Boolean = false
+  readOnly: Boolean = false,
+  inputType: String = "text"
 )(implicit messages: Messages)
 
 @govukInput(
@@ -51,6 +52,7 @@ govukInput: GovukInput
     spellcheck = Some(false),
     inputmode = inputMode,
     pattern = pattern,
+    inputType = inputType,
     prefix = prefix.map(prefix => PrefixOrSuffix(content = Text(prefix))),
     suffix = suffix.map(suffix => PrefixOrSuffix(content = Text(suffix))),
     classes = if(inputClass.isDefined) inputClass.get else "",
