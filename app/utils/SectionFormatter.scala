@@ -14,8 +14,23 @@
  * limitations under the License.
  */
 
-package viewmodels
+package utils
 
-case class AnswerSection(headingKey: Option[String] = None,
-                         rows: Seq[AnswerRow] = Nil,
-                         sectionKey: Option[String] = None) extends Section
+import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
+import viewmodels.AnswerSection
+
+object SectionFormatter {
+
+  def formatAnswerSection(answerSection: AnswerSection)(implicit messages: Messages): Seq[SummaryListRow] = {
+    answerSection.rows.map { row =>
+      SummaryListRow(
+        key = Key(classes = "govuk-!-width-two-thirds", content = Text(messages(row.label))),
+        value = Value(HtmlContent(row.answer)),
+        actions = None
+      )
+    }
+  }
+
+}

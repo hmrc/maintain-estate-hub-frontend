@@ -15,48 +15,45 @@
  *@
 
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
+@import utils.SectionFormatter.formatAnswerSection
+@import views.html.components.{Heading, Button}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    govukSummaryList: GovukSummaryList,
+    button: Button
 )
 
-@(personalRepresentative: Seq[Section], estateNameAndDeceasedPerson: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(personalRepresentative: Seq[AnswerSection], estateNameAndDeceasedPerson: Seq[AnswerSection])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("lastDeclared.title")
 ) {
 
-    @components.back_link()
+    @heading("lastDeclaredheading", headingSize = "govuk-heading-xl")
 
-    @components.heading("lastDeclared.heading", headingSize = "heading-large")
+    @button(messageKey = "site.button.continue.maintaining", isPrintButton = false)
 
     <div class="section">
-        <p>@components.button_link(Some("continue"),
-            "site.button.continue.maintaining",
-            controllers.routes.WhatIsNextController.onPageLoad().url)
-        </p>
-
-        <p>@components.button_print()</p>
+        @button(messageKey = "site.button.continue.maintaining", isPrintButton = false, href = Some(controllers.routes.WhatIsNextController.onPageLoad().url))
+        @button(messageKey = "site.print-or-save", isPrintButton = true)
     </div>
 
     @for(section <- personalRepresentative){
-        @{
-            section match {
-                case a: AnswerSection => components.answer_section(a)
-                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-            }
+        @if(section.sectionKey.isDefined){
+            <h2 class="govuk-heading-l">@messages(section.sectionKey.get)</h2>
+            @govukSummaryList(SummaryList(rows = formatAnswerSection(section)))
         }
     }
 
     <p>@messages("lastDeclared.informationFirstRegistered")</p>
 
     @for(section <- estateNameAndDeceasedPerson){
-        @{
-            section match {
-                case a: AnswerSection => components.answer_section(a)
-                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-            }
+        @if(section.sectionKey.isDefined){
+            <h2 class="govuk-heading-l">@messages(section.sectionKey.get)</h2>
+            @govukSummaryList(SummaryList(rows = formatAnswerSection(section)))
         }
     }
 
