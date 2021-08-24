@@ -34,11 +34,17 @@
 
     @heading("lastDeclaredheading", headingSize = "govuk-heading-xl")
 
-    @button(messageKey = "site.button.continue.maintaining", isPrintButton = false)
-
     <div class="section">
-        @button(messageKey = "site.button.continue.maintaining", isPrintButton = false, href = Some(controllers.routes.WhatIsNextController.onPageLoad().url))
-        @button(messageKey = "site.print-or-save", isPrintButton = true)
+        @button(
+            messageKey = "site.button.continue.maintaining",
+            attributes = Map("id"->"continue"),
+            isPrintButton = false,
+            href = Some(controllers.routes.WhatIsNextController.onPageLoad().url)
+        )
+        @button(
+            messageKey = "site.print-or-save",
+            isPrintButton = true
+        )
     </div>
 
     @for(section <- personalRepresentative){

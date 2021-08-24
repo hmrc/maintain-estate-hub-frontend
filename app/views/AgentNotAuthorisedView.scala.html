@@ -16,12 +16,13 @@
 
 @import controllers.routes._
 @import config.FrontendAppConfig
-@import views.html.components.{HeadingWithCaption, Link}
+@import views.html.components.{HeadingWithCaption, Link, BulletList}
 
 @this(
     main_template: MainTemplate,
     config: FrontendAppConfig,
     link: Link,
+    bulletList: BulletList,
     headingWithCaption: HeadingWithCaption
 )
 
@@ -45,17 +46,17 @@
     <p>@messages("agentNotAuthorised.p4") @link(config.estatesHelplineUrl, "help-link-1", "agentNotAuthorised.p4.a", true).</p>
     <p>@messages("agentNotAuthorised.p5")</p>
 
-    <ul class="govuk-list govuk-list--bullet">
-        <li>@messages("agentNotAuthorised.bullet.1")</li>
-        <li>@messages("agentNotAuthorised.bullet.2")</li>
-    </ul>
+    @bulletList("agentNotAuthorised", List(
+        "bullet.1",
+        "bullet.2"
+    ))
 
     <p>@messages("agentNotAuthorised.p6")</p>
 
-    <ul class="govuk-list govuk-list--bullet">
-        <li>@messages("agentNotAuthorised.bullet.3")</li>
-        <li>@messages("agentNotAuthorised.bullet.4")</li>
-    </ul>
+    @bulletList("agentNotAuthorised", List(
+        "bullet.3",
+        "bullet.4"
+    ))
 
     <p>@messages("agentNotAuthorised.p7") @link(config.estatesHelplineUrl, "help-link-2", "agentNotAuthorised.p7.a", true).</p>
 
