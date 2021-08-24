@@ -16,31 +16,38 @@
 
 @import controllers.routes._
 @import config.FrontendAppConfig
+@import views.html.components.{HeadingWithCaption, Link, Button}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    headingWithCaption: HeadingWithCaption,
+    link: Link,
+    button: Button
 )
 
 @(utr: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("accountNotLinked.title")
+    title = messages("accountNotLinked.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    @components.heading_with_caption(headingKey = "accountNotLinked.heading", caption = "accountNotLinked.caption", captionParam = utr)
+    @headingWithCaption(
+        headingPrefix = "accountNotLinked",
+        captionPrefix = "accountNotLinked",
+        captionParam = Some(utr)
+    )
 
     <p>@messages("accountNotLinked.p1")</p>
 
-    @components.button_link(
-        id = Some("sign-out"),
+    @button(
+        attributes = Map("id"->"sign-out"),
         messageKey = "site.sign_out_of_account",
-        href = controllers.routes.LogoutController.logout().url
+        isPrintButton = false,
+        href = Some(controllers.routes.LogoutController.logout().url)
     )
 
-    <p>@messages("accountNotLinked.p2") <a href="@config.estatesHelplineUrl" target="_blank">@messages("accountNotLinked.p2.link")</a>.</p>
-
+    <p>@messages("accountNotLinked.p2") @link(config.estatesHelplineUrl, "guidance", "accountNotLinked.p2.link", true).</p>
 
 }

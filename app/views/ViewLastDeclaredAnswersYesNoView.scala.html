@@ -15,33 +15,37 @@
  *@
 
 @import controllers.routes._
+@import views.html.components.{Heading, SubmitButton, ErrorSummary, InputYesNo}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], utr: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("viewLastDeclaredYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("viewLastDeclaredYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = ViewLastDeclaredAnswersYesNoController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @heading(headingKey = "viewLastDeclaredYesNo.subHeading", optionalParam = Some(utr), headingSize = "govuk-heading-xl")
 
-        <span class="govuk-caption-xl">@messages("viewLastDeclaredYesNo.subHeading", utr)</span>
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            legend = messages("viewLastDeclaredYesNo.heading"),
-            legendClass = Some("heading-large"),
-            headingIsLegend = true
+            label = messages("viewLastDeclaredYesNo.heading"),
+            legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

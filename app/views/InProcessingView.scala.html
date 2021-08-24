@@ -16,29 +16,35 @@
 
 @import controllers.routes._
 @import config.FrontendAppConfig
+@import views.html.components.{HeadingWithCaption, Link}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    headingWithCaption: HeadingWithCaption,
+    link: Link
 )
 
 @(utr: String, isAgent: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("inProcessing.title")
+    title = messages("inProcessing.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    @components.heading_with_caption(headingKey = "inProcessing.heading", caption = "inProcessing.caption", captionParam = utr)
+    @headingWithCaption(
+        headingPrefix = "inProcessing",
+        captionPrefix = "inProcessing",
+        captionParam = Some(utr)
+    )
 
     <p>@messages("inProcessing.p1")</p>
 
     <p>@messages("inProcessing.p2")</p>
 
-    <p>@messages("inProcessing.p3") <a href="@config.estatesHelplineUrl">@messages("inProcessing.p3.link")</a>.</p>
+    <p>@messages("inProcessing.p3") @link(href = config.estatesHelplineUrl, key = "inProcessing.p3.link").</p>
 
     @if(isAgent){
-        <p>@messages("inProcessing.p4") <a href="@config.agentOverviewUrl">@messages("inProcessing.p4.link")</a>.</p>
+        <p>@messages("inProcessing.p4") @link(href = config.agentOverviewUrl, key = "inProcessing.p4.link").</p>
     }
 }

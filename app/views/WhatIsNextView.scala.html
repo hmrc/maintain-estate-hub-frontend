@@ -16,31 +16,35 @@
 
 @import controllers.routes._
 @import models.WhatIsNext
+@import views.html.components.{SubmitButton, ErrorSummary, InputRadio}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputRadio: InputRadio,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("declarationWhatNext.title")}"
+    title = s"${errorPrefix(form)}${messages("declarationWhatNext.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = WhatIsNextController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio_with_hint(
+        @inputRadio(
             field = form("value"),
             legend = messages("declarationWhatNext.heading"),
             headingIsLegend = true,
-            inputs = WhatIsNext.options
+            inputs = mapRadioOptionsToRadioItemsWithHints(form("value"), WhatIsNext.options.toSeq),
+            inline = false
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

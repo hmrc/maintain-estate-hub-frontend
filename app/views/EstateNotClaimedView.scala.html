@@ -16,10 +16,13 @@
 
 @import controllers.routes._
 @import config.FrontendAppConfig
+@import views.html.components.{HeadingWithCaption, Link}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    headingWithCaption: HeadingWithCaption,
+    link: Link
 )
 
 @(utr: String)(implicit request: Request[_], messages: Messages)
@@ -28,15 +31,19 @@
     title = messages("estateNotClaimed.title")
 ) {
 
-    @components.heading_with_caption(headingKey = "estateNotClaimed.heading", caption = "estateNotClaimed.caption", captionParam = utr)
+    @headingWithCaption(
+        headingPrefix = "estateNotClaimed",
+        captionPrefix = "estateNotClaimed",
+        captionParam = Some(utr)
+    )
 
     <p>@messages("estateNotClaimed.p1")</p>
 
-    <ol class="numbered-list">
+    <ol class="govuk-list govuk-list--number">
         <li>
             <b>@messages("estateNotClaimed.b1.heading")</b>
             <p>@messages("estateNotClaimed.b1.p1")</p>
-            <p>@messages("estateNotClaimed.b1.p2") <a id="register-for-gg-account" href="@config.redirectToLoginUrl" target="_blank">@messages("estateNotClaimed.b1.p2.link")</a>.</p>
+            <p>@messages("estateNotClaimed.b1.p2") @link(href = config.redirectToLoginUrl, id = "register-for-gg-account", key = "estateNotClaimed.b1.p2.link", openInNewWindow = true).</p>
             <p>@messages("estateNotClaimed.b1.p3")</p>
             <p>@messages("estateNotClaimed.b1.p4")</p>
         </li>
@@ -45,8 +52,8 @@
             <b>@messages("estateNotClaimed.b2.heading")</b>
             <p>@messages("estateNotClaimed.b2.p1")</p>
             <p>@messages("estateNotClaimed.b2.p2")</p>
-            <p>@messages("estateNotClaimed.b2.p3") <a href="@config.estatesHelplineUrl">@messages("estateNotClaimed.b2.p3.link")</a>.</p>
-            <p>@messages("estateNotClaimed.b2.p4") <a href="@config.agentOverviewUrl">@messages("estateNotClaimed.b2.p4.link")</a>.</p>
+            <p>@messages("estateNotClaimed.b2.p3") @link(href = config.estatesHelplineUrl, key = "estateNotClaimed.b2.p3.link").</p>
+            <p>@messages("estateNotClaimed.b2.p4") @link(href = config.agentOverviewUrl, key = "estateNotClaimed.b2.p4.link").</p>
         </li>
     </ol>
 

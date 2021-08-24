@@ -16,35 +16,35 @@
 
 @import controllers.routes._
 @import models.Mode
+@import views.html.components.{InputText, SubmitButton, ErrorSummary}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    inputText: InputText,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("UTR.title")}"
+    title = s"${errorPrefix(form)}${messages("UTR.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = UTRController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_text(
+        @inputText(
             field = form("value"),
             label = messages("UTR.heading"),
-            labelAsHeading = true,
+            inputClass = Some("govuk-!-width-one-half"),
             hint = Some(messages("UTR.hint")),
-            labelClass = Some("heading-large"),
-            optionalHtmlContent = Some(
-                Html(s"""<p>${messages("UTR.linkMessage")} <a href="https://www.gov.uk/find-lost-utr-number" target="_blank">${messages("UTR.linkText")}</a>.</p>""")
-            )
+            labelAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

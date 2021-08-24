@@ -14,21 +14,24 @@
  * limitations under the License.
  *@
 
+@import views.html.components.{Heading, Link}
+
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    heading: Heading,
+    link: Link
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("featureNotAvailable.title")
-    ) {
+    title = messages("featureNotAvailable.title"),
+    showBackLink = true
+) {
 
-@components.back_link()
+@heading("featureNotAvailable.heading")
 
-@components.heading("featureNotAvailable.heading")
-
-<p>@messages("featureNotAvailable.p1") <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/bereavement-and-deceased-estate" target="_blank">@messages("featureNotAvailable.link")</a></p>
+<p>@messages("featureNotAvailable.p1") @link(href = "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/bereavement-and-deceased-estate", key = "featureNotAvailable.link", openInNewWindow = true)</p>
 
 <p>@messages("featureNotAvailable.p2")</p>
 

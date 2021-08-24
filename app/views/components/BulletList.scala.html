@@ -14,23 +14,15 @@
  * limitations under the License.
  *@
 
-@import config.FrontendAppConfig
-@import views.html.components.Heading
+@this()
 
-@this(
-    mainTemplate: MainTemplate,
-    appConfig: FrontendAppConfig,
-    headingComp: Heading
-)
+@(
+ prefix : String,
+ keys : Seq[String]
+)(implicit messages: Messages)
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
-
-@contentHeader = {
-    @headingComp(heading)
-}
-
-@mainContent = {
-  <p>@message</p>
-}
-
-@mainTemplate(title = pageTitle, contentHeader = Some(contentHeader))(mainContent = mainContent)
+<ul class="govuk-list govuk-list--bullet">
+ @keys.map { key =>
+ <li>@messages(s"$prefix.$key")</li>
+ }
+</ul>

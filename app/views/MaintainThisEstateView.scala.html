@@ -15,21 +15,28 @@
  *@
 
 @import config.FrontendAppConfig
+@import views.html.components.{HeadingWithCaption, Link, Button}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    headingWithCaption: HeadingWithCaption,
+    link: Link,
+    button: Button
 )
 
 @(utr: String, continueUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("maintainThisEstate.title")
+    title = messages("maintainThisEstate.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    @components.heading_with_caption(headingKey = "maintainThisEstate.heading", caption = "maintainThisEstate.caption", captionParam = utr)
+    @headingWithCaption(
+        headingPrefix = "maintainThisEstate",
+        captionPrefix = "maintainThisEstate",
+        captionParam = Some(utr)
+    )
 
     <p>@messages("maintainThisEstate.p1.a") <span class="weight-bold">@utr</span> @messages("maintainThisEstate.p1.b")</p>
 
@@ -37,9 +44,14 @@
 
     <p>@messages("maintainThisEstate.p3")</p>
 
-    <p>@messages("maintainThisEstate.p4") <a href="@config.estatesHelplineUrl" target="_blank">@messages("maintainThisEstate.p4.a")</a>.</p>
+    <p>@messages("maintainThisEstate.p4") @link(href = config.estatesHelplineUrl, key = "maintainThisEstate.p4.a", openInNewWindow = true).</p>
 
-    <p>@components.button_link(Some("continue"), "site.continue", continueUrl)</p>
+    @button(
+        attributes = Map("id"->"continue"),
+        messageKey = "site.continue",
+        isPrintButton = false,
+        href = Some(continueUrl)
+    )
 
 }
 
