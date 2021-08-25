@@ -28,7 +28,7 @@ class ViewLastDeclaredAnswersYesNoViewSpec extends YesNoViewBehaviours {
   val utr = "1234567890"
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "DateLastAssetSharedOutYesNo view" must {
+  "ViewLastDeclaredAnswersYesNo view" must {
 
     val view = viewFor[ViewLastDeclaredAnswersYesNoView](Some(emptyUserAnswers))
 

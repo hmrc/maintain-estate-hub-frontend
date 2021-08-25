@@ -35,7 +35,7 @@
 
     @formHelper(action = WhatIsNextController.onSubmit(), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, WhatIsNext.options.map(_._1))
 
         @inputRadio(
             field = form("value"),

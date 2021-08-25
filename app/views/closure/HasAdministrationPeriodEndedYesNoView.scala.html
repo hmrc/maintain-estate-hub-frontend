@@ -15,31 +15,35 @@
  *@
 
 @import controllers.closure.routes._
+@import views.html.components.{SubmitButton, ErrorSummary, InputYesNo}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("closure.hasAdministrationPeriodEnded.title")}"
+    title = s"${errorPrefix(form)}${messages("closure.hasAdministrationPeriodEnded.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = HasAdministrationPeriodEndedYesNoController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            legend = messages("closure.hasAdministrationPeriodEnded.heading"),
-            headingIsLegend = true,
-            hint = Some(messages("closure.hasAdministrationPeriodEnded.hint"))
+            label = messages("closure.hasAdministrationPeriodEnded.heading"),
+            legendClass = Some("govuk-heading-l"),
+            hint = Some(messages("closure.hasAdministrationPeriodEnded.hint")),
+            legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

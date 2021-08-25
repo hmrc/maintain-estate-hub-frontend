@@ -15,12 +15,11 @@
  *@
 
 @import controllers.routes._
-@import views.html.components.{Heading, SubmitButton, ErrorSummary, InputYesNo}
+@import views.html.components.{SubmitButton, ErrorSummary, InputYesNo}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
-    heading: Heading,
     errorSummary: ErrorSummary,
     inputYesNo: InputYesNo,
     submitButton: SubmitButton
@@ -35,7 +34,7 @@
 
     @formHelper(action = ViewLastDeclaredAnswersYesNoController.onSubmit(), 'autoComplete -> "off") {
 
-        @heading(headingKey = "viewLastDeclaredYesNo.subHeading", optionalParam = Some(utr), headingSize = "govuk-heading-xl")
+        <span class="govuk-caption-xl">@messages("viewLastDeclaredYesNo.subHeading", utr)</span>
 
         @errorSummary(form.errors)
 

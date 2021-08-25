@@ -46,7 +46,7 @@ class AgentDeclarationViewSpec extends QuestionViewBehaviours[AgentDeclaration] 
         form,
         applyView,
         messageKeyPrefix,
-        "firstName", "middleName", "lastName", "agencyName", "telephoneNumber", "crn","email"
+        Seq(("firstName", None), ("middleName", None), ("lastName", None), ("agencyName", None), ("telephoneNumber", None), ("crn", None), ("email", None))
       )
 
       "have a warning" in {
@@ -71,7 +71,7 @@ class AgentDeclarationViewSpec extends QuestionViewBehaviours[AgentDeclaration] 
         form,
         applyView,
         messageKeyPrefix,
-        "firstName", "middleName", "lastName", "agencyName", "telephoneNumber", "crn"
+        Seq(("firstName", None), ("middleName", None), ("lastName", None), ("agencyName", None), ("telephoneNumber", None), ("crn", None))
       )
 
       "have a warning" in {

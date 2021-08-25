@@ -62,11 +62,19 @@ trait ViewSpecBase extends SpecBase {
     headers.first.text.replaceAll("\u00a0", " ") mustBe messages(expectedMessageKey, args:_*).replaceAll("&nbsp;", " ")
   }
 
-  def assertPageTitleWithCaptionEqualsMessages(doc: Document, expectedCaptionMessageKey: String, captionParam: String, expectedMessageKey: String) = {
+  def assertPageTitleWithCaptionEqualsMessages(doc: Document,
+                                               expectedCaptionMessageKey: String,
+                                               captionParam: String,
+                                               expectedMessageKey: String,
+                                               messageKeyParam: String = "") = {
     val headers = doc.getElementsByTag("h1")
     headers.size mustBe 1
-    headers.first.text.replaceAll("\u00a0", " ") mustBe
-      messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ") + messages(expectedMessageKey).replaceAll("&nbsp;", " ")
+    val actual = headers.first.text.replaceAll("\u00a0", " ")
+
+    val expectedCaption = messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ")
+    val expectedHeading = messages(expectedMessageKey, messageKeyParam).replaceAll("&nbsp;", " ")
+
+    actual mustBe s"$expectedCaption $expectedHeading"
   }
 
   def assertContainsText(doc:Document, text: String) = assert(doc.toString.contains(text), "\n\ntext " + text + " was not rendered on the page.\n")
@@ -75,7 +83,7 @@ trait ViewSpecBase extends SpecBase {
     for (key <- expectedMessageKeys) assertContainsText(doc, messages(key))
   }
 
-  def assertRenderedById(doc: Document, id: String) = {
+  def assertRenderedById(doc: Document, id: String): Assertion = {
     assert(doc.getElementById(id) != null, "\n\nElement " + id + " was not rendered on the page.\n")
   }
 
@@ -91,18 +99,22 @@ trait ViewSpecBase extends SpecBase {
     assert(doc.select(cssSelector).isEmpty, "\n\nElement " + cssSelector + " was rendered on the page.\n")
   }
 
-  def assertContainsLabel(doc: Document, forElement: String, expectedText: String, expectedHintText: Option[String] = None) = {
+  def assertContainsLabel(doc: Document, forElement: String, expectedText: String, expectedHintText: Option[String] = None): Any = {
     val labels = doc.getElementsByAttributeValue("for", forElement)
     assert(labels.size == 1, s"\n\nLabel for $forElement was not rendered on the page.")
     val label = labels.first
+
     assert(label.text().contains(expectedText), s"\n\nLabel for $forElement was not $expectedText")
 
-    assertContainsHint(doc, forElement, expectedHintText)
+    if (expectedHintText.isDefined) {
+      assert(doc.getElementsByClass("govuk-hint").first.text == expectedHintText.get,
+        s"\n\nLabel for $forElement did not contain hint text $expectedHintText")
+    }
   }
 
-  def assertContainsHint(doc: Document, forElement: String, expectedHintText: Option[String]) = {
+  def assertContainsHint(doc: Document, forElement: String, expectedHintText: Option[String]): Any = {
     if (expectedHintText.isDefined) {
-      assert(doc.getElementsByClass("form-hint").first.text == expectedHintText.get,
+      assert(doc.getElementsByClass("govuk-hint").first.text == expectedHintText.get,
         s"\n\nLabel for $forElement did not contain hint text $expectedHintText")
     }
   }
@@ -111,14 +123,14 @@ trait ViewSpecBase extends SpecBase {
     assert(doc.getElementById(id).hasClass(expectedClass), s"\n\nElement $id does not have class $expectedClass")
   }
 
-  def assertContainsRadioButton(doc: Document, id: String, name: String, value: String, isChecked: Boolean) = {
+  def assertContainsRadioButton(doc: Document, id: String, name: String, value: String, isChecked: Boolean): Assertion = {
     assertRenderedById(doc, id)
     val radio = doc.getElementById(id)
     assert(radio.attr("name") == name, s"\n\nElement $id does not have name $name")
     assert(radio.attr("value") == value, s"\n\nElement $id does not have value $value")
     isChecked match {
-      case true => assert(radio.attr("checked") == "checked", s"\n\nElement $id is not checked")
-      case _ => assert(!radio.hasAttr("checked") && radio.attr("checked") != "checked", s"\n\nElement $id is checked")
+      case true => assert(radio.hasAttr("checked"), s"\n\nElement $id is not checked")
+      case _ => assert(!radio.hasAttr("checked"), s"\n\nElement $id is checked")
     }
   }
 

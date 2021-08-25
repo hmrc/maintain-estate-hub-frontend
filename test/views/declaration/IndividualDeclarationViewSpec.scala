@@ -46,7 +46,7 @@ class IndividualDeclarationViewSpec extends QuestionViewBehaviours[IndividualDec
         form,
         applyView,
         messageKeyPrefix,
-        "firstName", "middleName", "lastName", "email"
+        Seq(("firstName", None), ("middleName", None), ("lastName", None), ("email", None))
       )
 
       "have a warning" in {
@@ -71,7 +71,7 @@ class IndividualDeclarationViewSpec extends QuestionViewBehaviours[IndividualDec
         form,
         applyView,
         messageKeyPrefix,
-        "firstName", "middleName", "lastName"
+        Seq(("firstName", None), ("middleName", None), ("lastName", None))
       )
 
       "have a warning" in {

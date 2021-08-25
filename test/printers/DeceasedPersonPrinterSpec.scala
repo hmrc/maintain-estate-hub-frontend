@@ -33,11 +33,11 @@ class DeceasedPersonPrinterSpec extends SpecBase {
       result.value mustBe AnswerSection(
         headingKey = Some("Person who died"),
         rows = Seq(
-          AnswerRow(Html("What is the name of the person who died?"), Html("John James Smith")),
-          AnswerRow(Html("What is John Smith’s date of death?"), Html("1 January 2020")),
-          AnswerRow(Html("Do you know John Smith’s date of birth?"), Html("No")),
-          AnswerRow(Html("Do you know John Smith’s National Insurance number?"), Html("No")),
-          AnswerRow(Html("Do you know John Smith’s last known address?"), Html("No"))
+          AnswerRow("What is the name of the person who died?", Html("John James Smith")),
+          AnswerRow("What is John Smith’s date of death?", Html("1 January 2020")),
+          AnswerRow("Do you know John Smith’s date of birth?", Html("No")),
+          AnswerRow("Do you know John Smith’s National Insurance number?", Html("No")),
+          AnswerRow("Do you know John Smith’s last known address?", Html("No"))
         )
       )
     }
@@ -51,12 +51,12 @@ class DeceasedPersonPrinterSpec extends SpecBase {
       result.value mustBe AnswerSection(
         headingKey = Some("Person who died"),
         rows = Seq(
-          AnswerRow(Html("What is the name of the person who died?"), Html("John Smith")),
-          AnswerRow(Html("What is John Smith’s date of death?"), Html("1 January 2020")),
-          AnswerRow(Html("Do you know John Smith’s date of birth?"), Html("Yes")),
-          AnswerRow(Html("What is John Smith’s date of birth?"), Html("3 February 1996")),
-          AnswerRow(Html("Do you know John Smith’s National Insurance number?"), Html("Yes")),
-          AnswerRow(Html("What is John Smith’s National Insurance number?"), Html("AA 00 00 00 A"))
+          AnswerRow("What is the name of the person who died?", Html("John Smith")),
+          AnswerRow("What is John Smith’s date of death?", Html("1 January 2020")),
+          AnswerRow("Do you know John Smith’s date of birth?", Html("Yes")),
+          AnswerRow("What is John Smith’s date of birth?", Html("3 February 1996")),
+          AnswerRow("Do you know John Smith’s National Insurance number?", Html("Yes")),
+          AnswerRow("What is John Smith’s National Insurance number?", Html("AA 00 00 00 A"))
         )
       )
     }
@@ -70,13 +70,13 @@ class DeceasedPersonPrinterSpec extends SpecBase {
       result.value mustBe AnswerSection(
         headingKey = Some("Person who died"),
         rows = Seq(
-          AnswerRow(Html("What is the name of the person who died?"), Html("John Smith")),
-          AnswerRow(Html("What is John Smith’s date of death?"), Html("1 January 2020")),
-          AnswerRow(Html("Do you know John Smith’s date of birth?"), Html("No")),
-          AnswerRow(Html("Do you know John Smith’s National Insurance number?"), Html("No")),
-          AnswerRow(Html("Do you know John Smith’s last known address?"), Html("Yes")),
-          AnswerRow(Html("Was John Smith’s last known address in the UK?"), Html("Yes")),
-          AnswerRow(Html("What is John Smith’s last known address?"), Html("1<br />British Lane<br />NE1 1NE"))
+          AnswerRow("What is the name of the person who died?", Html("John Smith")),
+          AnswerRow("What is John Smith’s date of death?", Html("1 January 2020")),
+          AnswerRow("Do you know John Smith’s date of birth?", Html("No")),
+          AnswerRow("Do you know John Smith’s National Insurance number?", Html("No")),
+          AnswerRow("Do you know John Smith’s last known address?", Html("Yes")),
+          AnswerRow("Was John Smith’s last known address in the UK?", Html("Yes")),
+          AnswerRow("What is John Smith’s last known address?", Html("1<br />British Lane<br />NE1 1NE"))
         )
       )
     }
@@ -90,13 +90,13 @@ class DeceasedPersonPrinterSpec extends SpecBase {
       result.value mustBe AnswerSection(
         headingKey = Some("Person who died"),
         rows = Seq(
-          AnswerRow(Html("What is the name of the person who died?"), Html("John Smith")),
-          AnswerRow(Html("What is John Smith’s date of death?"), Html("1 January 2020")),
-          AnswerRow(Html("Do you know John Smith’s date of birth?"), Html("No")),
-          AnswerRow(Html("Do you know John Smith’s National Insurance number?"), Html("No")),
-          AnswerRow(Html("Do you know John Smith’s last known address?"), Html("Yes")),
-          AnswerRow(Html("Was John Smith’s last known address in the UK?"), Html("No")),
-          AnswerRow(Html("What is John Smith’s last known address?"), Html("2<br />German Street<br />Germany"))
+          AnswerRow("What is the name of the person who died?", Html("John Smith")),
+          AnswerRow("What is John Smith’s date of death?", Html("1 January 2020")),
+          AnswerRow("Do you know John Smith’s date of birth?", Html("No")),
+          AnswerRow("Do you know John Smith’s National Insurance number?", Html("No")),
+          AnswerRow("Do you know John Smith’s last known address?", Html("Yes")),
+          AnswerRow("Was John Smith’s last known address in the UK?", Html("No")),
+          AnswerRow("What is John Smith’s last known address?", Html("2<br />German Street<br />Germany"))
         )
       )
     }

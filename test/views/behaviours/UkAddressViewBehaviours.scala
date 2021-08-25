@@ -31,15 +31,15 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
 
   def ukAddressPage(createView: Form[UKAddress] => HtmlFormat.Appendable,
                     messageKeyPrefix: Option[String],
-                         args : String*) = {
+                    args: String*) = {
 
     val prefix = messageKeyPrefix.getOrElse("site.address.uk")
 
     val fields =  Seq(("line1",None),
-                              ("line2",None),
-                              ("line3", None),
-                              ("line4", None),
-                              ("postcode", Some("site.address.uk.postcode.hint")))
+      ("line2",None),
+      ("line3", None),
+      ("line4", None),
+      ("postcode", Some("site.address.uk.postcode.hint")))
 
     "behave like a ukAddressPage" when {
 
@@ -56,7 +56,7 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
         "not render an error summary" in {
 
           val doc = asDocument(createView(form))
-          assertNotRenderedById(doc, "error-summary-heading")
+          assertNotRenderedById(doc, "error-summary-title")
         }
       }
 
@@ -76,14 +76,14 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
           "show an error summary" in {
 
             val doc = asDocument(createView(form.withError(FormError(field._1, "error"))))
-            assertRenderedById(doc, "error-summary-heading")
+            assertRenderedById(doc, "error-summary-title")
           }
 
           s"show an error in the label for field '$field'" in {
 
             val doc = asDocument(createView(form.withError(FormError(field._1, "error"))))
-            val errorSpan = doc.getElementsByClass("error-message").first
-            errorSpan.parent.getElementsByClass("form-label").attr("for") mustBe field._1
+            val errorSpan = doc.getElementsByClass("govuk-error-message").first
+            errorSpan.parent.getElementsByClass("govuk-label").attr("for") mustBe field._1
           }
         }
       }
@@ -92,8 +92,8 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
         s"contains a label and optional hint text for the field '$field'" in {
           val doc = asDocument(createView(form))
           val fieldName = field._1
-          val expectedFieldHintMessage = field._2 map (k => messages(k))
-          assertContainsLabel(doc, fieldName, messages(s"site.address.uk.$fieldName"), expectedFieldHintMessage)
+          val fieldHint = field._2 map (k => messages(k))
+          assertContainsLabel(doc, fieldName, messages(s"site.address.uk.$fieldName"), fieldHint)
         }
       }
     }

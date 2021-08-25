@@ -36,7 +36,8 @@
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages(s"$prefix.title")
+    title = messages(s"$prefix.title"),
+    showBackLink = true
 ) {
 
     @heading(s"$prefix.heading", headingSize = "govuk-heading-xl")

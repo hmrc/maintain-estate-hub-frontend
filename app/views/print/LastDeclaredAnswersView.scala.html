@@ -29,10 +29,11 @@
 @(personalRepresentative: Seq[AnswerSection], estateNameAndDeceasedPerson: Seq[AnswerSection])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("lastDeclared.title")
+    title = messages("lastDeclared.title"),
+    showBackLink = true
 ) {
 
-    @heading("lastDeclaredheading", headingSize = "govuk-heading-xl")
+    @heading("lastDeclared.heading", headingSize = "govuk-heading-xl")
 
     <div class="section">
         @button(
