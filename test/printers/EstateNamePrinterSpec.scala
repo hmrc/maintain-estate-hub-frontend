@@ -39,7 +39,8 @@ class EstateNamePrinterSpec extends SpecBase {
           headingKey = Some("Estate name"),
           rows = Seq(
             AnswerRow("What is the estate’s name?", Html("Estate of person"))
-          )
+          ),
+          sectionKey = Some("Estate name")
         )
       }
     }

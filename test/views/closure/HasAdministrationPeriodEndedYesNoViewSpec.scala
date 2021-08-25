@@ -24,7 +24,7 @@ import views.html.closure.HasAdministrationPeriodEndedYesNoView
 
 class HasAdministrationPeriodEndedYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "closure.hasAdministrationPeriodEnded"
+  val messageKeyPrefix = "closure.hasAdministrationPeriodEndedYesNo"
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "HasAdministrationPeriodEndedYesNo View" must {

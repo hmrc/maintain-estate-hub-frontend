@@ -44,7 +44,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
             AnswerRow("Do you know Adam Conder’s email address?", Html("Yes")),
             AnswerRow("What is Adam Conder’s email address?", Html("email@test.com"))
-          )
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -69,7 +70,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
             AnswerRow("Do you know Adam Conder’s email address?", Html("Yes")),
             AnswerRow("What is Adam Conder’s email address?", Html("email@test.com"))
-          )
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -94,7 +96,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
             AnswerRow("Do you know Adam Conder’s email address?", Html("Yes")),
             AnswerRow("What is Adam Conder’s email address?", Html("email@test.com"))
-          )
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -119,7 +122,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
             AnswerRow("Do you know Adam Conder’s email address?", Html("Yes")),
             AnswerRow("What is Adam Conder’s email address?", Html("email@test.com"))
-          )
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -145,7 +149,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is Company Ltd’s address?", Html("line1<br />line2<br />NE991ZZ")),
             AnswerRow("What is Company Ltd’s telephone number?", Html("+447838383823")),
             AnswerRow("Do you know Company Ltd’s email address?", Html("No"))
-          )
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -168,7 +173,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is Company Ltd’s address?", Html("line1<br />line2<br />line3<br />Germany")),
             AnswerRow("What is Company Ltd’s telephone number?", Html("+447838383823")),
             AnswerRow("Do you know Company Ltd’s email address?", Html("No"))
-          )
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -191,7 +197,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is Company Ltd’s telephone number?", Html("+447838383823")),
             AnswerRow("Do you know Company Ltd’s email address?", Html("Yes")),
             AnswerRow("What is Company Ltd’s email address?", Html("email@test.com"))
-          )
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -214,7 +221,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is Company Ltd’s telephone number?", Html("+447838383823")),
             AnswerRow("Do you know Company Ltd’s email address?", Html("Yes")),
             AnswerRow("What is Company Ltd’s email address?", Html("email@test.com"))
-          )
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }

@@ -38,7 +38,8 @@ class DeceasedPersonPrinterSpec extends SpecBase {
           AnswerRow("Do you know John Smith’s date of birth?", Html("No")),
           AnswerRow("Do you know John Smith’s National Insurance number?", Html("No")),
           AnswerRow("Do you know John Smith’s last known address?", Html("No"))
-        )
+        ),
+        sectionKey = Some("Person who died")
       )
     }
 
@@ -57,7 +58,8 @@ class DeceasedPersonPrinterSpec extends SpecBase {
           AnswerRow("What is John Smith’s date of birth?", Html("3 February 1996")),
           AnswerRow("Do you know John Smith’s National Insurance number?", Html("Yes")),
           AnswerRow("What is John Smith’s National Insurance number?", Html("AA 00 00 00 A"))
-        )
+        ),
+        sectionKey = Some("Person who died")
       )
     }
 
@@ -77,7 +79,8 @@ class DeceasedPersonPrinterSpec extends SpecBase {
           AnswerRow("Do you know John Smith’s last known address?", Html("Yes")),
           AnswerRow("Was John Smith’s last known address in the UK?", Html("Yes")),
           AnswerRow("What is John Smith’s last known address?", Html("1<br />British Lane<br />NE1 1NE"))
-        )
+        ),
+        sectionKey = Some("Person who died")
       )
     }
 
@@ -97,7 +100,8 @@ class DeceasedPersonPrinterSpec extends SpecBase {
           AnswerRow("Do you know John Smith’s last known address?", Html("Yes")),
           AnswerRow("Was John Smith’s last known address in the UK?", Html("No")),
           AnswerRow("What is John Smith’s last known address?", Html("2<br />German Street<br />Germany"))
-        )
+        ),
+        sectionKey = Some("Person who died")
       )
     }
 

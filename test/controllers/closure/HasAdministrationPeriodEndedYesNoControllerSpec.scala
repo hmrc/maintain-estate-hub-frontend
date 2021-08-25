@@ -29,7 +29,7 @@ import views.html.closure.HasAdministrationPeriodEndedYesNoView
 class HasAdministrationPeriodEndedYesNoControllerSpec extends SpecBase {
 
   private val formProvider = new YesNoFormProvider()
-  private val form: Form[Boolean] = formProvider.withPrefix("closure.hasAdministrationPeriodEnded")
+  private val form: Form[Boolean] = formProvider.withPrefix("closure.hasAdministrationPeriodEndedYesNo")
   private lazy val yesNoRoute: String = routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
   private val utr: String = "utr"
   private val validAnswer: Boolean = true

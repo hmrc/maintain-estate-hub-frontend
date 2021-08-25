@@ -36,7 +36,8 @@ class AdministrationPeriodPrinterSpec extends SpecBase {
         headingKey = Some("Administration period"),
         rows = Seq(
           AnswerRow(messages("What is the date the administration period ended?"), Html("1 January 2020"))
-        )
+        ),
+        sectionKey = Some("Administration period")
       ))
     }
 

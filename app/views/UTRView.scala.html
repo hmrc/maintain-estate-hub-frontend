@@ -16,7 +16,7 @@
 
 @import controllers.routes._
 @import models.Mode
-@import views.html.components.{InputText, SubmitButton, ErrorSummary, Heading}
+@import views.html.components.{InputText, SubmitButton, ErrorSummary, Heading, Link}
 
 @this(
     main_template: MainTemplate,
@@ -24,12 +24,14 @@
     heading: Heading,
     inputText: InputText,
     errorSummary: ErrorSummary,
-    submitButton: SubmitButton
+    submitButton: SubmitButton,
+    govukHint: GovukHint,
+    link: Link
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
-@optionalHtmlContent = {<p>${messages("UTR.linkMessage")} <a href="https://www.gov.uk/find-lost-utr-number" target="_blank">${messages("UTR.linkText")}</a>.</p>}
+@optionalHtmlContent = {<p>@messages("UTR.linkMessage") <a href="https://www.gov.uk/find-lost-utr-number" target="_blank">@messages("UTR.linkText")</a>.</p>}
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("UTR.title")}",
@@ -42,13 +44,17 @@
 
         @heading("UTR.heading")
 
+        @govukHint(Hint(
+            content = HtmlContent(messages("UTR.hint"))
+        ))
+
         @optionalHtmlContent
 
         @inputText(
             field = form("value"),
             label = messages("UTR.heading"),
+            labelClass = Some("govuk-visually-hidden"),
             inputClass = Some("govuk-!-width-one-half"),
-            hint = Some(messages("UTR.hint")),
             labelAsHeading = false
         )
 

@@ -54,7 +54,8 @@ class PersonalRepresentativePrinter @Inject()(answerRowConverter: AnswerRowConve
         case Nil => None
         case _ => AnswerSection(
           headingKey = Some(messages("print.personalRepresentative")),
-          rows = questions
+          rows = questions,
+          sectionKey = Some(messages("print.personalRepresentative"))
         ).toOption
       }
     }
@@ -86,7 +87,8 @@ class PersonalRepresentativePrinter @Inject()(answerRowConverter: AnswerRowConve
         case Nil => None
         case _ => AnswerSection(
           headingKey = Some(messages("print.personalRepresentative")),
-          rows = questions
+          rows = questions,
+          sectionKey = Some(messages("print.personalRepresentative"))
         ).toOption
       }
     }

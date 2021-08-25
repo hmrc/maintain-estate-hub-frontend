@@ -28,7 +28,7 @@
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("closure.hasAdministrationPeriodEnded.title")}",
+    title = s"${errorPrefix(form)}${messages("closure.hasAdministrationPeriodEndedYesNo.title")}",
     showBackLink = true
 ) {
 
@@ -38,9 +38,9 @@
 
         @inputYesNo(
             field = form("value"),
-            label = messages("closure.hasAdministrationPeriodEnded.heading"),
+            label = messages("closure.hasAdministrationPeriodEndedYesNo.heading"),
             legendClass = Some("govuk-heading-l"),
-            hint = Some(messages("closure.hasAdministrationPeriodEnded.hint")),
+            hint = Some(messages("closure.hasAdministrationPeriodEndedYesNo.hint")),
             legendAsHeading = true
         )
 

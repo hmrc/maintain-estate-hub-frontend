@@ -16,6 +16,12 @@ body:not(.js-enabled) {
     }
 }
 
+@media print {
+  .print-hidden, .header-wrapper, .service-info, .report-error  {
+    display: none !important;
+  }
+}
+
 p {
     @extend .govuk-body;
 }
