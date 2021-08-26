@@ -16,31 +16,33 @@
 
 @import controllers.routes._
 @import config.FrontendAppConfig
+@import views.html.components.{Heading, Link}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    heading: Heading,
+    link: Link
 )
 
 @(isAgent: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("utrDoesNotMatchRecords.title")
+    title = messages("utrDoesNotMatchRecords.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    @components.heading("utrDoesNotMatchRecords.heading")
+    @heading("utrDoesNotMatchRecords.heading")
 
     <p>@messages("utrDoesNotMatchRecords.p1")</p>
 
     <p>@messages("utrDoesNotMatchRecords.p2")</p>
 
-    <p>@messages("utrDoesNotMatchRecords.p3") <a href="@config.loginContinueUrl" target="_blank">@messages("utrDoesNotMatchRecords.p3.link")</a>.</p>
+    <p>@messages("utrDoesNotMatchRecords.p3") @link(href = config.loginContinueUrl, key = "utrDoesNotMatchRecords.p3.link", openInNewWindow = true).</p>
 
-    <p>@messages("utrDoesNotMatchRecords.p4") <a href="@config.estatesHelplineUrl">@messages("utrDoesNotMatchRecords.p4.link")</a>.</p>
+    <p>@messages("utrDoesNotMatchRecords.p4") @link(href = config.estatesHelplineUrl, key = "utrDoesNotMatchRecords.p4.link").</p>
 
     @if(isAgent){
-        <p>@messages("utrDoesNotMatchRecords.p5") <a href="@config.agentOverviewUrl">@messages("utrDoesNotMatchRecords.p5.link")</a>.</p>
+        <p>@messages("utrDoesNotMatchRecords.p5") @link(href = config.agentOverviewUrl, key = "utrDoesNotMatchRecords.p5.link").</p>
     }
 }

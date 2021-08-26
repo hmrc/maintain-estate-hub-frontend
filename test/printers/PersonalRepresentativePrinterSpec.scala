@@ -34,17 +34,18 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
-            AnswerRow(Html("Is the personal representative an individual or business?"), Html("Individual")),
-            AnswerRow(Html("What is the personal representative’s name?"), Html("Adam Conder")),
-            AnswerRow(Html("What is Adam Conder’s date of birth?"), Html("3 May 2010")),
-            AnswerRow(Html("Does Adam Conder have a National Insurance number?"), Html("Yes")),
-            AnswerRow(Html("What is Adam Conder’s National Insurance number?"), Html("JP 12 12 12 A")),
-            AnswerRow(Html("Does Adam Conder live in the UK?"), Html("Yes")),
-            AnswerRow(Html("What is Adam Conder’s address?"), Html("line1<br />line2<br />NE991ZZ")),
-            AnswerRow(Html("What is Adam Conder’s telephone number?"), Html("+447838383823")),
-            AnswerRow(Html("Do you know Adam Conder’s email address?"), Html("Yes")),
-            AnswerRow(Html("What is Adam Conder’s email address?"), Html("email@test.com"))
-          )
+            AnswerRow("Is the personal representative an individual or business?", Html("Individual")),
+            AnswerRow("What is the personal representative’s name?", Html("Adam Conder")),
+            AnswerRow("What is Adam Conder’s date of birth?", Html("3 May 2010")),
+            AnswerRow("Does Adam Conder have a National Insurance number?", Html("Yes")),
+            AnswerRow("What is Adam Conder’s National Insurance number?", Html("JP 12 12 12 A")),
+            AnswerRow("Does Adam Conder live in the UK?", Html("Yes")),
+            AnswerRow("What is Adam Conder’s address?", Html("line1<br />line2<br />NE991ZZ")),
+            AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
+            AnswerRow("Do you know Adam Conder’s email address?", Html("Yes")),
+            AnswerRow("What is Adam Conder’s email address?", Html("email@test.com"))
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -59,17 +60,18 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
-            AnswerRow(Html("Is the personal representative an individual or business?"), Html("Individual")),
-            AnswerRow(Html("What is the personal representative’s name?"), Html("Adam Conder")),
-            AnswerRow(Html("What is Adam Conder’s date of birth?"), Html("3 May 2010")),
-            AnswerRow(Html("Does Adam Conder have a National Insurance number?"), Html("Yes")),
-            AnswerRow(Html("What is Adam Conder’s National Insurance number?"), Html("JP 12 12 12 A")),
-            AnswerRow(Html("Does Adam Conder live in the UK?"), Html("No")),
-            AnswerRow(Html("What is Adam Conder’s address?"), Html("line1<br />line2<br />line3<br />Germany")),
-            AnswerRow(Html("What is Adam Conder’s telephone number?"), Html("+447838383823")),
-            AnswerRow(Html("Do you know Adam Conder’s email address?"), Html("Yes")),
-            AnswerRow(Html("What is Adam Conder’s email address?"), Html("email@test.com"))
-          )
+            AnswerRow("Is the personal representative an individual or business?", Html("Individual")),
+            AnswerRow("What is the personal representative’s name?", Html("Adam Conder")),
+            AnswerRow("What is Adam Conder’s date of birth?", Html("3 May 2010")),
+            AnswerRow("Does Adam Conder have a National Insurance number?", Html("Yes")),
+            AnswerRow("What is Adam Conder’s National Insurance number?", Html("JP 12 12 12 A")),
+            AnswerRow("Does Adam Conder live in the UK?", Html("No")),
+            AnswerRow("What is Adam Conder’s address?", Html("line1<br />line2<br />line3<br />Germany")),
+            AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
+            AnswerRow("Do you know Adam Conder’s email address?", Html("Yes")),
+            AnswerRow("What is Adam Conder’s email address?", Html("email@test.com"))
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -84,17 +86,18 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
-            AnswerRow(Html("Is the personal representative an individual or business?"), Html("Individual")),
-            AnswerRow(Html("What is the personal representative’s name?"), Html("Adam Conder")),
-            AnswerRow(Html("What is Adam Conder’s date of birth?"), Html("3 May 2010")),
-            AnswerRow(Html("Does Adam Conder have a National Insurance number?"), Html("No")),
-            AnswerRow(Html("What are Adam Conder’s passport or ID card details?"), Html("Germany<br />1234567890<br />1 January 2020")),
-            AnswerRow(Html("Does Adam Conder live in the UK?"), Html("Yes")),
-            AnswerRow(Html("What is Adam Conder’s address?"), Html("lane 1<br />lane 2<br />NE211ZZ")),
-            AnswerRow(Html("What is Adam Conder’s telephone number?"), Html("+447838383823")),
-            AnswerRow(Html("Do you know Adam Conder’s email address?"), Html("Yes")),
-            AnswerRow(Html("What is Adam Conder’s email address?"), Html("email@test.com"))
-          )
+            AnswerRow("Is the personal representative an individual or business?", Html("Individual")),
+            AnswerRow("What is the personal representative’s name?", Html("Adam Conder")),
+            AnswerRow("What is Adam Conder’s date of birth?", Html("3 May 2010")),
+            AnswerRow("Does Adam Conder have a National Insurance number?", Html("No")),
+            AnswerRow("What are Adam Conder’s passport or ID card details?", Html("Germany<br />1234567890<br />1 January 2020")),
+            AnswerRow("Does Adam Conder live in the UK?", Html("Yes")),
+            AnswerRow("What is Adam Conder’s address?", Html("lane 1<br />lane 2<br />NE211ZZ")),
+            AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
+            AnswerRow("Do you know Adam Conder’s email address?", Html("Yes")),
+            AnswerRow("What is Adam Conder’s email address?", Html("email@test.com"))
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -109,17 +112,18 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
-            AnswerRow(Html("Is the personal representative an individual or business?"), Html("Individual")),
-            AnswerRow(Html("What is the personal representative’s name?"), Html("Adam Conder")),
-            AnswerRow(Html("What is Adam Conder’s date of birth?"), Html("3 May 2010")),
-            AnswerRow(Html("Does Adam Conder have a National Insurance number?"), Html("No")),
-            AnswerRow(Html("What are Adam Conder’s passport or ID card details?"), Html("Germany<br />1234567890<br />1 January 2020")),
-            AnswerRow(Html("Does Adam Conder live in the UK?"), Html("No")),
-            AnswerRow(Html("What is Adam Conder’s address?"), Html("line1<br />line2<br />line3<br />France")),
-            AnswerRow(Html("What is Adam Conder’s telephone number?"), Html("+447838383823")),
-            AnswerRow(Html("Do you know Adam Conder’s email address?"), Html("Yes")),
-            AnswerRow(Html("What is Adam Conder’s email address?"), Html("email@test.com"))
-          )
+            AnswerRow("Is the personal representative an individual or business?", Html("Individual")),
+            AnswerRow("What is the personal representative’s name?", Html("Adam Conder")),
+            AnswerRow("What is Adam Conder’s date of birth?", Html("3 May 2010")),
+            AnswerRow("Does Adam Conder have a National Insurance number?", Html("No")),
+            AnswerRow("What are Adam Conder’s passport or ID card details?", Html("Germany<br />1234567890<br />1 January 2020")),
+            AnswerRow("Does Adam Conder live in the UK?", Html("No")),
+            AnswerRow("What is Adam Conder’s address?", Html("line1<br />line2<br />line3<br />France")),
+            AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
+            AnswerRow("Do you know Adam Conder’s email address?", Html("Yes")),
+            AnswerRow("What is Adam Conder’s email address?", Html("email@test.com"))
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -137,15 +141,16 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
-            AnswerRow(Html("Is the personal representative an individual or business?"), Html("Business")),
-            AnswerRow(Html("Is the personal representative a UK registered business?"), Html("Yes")),
-            AnswerRow(Html("What is the business’s name?"), Html("Company Ltd")),
-            AnswerRow(Html("What is Company Ltd’s Unique Taxpayer Reference (UTR) number?"), Html("1234567892")),
-            AnswerRow(Html("Is Company Ltd’s address in the UK?"), Html("Yes")),
-            AnswerRow(Html("What is Company Ltd’s address?"), Html("line1<br />line2<br />NE991ZZ")),
-            AnswerRow(Html("What is Company Ltd’s telephone number?"), Html("+447838383823")),
-            AnswerRow(Html("Do you know Company Ltd’s email address?"), Html("No"))
-          )
+            AnswerRow("Is the personal representative an individual or business?", Html("Business")),
+            AnswerRow("Is the personal representative a UK registered business?", Html("Yes")),
+            AnswerRow("What is the business’s name?", Html("Company Ltd")),
+            AnswerRow("What is Company Ltd’s Unique Taxpayer Reference (UTR) number?", Html("1234567892")),
+            AnswerRow("Is Company Ltd’s address in the UK?", Html("Yes")),
+            AnswerRow("What is Company Ltd’s address?", Html("line1<br />line2<br />NE991ZZ")),
+            AnswerRow("What is Company Ltd’s telephone number?", Html("+447838383823")),
+            AnswerRow("Do you know Company Ltd’s email address?", Html("No"))
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -160,15 +165,16 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
-            AnswerRow(Html("Is the personal representative an individual or business?"), Html("Business")),
-            AnswerRow(Html("Is the personal representative a UK registered business?"), Html("Yes")),
-            AnswerRow(Html("What is the business’s name?"), Html("Company Ltd")),
-            AnswerRow(Html("What is Company Ltd’s Unique Taxpayer Reference (UTR) number?"), Html("1234567892")),
-            AnswerRow(Html("Is Company Ltd’s address in the UK?"), Html("No")),
-            AnswerRow(Html("What is Company Ltd’s address?"), Html("line1<br />line2<br />line3<br />Germany")),
-            AnswerRow(Html("What is Company Ltd’s telephone number?"), Html("+447838383823")),
-            AnswerRow(Html("Do you know Company Ltd’s email address?"), Html("No"))
-          )
+            AnswerRow("Is the personal representative an individual or business?", Html("Business")),
+            AnswerRow("Is the personal representative a UK registered business?", Html("Yes")),
+            AnswerRow("What is the business’s name?", Html("Company Ltd")),
+            AnswerRow("What is Company Ltd’s Unique Taxpayer Reference (UTR) number?", Html("1234567892")),
+            AnswerRow("Is Company Ltd’s address in the UK?", Html("No")),
+            AnswerRow("What is Company Ltd’s address?", Html("line1<br />line2<br />line3<br />Germany")),
+            AnswerRow("What is Company Ltd’s telephone number?", Html("+447838383823")),
+            AnswerRow("Do you know Company Ltd’s email address?", Html("No"))
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -183,15 +189,16 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
-            AnswerRow(Html("Is the personal representative an individual or business?"), Html("Business")),
-            AnswerRow(Html("Is the personal representative a UK registered business?"), Html("No")),
-            AnswerRow(Html("What is the business’s name?"), Html("Company Ltd")),
-            AnswerRow(Html("Is Company Ltd’s address in the UK?"), Html("Yes")),
-            AnswerRow(Html("What is Company Ltd’s address?"), Html("line1<br />line2<br />NE991ZZ")),
-            AnswerRow(Html("What is Company Ltd’s telephone number?"), Html("+447838383823")),
-            AnswerRow(Html("Do you know Company Ltd’s email address?"), Html("Yes")),
-            AnswerRow(Html("What is Company Ltd’s email address?"), Html("email@test.com"))
-          )
+            AnswerRow("Is the personal representative an individual or business?", Html("Business")),
+            AnswerRow("Is the personal representative a UK registered business?", Html("No")),
+            AnswerRow("What is the business’s name?", Html("Company Ltd")),
+            AnswerRow("Is Company Ltd’s address in the UK?", Html("Yes")),
+            AnswerRow("What is Company Ltd’s address?", Html("line1<br />line2<br />NE991ZZ")),
+            AnswerRow("What is Company Ltd’s telephone number?", Html("+447838383823")),
+            AnswerRow("Do you know Company Ltd’s email address?", Html("Yes")),
+            AnswerRow("What is Company Ltd’s email address?", Html("email@test.com"))
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }
@@ -206,15 +213,16 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
           rows = Seq(
-            AnswerRow(Html("Is the personal representative an individual or business?"), Html("Business")),
-            AnswerRow(Html("Is the personal representative a UK registered business?"), Html("No")),
-            AnswerRow(Html("What is the business’s name?"), Html("Company Ltd")),
-            AnswerRow(Html("Is Company Ltd’s address in the UK?"), Html("No")),
-            AnswerRow(Html("What is Company Ltd’s address?"), Html("line1<br />line2<br />line3<br />France")),
-            AnswerRow(Html("What is Company Ltd’s telephone number?"), Html("+447838383823")),
-            AnswerRow(Html("Do you know Company Ltd’s email address?"), Html("Yes")),
-            AnswerRow(Html("What is Company Ltd’s email address?"), Html("email@test.com"))
-          )
+            AnswerRow("Is the personal representative an individual or business?", Html("Business")),
+            AnswerRow("Is the personal representative a UK registered business?", Html("No")),
+            AnswerRow("What is the business’s name?", Html("Company Ltd")),
+            AnswerRow("Is Company Ltd’s address in the UK?", Html("No")),
+            AnswerRow("What is Company Ltd’s address?", Html("line1<br />line2<br />line3<br />France")),
+            AnswerRow("What is Company Ltd’s telephone number?", Html("+447838383823")),
+            AnswerRow("Do you know Company Ltd’s email address?", Html("Yes")),
+            AnswerRow("What is Company Ltd’s email address?", Html("email@test.com"))
+          ),
+          sectionKey = Some("Personal representative")
         )
       }
     }

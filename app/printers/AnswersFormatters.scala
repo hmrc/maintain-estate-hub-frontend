@@ -16,7 +16,6 @@
 
 package printers
 
-import config.annotations.AllCountries
 import models.{AddressType, PassportType}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat.escape
@@ -24,13 +23,14 @@ import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.play.language.LanguageUtils
 import utils.countryOptions.CountryOptions
-
 import java.time.LocalDate
+
 import javax.inject.Inject
+
 import scala.util.Try
 
-class AnswersFormatters @Inject()(languageUtils: LanguageUtils,
-                                  @AllCountries countryOptions: CountryOptions) {
+class AnswersFormatters @Inject()(languageUtils: LanguageUtils)
+                                 (implicit countryOptions: CountryOptions) {
 
   def date(date: LocalDate)(implicit messages: Messages): Html = {
     HtmlFormat.escape(languageUtils.Dates.formatDate(date))

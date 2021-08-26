@@ -14,63 +14,57 @@
  * limitations under the License.
  *@
 
-@import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
+@import viewmodels.{AnswerSection, Section}
+@import utils.SectionFormatter.formatAnswerSection
+@import views.html.components.{Heading, Button}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    govukSummaryList: GovukSummaryList,
+    button: Button
 )
 
 @(
     tvn: String,
     declarationSent: String,
     crn: Option[String],
-    administrationPeriodAndPersonalRep: Seq[Section],
-    estateNameAndDeceasedPerson: Seq[Section],
+    administrationPeriodAndPersonalRep: Seq[AnswerSection],
+    estateNameAndDeceasedPerson: Seq[AnswerSection],
     prefix: String
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages(s"$prefix.title")
+    title = messages(s"$prefix.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
+    @heading(s"$prefix.heading", headingSize = "govuk-heading-xl")
 
-    @components.heading(s"$prefix.heading", headingSize = "heading-large")
+    @button(messageKey = "site.print-or-save", isPrintButton = true)
 
-    <div class="section">
-        <p>@components.button_print()</p>
-    </div>
-
-    <p class="declarationReferenceNumber bold">
-        <span>@messages("declared.p1", tvn)</span>
-    </p>
+    <h2 class="govuk-heading-m">@messages("declared.p1", tvn)</h2>
 
     @crn.map{ c =>
-        <p class="agentClientRef bold">
-            <span>@messages("declared.p2", c)</span>
-        </p>
+        <h2 class="govuk-heading-m">@messages("declared.p2", c)</h2>
     }
 
     <p>@messages("declared.p3", declarationSent)</p>
 
     @for(section <- administrationPeriodAndPersonalRep){
-        @{
-            section match {
-                case a: AnswerSection => components.answer_section(a)
-                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-            }
+        @section.sectionKey.map { sk =>
+            <h2 class="govuk-heading-l">@messages(sk)</h2>
+            @govukSummaryList(SummaryList(rows = formatAnswerSection(section)))
         }
     }
 
     <p>@messages("declared.informationFirstRegistered")</p>
 
     @for(section <- estateNameAndDeceasedPerson){
-        @{
-            section match {
-                case a: AnswerSection => components.answer_section(a)
-                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-            }
+        @section.sectionKey.map { sk =>
+            <h2 class="govuk-heading-l">@messages(sk)</h2>
+            @govukSummaryList(SummaryList(rows = formatAnswerSection(section)))
         }
     }
 

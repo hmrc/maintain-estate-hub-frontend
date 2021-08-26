@@ -38,8 +38,9 @@ class EstateNamePrinterSpec extends SpecBase {
         result.value mustBe AnswerSection(
           headingKey = Some("Estate name"),
           rows = Seq(
-            AnswerRow(Html("What is the estate’s name?"), Html("Estate of person"))
-          )
+            AnswerRow("What is the estate’s name?", Html("Estate of person"))
+          ),
+          sectionKey = Some("Estate name")
         )
       }
     }

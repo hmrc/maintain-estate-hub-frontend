@@ -16,35 +16,48 @@
 
 @import controllers.routes._
 @import models.Mode
+@import views.html.components.{InputText, SubmitButton, ErrorSummary, Heading, Link}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    inputText: InputText,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    govukHint: GovukHint,
+    link: Link
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
+@optionalHtmlContent = {<p>@messages("UTR.linkMessage") <a href="https://www.gov.uk/find-lost-utr-number" target="_blank">@messages("UTR.linkText")</a>.</p>}
+
 @main_template(
-    title = s"${errorPrefix(form)}${messages("UTR.title")}"
+    title = s"${errorPrefix(form)}${messages("UTR.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = UTRController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("UTR.heading")
 
-        @components.input_text(
+        @govukHint(Hint(
+            content = HtmlContent(messages("UTR.hint"))
+        ))
+
+        @optionalHtmlContent
+
+        @inputText(
             field = form("value"),
             label = messages("UTR.heading"),
-            labelAsHeading = true,
-            hint = Some(messages("UTR.hint")),
-            labelClass = Some("heading-large"),
-            optionalHtmlContent = Some(
-                Html(s"""<p>${messages("UTR.linkMessage")} <a href="https://www.gov.uk/find-lost-utr-number" target="_blank">${messages("UTR.linkText")}</a>.</p>""")
-            )
+            labelClass = Some("govuk-visually-hidden"),
+            inputClass = Some("govuk-!-width-one-half"),
+            labelAsHeading = false
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

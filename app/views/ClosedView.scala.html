@@ -16,25 +16,31 @@
 
 @import controllers.routes._
 @import config.FrontendAppConfig
+@import views.html.components.{HeadingWithCaption, Link}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    link: Link,
+    headingWithCaption: HeadingWithCaption
 )
 
 @(utr: String, isAgent: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("closed.title")
+    title = messages("closed.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
+    @headingWithCaption(
+        headingPrefix = "closed",
+        captionPrefix = "closed",
+        captionParam = Some(utr)
+    )
 
-    @components.heading_with_caption(headingKey = "closed.heading", caption = "closed.caption", captionParam = utr)
-
-    <p>@messages("closed.p1.beforeLink") <a href="@config.estatesHelplineUrl" target="_blank">@messages("closed.p1.link")</a>. @messages("closed.p1.afterLink")</p>
+    <p>@messages("closed.p1.beforeLink") @link(config.estatesHelplineUrl, "guidance", "closed.p1.link", true). @messages("closed.p1.afterLink")</p>
 
     @if(isAgent){
-        <p>@messages("closed.p2") <a href="@config.agentOverviewUrl">@messages("closed.p2.link")</a>.</p>
+        <p>@messages("closed.p2") @link(config.agentOverviewUrl, "agent-overview-link", "closed.p2.link", true).</p>
     }
 }

@@ -29,19 +29,21 @@ class AdministrationPeriodPrinter @Inject()(answerRowConverter: AnswerRowConvert
   def period(closeDate: Option[LocalDate])(implicit messages: Messages): Option[AnswerSection] = {
 
     val bound = answerRowConverter.bind()
+    val key: String = "print.administrationPeriod"
 
     closeDate match {
       case Some(date) =>
 
         val questions = Seq(
-          bound.dateQuestion(date, "print.administrationPeriod")
+          bound.dateQuestion(date, key)
         ).flatten
 
         questions match {
           case Nil => None
           case _ => AnswerSection(
-            headingKey = Some(messages("print.administrationPeriod")),
-            rows = questions
+            headingKey = Some(messages(key)),
+            rows = questions,
+            sectionKey = Some(messages(key))
           ).toOption
         }
 

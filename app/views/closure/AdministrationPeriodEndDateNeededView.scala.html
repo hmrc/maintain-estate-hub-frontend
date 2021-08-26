@@ -16,26 +16,29 @@
 
 @import config.FrontendAppConfig
 @import controllers.closure.routes._
+@import views.html.components.{SubmitButton, Heading, Link}
 
 @this(
     appConfig: FrontendAppConfig,
     formHelper: FormWithCSRF,
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    heading: Heading,
+    link: Link,
+    submitButton: SubmitButton
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("closure.administrationPeriodEndDateNeeded.title")
+    title = messages("closure.administrationPeriodEndDateNeeded.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
+    @heading("closure.administrationPeriodEndDateNeeded.heading")
 
-    @components.heading("closure.administrationPeriodEndDateNeeded.heading")
-
-    <p>@messages("closure.administrationPeriodEndDateNeeded.p") <a href="@{appConfig.estatesHelplineUrl}" target="_blank">@messages("closure.administrationPeriodEndDateNeeded.link")</a>.</p>
+    <p>@messages("closure.administrationPeriodEndDateNeeded.p") @link(appConfig.estatesHelplineUrl, "guidance", "closure.administrationPeriodEndDateNeeded.link", true).</p>
 
     @formHelper(action = AdministrationPeriodEndDateNeededController.cleanupAndRedirect(), 'autoComplete -> "off") {
-        @components.submit_button()
+        @submitButton()
     }
 }

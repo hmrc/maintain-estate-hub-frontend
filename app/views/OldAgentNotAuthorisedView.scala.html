@@ -16,10 +16,13 @@
 
 @import controllers.routes._
 @import config.FrontendAppConfig
+@import views.html.components.{HeadingWithCaption, Link}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    headingWithCaption: HeadingWithCaption,
+    link: Link
 )
 
 @(utr: String)(implicit request: Request[_], messages: Messages)
@@ -28,17 +31,21 @@
     title = messages("agentNotAuthorised.old.title")
 ) {
 
-    @components.heading_with_caption(headingKey = "agentNotAuthorised.old.heading", caption = "agentNotAuthorised.old.caption", captionParam = utr)
+    @headingWithCaption(
+        headingPrefix = "agentNotAuthorised.old",
+        captionPrefix = "agentNotAuthorised.old",
+        captionParam = Some(utr)
+    )
 
     <p>@messages("agentNotAuthorised.old.p1")</p>
 
-    <p>@messages("agentNotAuthorised.old.p2") <a href="@config.agentServicesUrl">@messages("agentNotAuthorised.old.p2.link")</a>.</p>
+    <p>@messages("agentNotAuthorised.old.p2") @link(href = config.agentServicesUrl, key = "agentNotAuthorised.old.p2.link").</p>
 
     <p>@messages("agentNotAuthorised.old.p3")</p>
 
-    <p>@messages("agentNotAuthorised.old.p4") <a href="@config.estatesHelplineUrl">@messages("agentNotAuthorised.old.p4.link")</a>.</p>
+    <p>@messages("agentNotAuthorised.old.p4") @link(href = config.estatesHelplineUrl, key = "agentNotAuthorised.old.p4.link").</p>
 
-    <p>@messages("agentNotAuthorised.old.p5") <a href="@config.agentOverviewUrl">@messages("agentNotAuthorised.old.p5.link")</a>.</p>
+    <p>@messages("agentNotAuthorised.old.p5") @link(href = config.agentOverviewUrl, key = "agentNotAuthorised.old.p5.link").</p>
 
 
 }

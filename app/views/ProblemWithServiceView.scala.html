@@ -16,33 +16,37 @@
 
 @import controllers.routes._
 @import config.FrontendAppConfig
+@import views.html.components.{Heading, Link, Button}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    heading: Heading,
+    link: Link,
+    button: Button
 )
 
 @(isAgent: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("problemWithService.title")
+    title = messages("problemWithService.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    @components.heading("problemWithService.heading")
+    @heading("problemWithService.heading")
 
     <p>@messages("problemWithService.p1")</p>
 
-    <p>@messages("problemWithService.p2.beforeLink") <a href="@config.estatesHelplineUrl" target="_blank">@messages("problemWithService.p2.link")</a> @messages("problemWithService.p2.afterLink")</p>
+    <p>@messages("problemWithService.p2.beforeLink") @link(href = config.estatesHelplineUrl, key = "problemWithService.p2.link", openInNewWindow = true) @messages("problemWithService.p2.afterLink")</p>
 
     @if(isAgent){
-        <p>@messages("problemWithService.p3") <a href="@config.agentOverviewUrl">@messages("problemWithService.p3.link")</a>.</p>
+        <p>@messages("problemWithService.p3") @link(href = config.agentOverviewUrl, key = "problemWithService.p3.link").</p>
     }
 
-    @components.button_link(
-        id = Some("sign-out"),
+    @button(
+        attributes = Map("id"->"sign-out"),
         messageKey = "site.sign_out",
-        href = controllers.routes.LogoutController.logout().url
+        isPrintButton = false,
+        href = Some(controllers.routes.LogoutController.logout().url)
     )
 }

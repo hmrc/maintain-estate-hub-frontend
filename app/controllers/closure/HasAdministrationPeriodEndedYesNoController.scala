@@ -38,7 +38,7 @@ class HasAdministrationPeriodEndedYesNoController @Inject()(
                                                              view: HasAdministrationPeriodEndedYesNoView
                                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("closure.hasAdministrationPeriodEnded")
+  val form: Form[Boolean] = yesNoFormProvider.withPrefix("closure.hasAdministrationPeriodEndedYesNo")
 
   def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
     implicit request =>

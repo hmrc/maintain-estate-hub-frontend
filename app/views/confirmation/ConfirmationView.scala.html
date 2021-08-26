@@ -17,10 +17,13 @@
 @import controllers.declaration.routes._
 @import config.FrontendAppConfig
 @import models.NormalMode
+@import views.html.components.{ConfirmationPanel, Link}
 
 @this(
     appConfig: FrontendAppConfig,
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    confirmationPanel: ConfirmationPanel,
+    link: Link
 )
 
 @(name: String, tvn: String, isAgent: Boolean, isClosing: Boolean)(implicit request: Request[_], messages: Messages)
@@ -29,15 +32,13 @@
     title = s"${messages("confirmationPage.title", tvn)}"
     ) {
 
-    <div class="govuk-main-wrapper--l">
-        <h1 class="form-title heading-large heading-confirmation">
-            @messages("confirmationPage.heading")
-            <span class="reference-text">@messages("confirmationPage.heading2")</span>
-            <span id="trusts-registration-number" class="reference-number">@tvn</span>
-        </h1>
-    </div>
+    @confirmationPanel(
+        heading = messages("confirmationPage.heading"),
+        content = messages("confirmationPage.heading2"),
+        refNumber = tvn
+    )
 
-    <p class="panel-indent" id="print-declared">@components.link(controllers.print.routes.DeclaredAnswersController.onPageLoad.url, "print-and-save","confirmationPage.printsave.link", openInNewWindow = false)</p>
+    <p class="govuk-inset-text" id="print-declared">@link(controllers.print.routes.DeclaredAnswersController.onPageLoad().url, "print-and-save","confirmationPage.printsave.link")</p>
 
     <h2>@messages("confirmationPage.subheading1")</h2>
 
@@ -46,10 +47,10 @@
     @if(isClosing) {
         <p>@messages("confirmationPage.paragraph2")</p>
 
-        @components.paragraph_link("confirmationPage.paragraph3", appConfig.estatesHelplineUrl, "helpline", "confirmationPage.paragraph3.link", true)
+        <p>@messages("confirmationPage.paragraph3") @link(appConfig.estatesHelplineUrl, "helpline", "confirmationPage.paragraph3.link", openInNewWindow = true)</p>
     }
 
     @if(isAgent: Boolean) {
-        @components.paragraph_link("confirmationPage.agent.you.can", appConfig.agentOverviewUrl, "agent-overview", "confirmationPage.agent.link", false)
+        <p>@messages("confirmationPage.agent.you.can") @link(appConfig.agentOverviewUrl, "agent-overview", "confirmationPage.agent.link")</p>
     }
 }

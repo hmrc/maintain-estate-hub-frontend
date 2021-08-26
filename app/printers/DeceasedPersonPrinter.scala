@@ -54,8 +54,9 @@ class DeceasedPersonPrinter @Inject()(answerRowConverter: AnswerRowConverter) {
     questions match {
       case Nil => None
       case _ => AnswerSection(
-        headingKey = Some(messages("print.deceasedPerson")),
-        rows = questions
+        headingKey = Some(messages(prefix)),
+        rows = questions,
+        sectionKey = Some(messages(prefix))
       ).toOption
     }
   }

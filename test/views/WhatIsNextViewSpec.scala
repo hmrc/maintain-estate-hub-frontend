@@ -53,7 +53,7 @@ class WhatIsNextViewSpec extends ViewBehaviours {
 
         for (option <- WhatIsNext.options) {
           assertContainsRadioButton(doc, option._1.id, "value", option._1.value, false)
-          assertRadioButtonContainsHint(doc, option._1.id + ".hint", messages(option._2))
+          if (option._2.nonEmpty) assertRadioButtonContainsHint(doc, option._1.id + "-item-hint", messages(option._2))
         }
       }
     }
@@ -67,11 +67,11 @@ class WhatIsNextViewSpec extends ViewBehaviours {
           val doc = asDocument(applyView(form.bind(Map("value" -> s"${option._1.value}"))))
 
           assertContainsRadioButton(doc, option._1.id, "value", option._1.value, true)
-          assertRadioButtonContainsHint(doc, option._1.id + ".hint", messages(option._2))
+          if (option._2.nonEmpty) assertRadioButtonContainsHint(doc, option._1.id + "-item-hint", messages(option._2))
 
           for (unselectedOption <- WhatIsNext.options.filterNot(o => o == option)) {
             assertContainsRadioButton(doc, unselectedOption._1.id, "value", unselectedOption._1.value, false)
-            assertRadioButtonContainsHint(doc, unselectedOption._1.id + ".hint", messages(unselectedOption._2))
+            if (unselectedOption._2.nonEmpty) assertRadioButtonContainsHint(doc, unselectedOption._1.id + "-item-hint", messages(unselectedOption._2))
           }
         }
       }

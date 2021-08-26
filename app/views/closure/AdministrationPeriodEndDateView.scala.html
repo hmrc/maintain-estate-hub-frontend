@@ -15,31 +15,34 @@
  *@
 
 @import controllers.closure.routes._
+@import views.html.components.{SubmitButton, ErrorSummary, InputDate}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputDate: InputDate,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("closure.administrationPeriodEndDate.title")}"
+    title = s"${errorPrefix(form)}${messages("closure.administrationPeriodEndDate.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = AdministrationPeriodEndDateController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_date(
+        @inputDate(
             field = form("value"),
             legend = messages("closure.administrationPeriodEndDate.heading"),
-            headingIsLegend = true,
+            legendAsHeading = true,
             hint = Some(messages("closure.administrationPeriodEndDate.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -15,35 +15,35 @@
  *@
 
 @import controllers.declaration.routes._
-@import utils.countryOptions.InputOption
+@import utils.InputOption
+@import views.html.components.{SubmitButton, ErrorSummary, InternationalAddress}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    internationalAddress: InternationalAddress,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], countryOptions: Seq[InputOption])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("agencyRegisteredAddressInternational.title")}"
+    title = s"${errorPrefix(form)}${messages("agencyRegisteredAddressInternational.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = AgencyRegisteredAddressInternationalController.onSubmit(), 'autocomplete -> "on") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @internationalAddress(
+            form,
+            messages("agencyRegisteredAddressInternational.heading"),
+            true,
+            countryOptions
+        )
 
-        <fieldset>
-
-            <legend>
-                @components.heading("agencyRegisteredAddressInternational.heading")
-            </legend>
-
-            @components.address.international_address(form, countryOptions)
-
-        </fieldset>
-
-        @components.submit_button()
+        @submitButton()
     }
 }

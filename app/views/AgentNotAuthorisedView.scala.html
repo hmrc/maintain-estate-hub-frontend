@@ -16,10 +16,14 @@
 
 @import controllers.routes._
 @import config.FrontendAppConfig
+@import views.html.components.{HeadingWithCaption, Link, BulletList}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    link: Link,
+    bulletList: BulletList,
+    headingWithCaption: HeadingWithCaption
 )
 
 @(utr: String)(implicit request: Request[_], messages: Messages)
@@ -28,38 +32,42 @@
     title = messages("agentNotAuthorised.title")
 ) {
 
-    @components.heading_with_caption(headingKey = "agentNotAuthorised.heading", caption = "agentNotAuthorised.caption", captionParam = utr)
+    @headingWithCaption(
+        headingPrefix = "agentNotAuthorised",
+        captionPrefix = "agentNotAuthorised",
+        captionParam = Some(utr)
+    )
 
     <p>@messages("agentNotAuthorised.p1")</p>
     <h2>@messages("agentNotAuthorised.subheading1")</h2>
     <p>@messages("agentNotAuthorised.p2")</p>
     <p>@messages("agentNotAuthorised.p3")</p>
     <h3>@messages("agentNotAuthorised.subheading2")</h3>
-    <p>@messages("agentNotAuthorised.p4") <a href="@config.estatesHelplineUrl" target="_blank">@messages("agentNotAuthorised.p4.a")</a>.</p>
+    <p>@messages("agentNotAuthorised.p4") @link(config.estatesHelplineUrl, "help-link-1", "agentNotAuthorised.p4.a", true).</p>
     <p>@messages("agentNotAuthorised.p5")</p>
 
-    <ul class="list bullet-list">
-        <li>@messages("agentNotAuthorised.bullet.1")</li>
-        <li>@messages("agentNotAuthorised.bullet.2")</li>
-    </ul>
+    @bulletList("agentNotAuthorised", List(
+        "bullet.1",
+        "bullet.2"
+    ))
 
     <p>@messages("agentNotAuthorised.p6")</p>
 
-    <ul class="list bullet-list">
-        <li>@messages("agentNotAuthorised.bullet.3")</li>
-        <li>@messages("agentNotAuthorised.bullet.4")</li>
-    </ul>
+    @bulletList("agentNotAuthorised", List(
+        "bullet.3",
+        "bullet.4"
+    ))
 
-    <p>@messages("agentNotAuthorised.p7") <a href="@config.estatesHelplineUrl" target="_blank">@messages("agentNotAuthorised.p7.a")</a>.</p>
+    <p>@messages("agentNotAuthorised.p7") @link(config.estatesHelplineUrl, "help-link-2", "agentNotAuthorised.p7.a", true).</p>
 
     <h2>@messages("agentNotAuthorised.subheading3")</h2>
 
     <p>@messages("agentNotAuthorised.p8")</p>
 
-    <p>@messages("agentNotAuthorised.p9") <a href="@config.registerEstateGuidanceUrl" target="_blank">@messages("agentNotAuthorised.p9.a")</a>.</p>
+    <p>@messages("agentNotAuthorised.p9") @link(config.registerEstateGuidanceUrl, "guidance", "agentNotAuthorised.p9.a", true).</p>
 
     <p>@messages("agentNotAuthorised.p10")</p>
 
-    <p>@messages("agentNotAuthorised.p11") <a href="@config.agentOverviewUrl">@messages("agentNotAuthorised.p11.a")</a>.</p>
+    <p>@messages("agentNotAuthorised.p11") @link(config.agentOverviewUrl, "index", "agentNotAuthorised.p11.a").</p>
 
 }

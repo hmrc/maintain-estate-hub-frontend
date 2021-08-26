@@ -75,7 +75,7 @@ class AnswerRowConverter @Inject()(answersFormatters: AnswersFormatters) {
                              labelKey: String,
                              format: T => Html): AnswerRow = {
       AnswerRow(
-        label = HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", messageArgs: _*)),
+        label = messages(s"$labelKey.checkYourAnswersLabel", messageArgs: _*),
         answer = format(answer)
       )
     }

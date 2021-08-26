@@ -22,6 +22,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.Environment
 import play.api.i18n.Messages
 import play.api.libs.json.Json
+import utils.InputOption
 
 @Singleton
 class CountryOptions @Inject()(environment: Environment, config: FrontendAppConfig) {

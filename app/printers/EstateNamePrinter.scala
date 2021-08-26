@@ -38,7 +38,8 @@ class EstateNamePrinter @Inject()(answerRowConverter: AnswerRowConverter) {
       case Nil => None
       case _ => AnswerSection(
         headingKey = Some(messages("print.estate.name")),
-        rows = questions
+        rows = questions,
+        sectionKey = Some(messages("print.estate.name"))
       ).toOption
     }
   }

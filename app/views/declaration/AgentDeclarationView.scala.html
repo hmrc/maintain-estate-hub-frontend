@@ -16,74 +16,83 @@
 
 @import controllers.declaration.routes._
 @import config.FrontendAppConfig
+@import views.html.components.{Heading, InputText, SubmitButton, ErrorSummary, InsetText}
 
 @this(
     appConfig: FrontendAppConfig,
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    inputText: InputText,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary,
+    insetText: InsetText
 )
 
 @(form: Form[_], declarationEmailEnabled: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("declaration.title")}"
+    title = s"${errorPrefix(form)}${messages("declaration.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = AgentDeclarationController.onSubmit(), 'autocomplete -> "on") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("declaration.heading")
 
-        @components.heading("declaration.heading")
+        <fieldset class="govuk-fieldset">
 
-        <fieldset>
-
-            <legend class="visually-hidden">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-visually-hidden">
                 @messages("declaration.subheading.personal")
             </legend>
 
-            @components.input_text(
+            @inputText(
                 field = form("firstName"),
+                inputClass = Some("govuk-!-width-one-half"),
                 label = messages("declaration.firstName"),
-                autoComplete = Some("given-name")
+                autocomplete = Some("given-name")
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("middleName"),
+                inputClass = Some("govuk-!-width-one-half"),
                 label = messages("declaration.middleName")
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("lastName"),
+                inputClass = Some("govuk-!-width-one-half"),
                 label = messages("declaration.lastName"),
-                autoComplete = Some("family-name")
+                autocomplete = Some("family-name")
             )
 
         </fieldset>
 
-        <fieldset>
+        <fieldset class="govuk-fieldset">
 
-            <legend class="visually-hidden">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-visually-hidden">
                 @messages("declaration.subheading.agent")
             </legend>
 
-            @components.input_text(
+            @inputText(
                 field = form("agencyName"),
+                inputClass = Some("govuk-!-width-one-half"),
                 label = messages("declaration.agencyName")
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("telephoneNumber"),
                 label = messages("declaration.telephoneNumber"),
-                inputClass = Some("form-control-3-4"),
-                autoComplete = Some("tel")
+                inputClass = Some("govuk-!-width-three-quarters"),
+                autocomplete = Some("tel")
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("crn"),
                 label = messages("declaration.crn"),
-                inputClass = Some("form-control-3-4")
+                inputClass = Some("govuk-!-width-three-quarters")
             )
 
         </fieldset>
@@ -91,15 +100,17 @@
         @if(declarationEmailEnabled) {
             <p>@messages("declaration.paragraph1")</p>
             <p>@messages("declaration.paragraph2")</p>
-            @components.input_text(
+            @inputText(
                 field = form("email"),
-                inputClass = Some("declaration-email"),
-                label = messages("declaration.email")
+                inputClass = Some("govuk-input govuk-!-width-full"),
+                label = messages("declaration.email"),
+                autocomplete = Some("email"),
+                inputType = "email"
             )
         }
 
-        <p class="panel-indent">@messages("declaration.agent.warning")</p>
+        @insetText(s"declaration.agent.warning")
 
-        @components.submit_button(Some("site.confirm-send"))
+        @submitButton(Some("site.confirm-send"))
     }
 }
