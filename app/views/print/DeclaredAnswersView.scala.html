@@ -44,21 +44,17 @@
 
     @button(messageKey = "site.print-or-save", isPrintButton = true)
 
-    <p class="govuk-!-font-weight-bold">
-        <span>@messages("declared.p1", tvn)</span>
-    </p>
+    <h2 class="govuk-heading-m">@messages("declared.p1", tvn)</h2>
 
     @crn.map{ c =>
-        <p class="agentClientRef bold">
-            <span>@messages("declared.p2", c)</span>
-        </p>
+        <h2 class="govuk-heading-m">@messages("declared.p2", c)</h2>
     }
 
     <p>@messages("declared.p3", declarationSent)</p>
 
     @for(section <- administrationPeriodAndPersonalRep){
-        @if(section.sectionKey.isDefined){
-            <h2 class="govuk-heading-l">@messages(section.sectionKey.get)</h2>
+        @section.sectionKey.map { sk =>
+            <h2 class="govuk-heading-l">@messages(sk)</h2>
             @govukSummaryList(SummaryList(rows = formatAnswerSection(section)))
         }
     }
@@ -66,8 +62,8 @@
     <p>@messages("declared.informationFirstRegistered")</p>
 
     @for(section <- estateNameAndDeceasedPerson){
-        @if(section.sectionKey.isDefined){
-            <h2 class="govuk-heading-l">@messages(section.sectionKey.get)</h2>
+        @section.sectionKey.map { sk =>
+            <h2 class="govuk-heading-l">@messages(sk)</h2>
             @govukSummaryList(SummaryList(rows = formatAnswerSection(section)))
         }
     }
