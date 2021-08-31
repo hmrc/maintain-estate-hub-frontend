@@ -38,11 +38,11 @@
 
     <p>@messages("utrDoesNotMatchRecords.p2")</p>
 
-    <p>@messages("utrDoesNotMatchRecords.p3") @link(href = config.loginContinueUrl, key = "utrDoesNotMatchRecords.p3.link", openInNewWindow = true).</p>
+    <p>@messages("utrDoesNotMatchRecords.p3") @link(href = config.loginContinueUrl, id = "register-link", key = "utrDoesNotMatchRecords.p3.link", openInNewWindow = true).</p>
 
-    <p>@messages("utrDoesNotMatchRecords.p4") @link(href = config.estatesHelplineUrl, key = "utrDoesNotMatchRecords.p4.link").</p>
+    <p>@messages("utrDoesNotMatchRecords.p4") @link(href = config.estatesHelplineUrl, id = "help-link", key = "utrDoesNotMatchRecords.p4.link").</p>
 
     @if(isAgent){
-        <p>@messages("utrDoesNotMatchRecords.p5") @link(href = config.agentOverviewUrl, key = "utrDoesNotMatchRecords.p5.link").</p>
+        <p>@messages("utrDoesNotMatchRecords.p5") @link(href = config.agentOverviewUrl, id = "agent-overview-link", key = "utrDoesNotMatchRecords.p5.link").</p>
     }
 }

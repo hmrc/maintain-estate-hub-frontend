@@ -37,10 +37,10 @@
 
     <p>@messages("problemWithService.p1")</p>
 
-    <p>@messages("problemWithService.p2.beforeLink") @link(href = config.estatesHelplineUrl, key = "problemWithService.p2.link", openInNewWindow = true) @messages("problemWithService.p2.afterLink")</p>
+    <p>@messages("problemWithService.p2.beforeLink") @link(href = config.estatesHelplineUrl, id = "help-link", key = "problemWithService.p2.link", openInNewWindow = true) @messages("problemWithService.p2.afterLink")</p>
 
     @if(isAgent){
-        <p>@messages("problemWithService.p3") @link(href = config.agentOverviewUrl, key = "problemWithService.p3.link").</p>
+        <p>@messages("problemWithService.p3") @link(href = config.agentOverviewUrl, id = "agent-overview-link", key = "problemWithService.p3.link").</p>
     }
 
     @button(
