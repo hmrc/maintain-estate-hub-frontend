@@ -43,10 +43,12 @@
         <p>@messages("problemWithService.p3") @link(href = config.agentOverviewUrl, id = "agent-overview-link", key = "problemWithService.p3.link").</p>
     }
 
+    <p>
     @button(
         attributes = Map("id"->"sign-out"),
         messageKey = "site.sign_out",
         isPrintButton = false,
         href = Some(controllers.routes.LogoutController.logout().url)
     )
+    </p>
 }
