@@ -46,12 +46,14 @@
 
     <p>@messages("maintainThisEstate.p4") @link(href = config.estatesHelplineUrl, id = "help-link", key = "maintainThisEstate.p4.a", openInNewWindow = true).</p>
 
+    <p>
     @button(
         attributes = Map("id"->"continue"),
         messageKey = "site.continue",
         isPrintButton = false,
         href = Some(continueUrl)
     )
+    </p>
 
 }
 
