@@ -22,6 +22,7 @@
 
 @button(Button(
     attributes = Map("id"->"submit"),
+    preventDoubleClick = true,
     classes = s"button ${submitClass.getOrElse("")}",
     content = if(overrideMessage.isEmpty) {
         Text(messages("site.continue"))
