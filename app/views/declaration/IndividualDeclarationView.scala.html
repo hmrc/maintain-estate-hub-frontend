@@ -16,7 +16,7 @@
 
 @import controllers.declaration.routes._
 @import config.FrontendAppConfig
-@import views.html.components.{Heading, InputText, SubmitButton, ErrorSummary, Warning}
+@import views.html.components.{Heading, InputText, SubmitButton, ErrorSummary, InsetText}
 
 @this(
         appConfig: FrontendAppConfig,
@@ -26,7 +26,7 @@
         inputText: InputText,
         submitButton: SubmitButton,
         errorSummary: ErrorSummary,
-        warning: Warning
+        insetText: InsetText
 )
 
 @(form: Form[_], declarationEmailEnabled: Boolean)(implicit request: Request[_], messages: Messages)
@@ -42,9 +42,9 @@
 
         @heading("declaration.heading")
 
-        <fieldset>
+        <fieldset class="govuk-fieldset">
 
-            <legend class="govuk-visually-hidden">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-visually-hidden">
                 @messages("declaration.subheading.personal")
             </legend>
 
@@ -82,7 +82,7 @@
             )
         }
 
-        @warning("declaration.individual")
+        @insetText("declaration.individual.warning")
 
         @submitButton(Some("site.confirm-send"))
     }
