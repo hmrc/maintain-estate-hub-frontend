@@ -33,3 +33,7 @@ a {
 h2 {
     @extend .govuk-heading-m;
 }
+
+h3 {
+    @extend .govuk-heading-s;
+}
