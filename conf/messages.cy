@@ -1,4 +1,4 @@
-service.name=Cofrestru a Chynnal Ystâd
+service.name=Cofrestru Ystâd a’i Chynnal
 date.day=Diwrnod
 date.month=Mis
 date.year=Blwyddyn
