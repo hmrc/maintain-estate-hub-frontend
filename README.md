@@ -1,6 +1,6 @@
 # Maintain estate hub frontend
 
-This service is responsible for navigating the user to maintain various aspects of their estate registration. It acts as the 'hub' which each journey branches off of.
+This service is responsible for navigating the user to maintain various aspects of their estate registration. It acts as the 'hub' allows the user to navigate to other areas of the service.
 
 To run locally using the micro-service provided by the service manager:
 
