@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,18 @@
 package forms.mappings
 
 import java.time.LocalDate
-
 import generators.Generators
 import org.scalacheck.Gen
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.OptionValues
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.{Form, FormError}
 
-class DateMappingsSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with Generators with OptionValues
+class DateMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with OptionValues
   with Mappings {
 
-  val form = Form(
+  private val form = Form(
     "value" -> localDate(
       requiredKey    = "error.required",
       allRequiredKey = "error.required.all",
@@ -36,14 +37,14 @@ class DateMappingsSpec extends FreeSpec with MustMatchers with ScalaCheckPropert
     )
   )
 
-  val validData = datesBetween(
+  private val validData = datesBetween(
     min = LocalDate.of(2000, 1, 1),
     max = LocalDate.of(3000, 1, 1)
   )
 
-  val invalidField: Gen[String] = Gen.alphaStr.suchThat(_.nonEmpty)
+  private val invalidField: Gen[String] = Gen.alphaStr.suchThat(_.nonEmpty)
 
-  val missingField: Gen[Option[String]] = Gen.option(Gen.const(""))
+  private val missingField: Gen[Option[String]] = Gen.option(Gen.const(""))
 
   "bind valid data" in {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@
 package connectors
 
 import java.time.LocalDate
-
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import generators.Generators
 import models.http._
 import models.{AddressType, NameType}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{Inside, MustMatchers, OptionValues}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.{Inside, OptionValues}
 import org.scalatestplus.play.PlaySpec
 import play.api.http.Status
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.io.Source
 
-class EstatesConnectorSpec extends PlaySpec with MustMatchers
+class EstatesConnectorSpec extends PlaySpec with Matchers
   with OptionValues with Generators with SpecBase with WireMockHelper with ScalaFutures with Inside {
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()

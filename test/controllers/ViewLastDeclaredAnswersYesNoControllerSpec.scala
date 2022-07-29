@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
   val formProvider = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("viewLastDeclaredYesNo")
   val utr: String = "utr"
-  lazy val yesNoRoute: String = routes.ViewLastDeclaredAnswersYesNoController.onPageLoad().url
+  lazy val yesNoRoute: String = routes.ViewLastDeclaredAnswersYesNoController.onPageLoad.url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .set(UTRPage, utr).success.value
@@ -97,7 +97,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.print.routes.LastDeclaredAnswersController.onPageLoad.url
 
       application.stop()
     }
@@ -157,7 +157,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
 
       application.stop()
     }
