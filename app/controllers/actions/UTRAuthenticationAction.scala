@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
       }
     } getOrElse {
       logger.info(s"[Session ID: ${Session.id(hc)}] cannot authenticate user due to no cached utr")
-      Future.successful(Left(Redirect(controllers.routes.IndexController.onPageLoad())))
+      Future.successful(Left(Redirect(controllers.routes.IndexController.onPageLoad)))
     }
 
   }
@@ -57,5 +57,4 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
 trait UTRAuthenticationAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
 
   def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]]
-
 }

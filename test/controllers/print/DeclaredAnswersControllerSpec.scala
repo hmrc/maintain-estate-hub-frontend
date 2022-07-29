@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ class DeclaredAnswersControllerSpec extends SpecBase {
 
         when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
-        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad.url)
 
         val result = route(application, request).value
 
@@ -105,7 +105,7 @@ class DeclaredAnswersControllerSpec extends SpecBase {
 
         when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
-        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad.url)
 
         val result = route(application, request).value
 
@@ -132,7 +132,7 @@ class DeclaredAnswersControllerSpec extends SpecBase {
 
         when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(SorryThereHasBeenAProblem))
 
-        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad.url)
 
         val result = route(application, request).value
 

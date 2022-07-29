@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,13 @@ import utils.Session
 
 import scala.language.implicitConversions
 
-case class EstateLock(utr:String, managedByAgent: Boolean, estateLocked:Boolean)
+case class EstateLock(utr: String, managedByAgent: Boolean, estateLocked: Boolean)
 
 object EstateLock extends Logging {
 
-  implicit val formats : OFormat[EstateLock] = Json.format[EstateLock]
+  implicit val formats: OFormat[EstateLock] = Json.format[EstateLock]
 
-  implicit def httpReads(utr : String)(implicit hc: HeaderCarrier): HttpReads[Option[EstateLock]] =
+  implicit def httpReads(utr: String)(implicit hc: HeaderCarrier): HttpReads[Option[EstateLock]] =
     (method: String, url: String, response: HttpResponse) => {
       logger.info(s"[Session ID: ${Session.id(hc)}] response status received from estates store api: ${response.status}")
 
@@ -49,6 +49,4 @@ object EstateLock extends Logging {
           None
       }
     }
-
-
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ class EstateStatusController @Inject()(
     connector.getEstate(utr) flatMap {
       case Processed(estate, _) =>
         logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr estate is in a processed state")
-        Future.successful(Redirect(controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad()))
+        Future.successful(Redirect(controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad))
       case Processing =>
         logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr unable to retrieve estate due it being in processing")
         Future.successful(Redirect(controllers.routes.EstateStatusController.inProcessing()))
@@ -127,7 +127,7 @@ class EstateStatusController @Inject()(
         Future.successful(Redirect(controllers.routes.EstateStatusController.problemWithService()))
     }
   }
-  
+
   private def enforceUtr()(block: String => Future[Result])(implicit request: DataRequest[AnyContent]): Future[Result] = {
     request.userAnswers.get(UTRPage) match {
       case None =>

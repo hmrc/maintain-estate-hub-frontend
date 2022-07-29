@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,13 @@ package models
 
 import generators.ModelGenerators
 import org.scalacheck.{Gen, Shrink}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.OptionValues
 import play.api.libs.json._
 
-class RichJsValueSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
+class RichJsValueSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
 
   implicit def dontShrink[A]: Shrink[A] = Shrink.shrinkAny
 

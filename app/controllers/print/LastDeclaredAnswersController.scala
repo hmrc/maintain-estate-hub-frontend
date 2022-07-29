@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,5 @@ class LastDeclaredAnswersController  @Inject()(
           logger.error(s"[Session ID: ${Session.id(hc)}] unable to render last declared answers due to ${e.getMessage}")
           Redirect(controllers.routes.EstateStatusController.problemWithService())
       }
-
   }
-
 }

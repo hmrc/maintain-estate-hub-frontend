@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ package connectors
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.http.{AuthAgentAllowed, AuthAllowed, AuthDenied, AuthInternalServerError}
-import org.scalatest.{AsyncFreeSpec, MustMatchers}
+import org.scalatest.freespec.AsyncFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -28,7 +29,7 @@ import play.api.test.DefaultAwaitTimeout
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.WireMockHelper
 
-class EstatesAuthConnectorSpec extends AsyncFreeSpec with MustMatchers with WireMockHelper with DefaultAwaitTimeout {
+class EstatesAuthConnectorSpec extends AsyncFreeSpec with Matchers with WireMockHelper with DefaultAwaitTimeout {
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
