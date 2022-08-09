@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ class MaintainThisEstateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(utr, routes.SessionExpiredController.onPageLoad().url
+        view(utr, routes.SessionExpiredController.onPageLoad.url
         )(request, messages).toString
 
       application.stop()
@@ -80,7 +80,7 @@ class MaintainThisEstateControllerSpec extends SpecBase {
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
 
       application.stop()
     }

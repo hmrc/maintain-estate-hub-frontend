@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,14 +77,14 @@ class AuthenticatedIdentifierAction @Inject()(
         authenticateOrganisation(internalId, enrolments, block)(request)
 
       case Some(_) ~ _ ~ _ =>
-        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
+        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad))
 
       case _ =>
         logger.warn(s"[Session ID: ${Session.id(hc)}] Unable to retrieve retrievals")
-        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
+        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad))
     } recover {
       case _: NoActiveSession => Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
-      case _: AuthorisationException => Redirect(controllers.routes.UnauthorisedController.onPageLoad())
+      case _: AuthorisationException => Redirect(controllers.routes.UnauthorisedController.onPageLoad)
     }
   }
 }

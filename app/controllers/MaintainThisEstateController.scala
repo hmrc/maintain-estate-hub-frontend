@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,11 +43,11 @@ class MaintainThisEstateController @Inject()(
           config.verifyIdentityForAnEstateUrl(utr)
         } else {
           //TODO - Build Information Maintaining this Estate (TRUS-2781)
-          routes.SessionExpiredController.onPageLoad().url
+          routes.SessionExpiredController.onPageLoad.url
         }
 
         Ok(view(utr, continueUrl))
-      } getOrElse Redirect(routes.SessionExpiredController.onPageLoad())
+      } getOrElse Redirect(routes.SessionExpiredController.onPageLoad)
 
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enr
 
 class IndexControllerSpec extends SpecBase {
 
-  lazy val onPageLoad: String = routes.IndexController.onPageLoad().url
+  lazy val onPageLoad: String = routes.IndexController.onPageLoad.url
 
   val utr: String = "1234567892"
 

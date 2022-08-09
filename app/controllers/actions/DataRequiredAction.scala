@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ class DataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionC
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
     request.userAnswers match {
       case None =>
-        Future.successful(Left(Redirect(routes.SessionExpiredController.onPageLoad())))
+        Future.successful(Left(Redirect(routes.SessionExpiredController.onPageLoad)))
       case Some(data) =>
         Future.successful(Right(DataRequest(request.request, data, request.user)))
     }

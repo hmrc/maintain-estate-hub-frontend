@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ class RequireAgentAddressActionSpec extends SpecBase with MockitoSugar with Scal
 
         val redirect = Future.successful(futureResult.futureValue.left.value)
 
-        redirectLocation(redirect).value mustBe controllers.routes.UnauthorisedController.onPageLoad().url
+        redirectLocation(redirect).value mustBe controllers.routes.UnauthorisedController.onPageLoad.url
       }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ class SessionTimeoutControllerSpec extends SpecBase {
         val fakeRequest: Request[AnyContent] = FakeRequest().withSession()
         val res = TestSessionTimeoutController.timeout(fakeRequest)
         status(res) mustEqual SEE_OTHER
-        redirectLocation(res).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(res).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
       }
     }
   }
