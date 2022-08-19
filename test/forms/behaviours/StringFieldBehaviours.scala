@@ -18,6 +18,7 @@ package forms.behaviours
 
 import forms.Validation
 import forms.mappings.TelephoneNumber
+import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
@@ -78,6 +79,23 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
           whenever(!TelephoneNumber.isValid(string)) {
             val result = form.bind(Map(fieldName -> string)).apply(fieldName)
             result.errors shouldEqual Seq(invalidError)
+          }
+      }
+    }
+  }
+
+  def fieldWithRegexpWithGenerator(form: Form[_],
+                                   fieldName: String,
+                                   regexp: String,
+                                   generator: Gen[String],
+                                   error: FormError): Unit = {
+
+    s"not bind strings which do not match $regexp" in {
+      forAll(generator) {
+        string =>
+          whenever(!string.matches(regexp) && string.nonEmpty) {
+            val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+            result.errors shouldEqual Seq(error)
           }
       }
     }
