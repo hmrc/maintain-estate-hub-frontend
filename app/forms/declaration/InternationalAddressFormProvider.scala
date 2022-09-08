@@ -17,7 +17,9 @@
 package forms.declaration
 
 import forms.Validation
+import forms.helpers.WhitespaceHelper._
 import forms.mappings.Mappings
+
 import javax.inject.Inject
 import models.declaration.InternationalAddress
 import play.api.data.Forms._
@@ -45,11 +47,12 @@ class InternationalAddressFormProvider @Inject() extends Mappings {
             )),
       "line3" ->
         optional(Forms.text
+          .transform(trimWhitespace, identity[String])
           .verifying(
             firstError(
               maxLength(35, "internationalAddress.error.line3.length"),
               regexp(Validation.addressLineRegex, "internationalAddress.error.line3.invalidCharacters")
-            ))),
+            ))).transform(emptyToNone, identity[Option[String]]),
       "country" ->
         text("internationalAddress.error.country.required")
           .verifying(

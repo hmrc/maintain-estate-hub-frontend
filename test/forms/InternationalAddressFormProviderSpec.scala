@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package forms.declaration
+package forms
 
-import forms.Validation
 import forms.behaviours.StringFieldBehaviours
-import models.declaration.IndividualDeclaration
-import play.api.data.{Form, FormError}
+import forms.declaration.InternationalAddressFormProvider
+import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 
-class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
+class InternationalAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val prefix: String = "declaration.error"
+  private val prefix: String = "internationalAddress.error"
 
-  private val form: Form[IndividualDeclaration] = new IndividualDeclarationFormProvider()()
+  private val form = new InternationalAddressFormProvider()()
 
-  ".firstName" must {
+  ".line1" must {
 
-    val fieldName = "firstName"
+    val fieldName = "line1"
     val requiredKey = s"$prefix.$fieldName.required"
     val lengthKey = s"$prefix.$fieldName.length"
     val maxLength = 35
@@ -38,7 +37,7 @@ class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      RegexpGen.from(Validation.nameRegex)
+      RegexpGen.from(Validation.addressLineRegex)
     )
 
     behave like fieldWithMaxLength(
@@ -61,9 +60,42 @@ class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".middleName" must {
+  ".line2" must {
 
-    val fieldName = "middleName"
+    val fieldName = "line2"
+    val requiredKey = s"$prefix.$fieldName.required"
+    val lengthKey = s"$prefix.$fieldName.length"
+    val maxLength = 35
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      RegexpGen.from(Validation.addressLineRegex)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like nonEmptyField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
+    )
+  }
+
+  ".line3" must {
+
+    val fieldName = "line3"
     val lengthKey = s"$prefix.$fieldName.length"
     val maxLength = 35
 
@@ -77,37 +109,31 @@ class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
     behave like optionalField(
       form,
       fieldName,
-      validDataGenerator = RegexpGen.from(Validation.nameRegex)
+      validDataGenerator = RegexpGen.from(Validation.addressLineRegex)
     )
 
     "bind whitespace trim values" in {
-      val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  middle  ", "lastName" -> "lastName"))
-      result.value.value.name.middleName shouldBe Some("middle")
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "  line3  ", "country" -> "country"))
+      result.value.value.line3 shouldBe Some("line3")
     }
 
     "bind whitespace blank values" in {
-      val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  ", "lastName" -> "lastName"))
-      result.value.value.name.middleName shouldBe None
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "  ", "country" -> "country"))
+      result.value.value.line3 shouldBe None
     }
 
     "bind whitespace no values" in {
-      val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "", "lastName" -> "lastName"))
-      result.value.value.name.middleName shouldBe None
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "", "country" -> "country"))
+      result.value.value.line3 shouldBe None
     }
   }
 
-  ".lastName" must {
+  ".country" must {
 
-    val fieldName = "lastName"
+    val fieldName = "country"
     val requiredKey = s"$prefix.$fieldName.required"
     val lengthKey = s"$prefix.$fieldName.length"
     val maxLength = 35
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      RegexpGen.from(Validation.nameRegex)
-    )
 
     behave like fieldWithMaxLength(
       form,
@@ -127,27 +153,6 @@ class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
     )
-  }
-
-  "email" must {
-
-    val fieldName = "email"
-
-    behave like optionalField(
-      form,
-      fieldName,
-      validDataGenerator = RegexpGen.from(Validation.emailRegex)
-    )
-
-    "bind whitespace trim values" in {
-      val result = form.bind(Map("firstName" -> "firstName", "lastName" -> "lastName", "email" -> "test@test.com"))
-      result.value.value.email shouldBe Some("test@test.com")
-    }
-
-    "bind whitespace no values" in {
-      val result = form.bind(Map("firstName" -> "firstName", "lastName" -> "lastName", "email" -> ""))
-      result.value.value.email shouldBe None
-    }
   }
 
 }
