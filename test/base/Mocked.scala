@@ -33,5 +33,5 @@ trait Mocked extends MockitoSugar {
   val fakeRepository: SessionRepository = mock[SessionRepository]
 
   when(fakeRepository.set(any())).thenReturn(Future.successful(true))
-  when(fakeRepository.resetCache(any())).thenReturn(Future.successful(None))
+  when(fakeRepository.resetCache(any())).thenReturn(Future.successful(false))
 }
