@@ -30,13 +30,4 @@ object AppDependencies {
 
   val akkaVersion = "2.6.10"
   val akkaHttpVersion = "10.1.12"
-
-  val overrides = Seq(
-    "com.typesafe.akka" %% "akka-stream_2.12"     % akkaVersion,
-    "com.typesafe.akka" %% "akka-protobuf_2.12"   % akkaVersion,
-    "com.typesafe.akka" %% "akka-slf4j_2.12"      % akkaVersion,
-    "com.typesafe.akka" %% "akka-actor_2.12"      % akkaVersion,
-    "com.typesafe.akka" %% "akka-http-core_2.12"  % akkaHttpVersion
-
-  )
 }
