@@ -88,7 +88,7 @@ class RequireAgentAddressActionSpec extends SpecBase with MockitoSugar with Scal
 
         val futureResult = action.callRefine(request)
 
-        futureResult.futureValue.right.value mustBe a[AgentRequestWithAddress[_]]
+        futureResult.futureValue.value mustBe a[AgentRequestWithAddress[_]]
       }
     }
   }

@@ -54,7 +54,9 @@ class IndexController @Inject()(
               }
               _ <- repository.set(newSessionWithUtr)
             } yield {
-              logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr organisation user is enrolled, storing UTR in user answers, checking status of estate")
+              logger.info(
+                s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr organisation user is enrolled, storing UTR in user answers, checking status of estate"
+              )
               Redirect(controllers.routes.EstateStatusController.checkStatus())
             }
         }

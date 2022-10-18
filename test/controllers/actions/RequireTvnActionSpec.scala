@@ -70,7 +70,7 @@ class RequireTvnActionSpec extends SpecBase with MockitoSugar with ScalaFutures 
 
         val futureResult = action.callRefine(request)
 
-        futureResult.futureValue.right.value mustBe a[TvnRequest[_]]
+        futureResult.futureValue.value mustBe a[TvnRequest[_]]
       }
     }
   }
