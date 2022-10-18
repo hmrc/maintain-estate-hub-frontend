@@ -91,4 +91,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration, contactFrontend
   private val minMonth: Int = configuration.get[Int]("dates.minimum.month")
   private val minYear: Int = configuration.get[Int]("dates.minimum.year")
   lazy val minDate: LocalDate = LocalDate.of(minYear, minMonth, minDay)
+
+  val cachettlInSeconds: Long = configuration.get[Long]("mongodb.timeToLiveInSeconds")
+
+  val dropIndexes: Boolean = configuration.getOptional[Boolean]("microservice.services.features.mongo.dropIndexes").getOrElse(false)
+
 }
