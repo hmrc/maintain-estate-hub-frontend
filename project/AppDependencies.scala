@@ -3,12 +3,14 @@ import sbt._
 object AppDependencies {
   import play.core.PlayVersion
 
+  val bootstrapVersion = "7.13.0"
+
   val compile = Seq(
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"             % "0.74.0",
     "uk.gov.hmrc"       %% "play-frontend-hmrc"             % "6.4.0-play-28",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"  % "1.12.0-play-28",
-    "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"     % "7.13.0",
+    "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"     % bootstrapVersion,
     "uk.gov.hmrc"       %% "domain"                         % "8.1.0-play-28"
   )
 
@@ -23,7 +25,9 @@ object AppDependencies {
     "org.scalacheck"              %% "scalacheck"               % "1.17.0",
     "com.github.tomakehurst"      % "wiremock-standalone"       % "2.27.2",
     "wolfendale"                  %% "scalacheck-gen-regexp"    % "0.1.2",
-    "com.vladsch.flexmark"        % "flexmark-all"              % "0.62.2"
+    "com.vladsch.flexmark"        % "flexmark-all"              % "0.62.2",
+    "uk.gov.hmrc"                 %% "bootstrap-test-play-28"   % bootstrapVersion
+
   ).map(_ % Test)
 
   def apply(): Seq[ModuleID] = compile ++ test
