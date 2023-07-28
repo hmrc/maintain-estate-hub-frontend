@@ -13,7 +13,7 @@
 ->         /                          prod.Routes
 
 + nocsrf
-POST       /maintain-an-estate/test-only/insert-test-user       controllers.testOnlyDoNotUseInAppConf.EnrolmentStoreStubController.insertTestUserIntoEnrolmentStore
+POST       /maintain-an-estate/test-only/insert-test-user       controllers.testOnlyDoNotUseInAppConf.EnrolmentStoreStubController.insertTestUserIntoEnrolmentStore()
 
 + nocsrf
-DELETE     /maintain-an-estate/test-only/test-users   controllers.testOnlyDoNotUseInAppConf.EnrolmentStoreStubController.flush
+DELETE     /maintain-an-estate/test-only/test-users   controllers.testOnlyDoNotUseInAppConf.EnrolmentStoreStubController.flush()

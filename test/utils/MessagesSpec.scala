@@ -111,9 +111,9 @@ class MessagesSpec extends SpecBase {
 
   private def isInteger(s: String): Boolean = s forall Character.isDigit
 
-  private def toArgArray(msg: String) = msg.split("\\{|\\}").map(_.trim()).filter(isInteger(_))
+  private def toArgArray(msg: String) = msg.split("\\{|\\}").map(_.trim()).filter(isInteger)
 
-  private def countArgs(msg: String) = toArgArray(msg).size
+  private def countArgs(msg: String) = toArgArray(msg).length
 
   private def listArgs(msg: String) = toArgArray(msg).mkString
 
@@ -161,9 +161,5 @@ class MessagesSpec extends SpecBase {
 
     test1 ++ test2
   }
-
-  private val commonProvidedKeys = Set(
-    "this.section.is"
-  )
 
 }

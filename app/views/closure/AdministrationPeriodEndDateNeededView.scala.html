@@ -38,7 +38,7 @@
 
     <p>@messages("closure.administrationPeriodEndDateNeeded.p") @link(appConfig.estatesHelplineUrl, "guidance", "closure.administrationPeriodEndDateNeeded.link", true).</p>
 
-    @formHelper(action = AdministrationPeriodEndDateNeededController.cleanupAndRedirect(), 'autoComplete -> "off") {
+    @formHelper(action = AdministrationPeriodEndDateNeededController.cleanupAndRedirect(), Symbol("autoComplete") -> "off") {
         @submitButton()
     }
 }

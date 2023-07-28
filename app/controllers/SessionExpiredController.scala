@@ -29,11 +29,11 @@ class SessionExpiredController @Inject()(
                                           view: SessionExpiredView
                                         ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
+  def onPageLoad(): Action[AnyContent] = Action { implicit request =>
     Ok(view())
   }
 
-  def onSubmit: Action[AnyContent] = Action {
+  def onSubmit(): Action[AnyContent] = Action {
     Redirect(appConfig.loginUrl)
   }
 

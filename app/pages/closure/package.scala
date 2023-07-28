@@ -19,5 +19,5 @@ package pages
 import play.api.libs.json.JsPath
 
 package object closure {
-  val basePath: JsPath = JsPath \ 'closure
+  val basePath: JsPath = JsPath \ "closure"
 }

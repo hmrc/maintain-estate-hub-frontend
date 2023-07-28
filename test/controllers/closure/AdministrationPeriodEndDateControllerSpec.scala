@@ -22,7 +22,7 @@ import base.SpecBase
 import connectors.EstatesConnector
 import forms.DateFormProvider
 import models.UserAnswers
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.UTRPage
 import pages.closure.AdministrationPeriodEndDatePage
@@ -154,7 +154,7 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

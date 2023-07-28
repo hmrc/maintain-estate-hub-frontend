@@ -21,7 +21,7 @@ import connectors.EstatesConnector
 import models.NameType
 import models.declaration.{AgentDeclaration, IndividualDeclaration, InternalServerError, TVN, UKAddress}
 import models.requests.{AgentRequestWithAddress, AgentUser}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{EitherValues, RecoverMethods}

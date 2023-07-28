@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import forms.YesNoFormProvider
 import models.UserAnswers
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{UTRPage, ViewLastDeclaredAnswersYesNoPage}
@@ -36,7 +36,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
   val formProvider = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("viewLastDeclaredYesNo")
   val utr: String = "utr"
-  lazy val yesNoRoute: String = routes.ViewLastDeclaredAnswersYesNoController.onPageLoad.url
+  lazy val yesNoRoute: String = routes.ViewLastDeclaredAnswersYesNoController.onPageLoad().url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .set(UTRPage, utr).success.value
@@ -97,7 +97,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.print.routes.LastDeclaredAnswersController.onPageLoad.url
+      redirectLocation(result).value mustEqual controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url
 
       application.stop()
     }
@@ -157,7 +157,7 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

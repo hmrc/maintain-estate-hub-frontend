@@ -25,7 +25,7 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enr
 
 class IndexControllerSpec extends SpecBase {
 
-  lazy val onPageLoad: String = routes.IndexController.onPageLoad.url
+  lazy val onPageLoad: String = routes.IndexController.onPageLoad().url
 
   val utr: String = "1234567892"
 

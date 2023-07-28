@@ -64,7 +64,7 @@ class EnrolmentStoreStubController @Inject()(
       connector.insert(request.body).map(_ => Ok)
   }
 
-  def flush: Action[AnyContent] = Action.async {
+  def flush(): Action[AnyContent] = Action.async {
     implicit request =>
       logger.info(s"[Session ID: ${Session.id(hc)}] flushing test users from enrolment-store")
       connector.delete().map(_ => Ok)

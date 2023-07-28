@@ -22,7 +22,7 @@ import connectors.EstatesConnector
 import forms.WhatIsNextFormProvider
 import models.WhatIsNext
 import models.WhatIsNext.CloseEstate
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when, times}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{UTRPage, WhatIsNextPage}
@@ -103,7 +103,7 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
+      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

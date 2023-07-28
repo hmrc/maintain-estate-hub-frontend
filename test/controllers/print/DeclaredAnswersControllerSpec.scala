@@ -22,7 +22,7 @@ import base.{FakeData, SpecBase}
 import connectors.EstatesConnector
 import models.PersonalRepresentativeType
 import models.http.{Processed, SorryThereHasBeenAProblem}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.{SubmissionDatePage, TVNPage}
 import play.api.inject.bind
@@ -69,7 +69,7 @@ class DeclaredAnswersControllerSpec extends SpecBase {
 
         when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
-        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad.url)
+        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -105,7 +105,7 @@ class DeclaredAnswersControllerSpec extends SpecBase {
 
         when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
-        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad.url)
+        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -132,7 +132,7 @@ class DeclaredAnswersControllerSpec extends SpecBase {
 
         when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(SorryThereHasBeenAProblem))
 
-        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad.url)
+        val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
 
         val result = route(application, request).value
 

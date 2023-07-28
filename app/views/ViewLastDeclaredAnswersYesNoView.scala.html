@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = ViewLastDeclaredAnswersYesNoController.onSubmit, 'autoComplete -> "off") {
+    @formHelper(action = ViewLastDeclaredAnswersYesNoController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         <span class="govuk-caption-xl">@messages("viewLastDeclaredYesNo.subHeading", utr)</span>
 

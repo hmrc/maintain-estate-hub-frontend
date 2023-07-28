@@ -23,7 +23,7 @@ import connectors.EstatesConnector
 import models.http.Processed
 import models.requests.AgentUser
 import models.{PersonalRepresentativeType, UserAnswers}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.{SubmissionDatePage, TVNPage}
 import play.api.inject.bind

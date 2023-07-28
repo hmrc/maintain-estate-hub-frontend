@@ -46,7 +46,7 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
       }
     } getOrElse {
       logger.info(s"[Session ID: ${Session.id(hc)}] cannot authenticate user due to no cached utr")
-      Future.successful(Left(Redirect(controllers.routes.IndexController.onPageLoad)))
+      Future.successful(Left(Redirect(controllers.routes.IndexController.onPageLoad())))
     }
 
   }

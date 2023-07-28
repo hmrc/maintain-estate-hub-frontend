@@ -17,7 +17,7 @@
 package base
 
 import connectors.{EstatesConnector, EstatesStoreConnector}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import repositories.SessionRepository
