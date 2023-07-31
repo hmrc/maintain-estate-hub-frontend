@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = AdministrationPeriodEndDateController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = AdministrationPeriodEndDateController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

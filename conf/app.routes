@@ -4,16 +4,16 @@
 
 ->         /closure                                     closure.Routes
 
-GET        /                                            controllers.IndexController.onPageLoad
+GET        /                                            controllers.IndexController.onPageLoad()
 
 GET        /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET        /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
-POST       /this-service-has-been-reset                 controllers.SessionExpiredController.onSubmit
+GET        /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad()
+POST       /this-service-has-been-reset                 controllers.SessionExpiredController.onSubmit()
 
-GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
+GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad()
 
 GET        /keep-alive                                  controllers.SessionTimeoutController.keepAlive
 
@@ -40,12 +40,12 @@ POST       /unique-tax-reference-number                 controllers.UTRControlle
 GET        /maintain-this-estate                        controllers.MaintainThisEstateController.onPageLoad(needsIv:Boolean=true)
 GET        /continue-maintaining-this-estate            controllers.MaintainThisEstateController.onPageLoad(needsIv:Boolean=false)
 
-GET        /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onPageLoad
-POST       /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onSubmit
+GET        /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onPageLoad()
+POST       /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onSubmit()
 
 
-GET        /last-declared                               controllers.print.LastDeclaredAnswersController.onPageLoad
-GET        /declared                                    controllers.print.DeclaredAnswersController.onPageLoad
+GET        /last-declared                               controllers.print.LastDeclaredAnswersController.onPageLoad()
+GET        /declared                                    controllers.print.DeclaredAnswersController.onPageLoad()
 
 GET        /declare-what-changed                        controllers.WhatIsNextController.onPageLoad()
 POST       /declare-what-changed                        controllers.WhatIsNextController.onSubmit()

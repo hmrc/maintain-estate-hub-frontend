@@ -27,7 +27,7 @@ import org.scalatestplus.play.guice._
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
-import play.api.mvc.PlayBodyParsers
+import play.api.mvc.{AnyContentAsEmpty, PlayBodyParsers}
 import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.AffinityGroup
@@ -47,9 +47,9 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
 
   def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
 
-  def fakeRequest = FakeRequest("", "")
+  def fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 
-  implicit def executionContext = injector.instanceOf[ExecutionContext]
+  implicit def executionContext: ExecutionContext = injector.instanceOf[ExecutionContext]
 
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 

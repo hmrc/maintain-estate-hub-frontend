@@ -43,11 +43,11 @@ class MaintainThisEstateController @Inject()(
           config.verifyIdentityForAnEstateUrl(utr)
         } else {
           //TODO - Build Information Maintaining this Estate (TRUS-2781)
-          routes.SessionExpiredController.onPageLoad.url
+          routes.SessionExpiredController.onPageLoad().url
         }
 
         Ok(view(utr, continueUrl))
-      } getOrElse Redirect(routes.SessionExpiredController.onPageLoad)
+      } getOrElse Redirect(routes.SessionExpiredController.onPageLoad())
 
   }
 

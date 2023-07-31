@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import config.FrontendAppConfig
 import models.FakeUser
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import play.api.Application
 import play.api.mvc.Results.Redirect
@@ -136,7 +136,7 @@ class IdentifierActionSpec extends SpecBase {
         val result = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad.url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad().url)
 
         application.stop()
       }
@@ -197,7 +197,7 @@ class IdentifierActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad.url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad().url)
         application.stop()
       }
     }
@@ -217,7 +217,7 @@ class IdentifierActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad.url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad().url)
         application.stop()
       }
     }
@@ -237,7 +237,7 @@ class IdentifierActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad.url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad().url)
         application.stop()
       }
     }
@@ -257,7 +257,7 @@ class IdentifierActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad.url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad().url)
         application.stop()
       }
     }
@@ -277,7 +277,7 @@ class IdentifierActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad.url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad().url)
         application.stop()
       }
     }

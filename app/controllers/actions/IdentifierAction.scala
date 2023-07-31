@@ -77,14 +77,14 @@ class AuthenticatedIdentifierAction @Inject()(
         authenticateOrganisation(internalId, enrolments, block)(request)
 
       case Some(_) ~ _ ~ _ =>
-        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad))
+        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
 
       case _ =>
         logger.warn(s"[Session ID: ${Session.id(hc)}] Unable to retrieve retrievals")
-        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad))
+        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     } recover {
       case _: NoActiveSession => Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
-      case _: AuthorisationException => Redirect(controllers.routes.UnauthorisedController.onPageLoad)
+      case _: AuthorisationException => Redirect(controllers.routes.UnauthorisedController.onPageLoad())
     }
   }
 }

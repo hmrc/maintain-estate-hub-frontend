@@ -38,7 +38,7 @@ class RequireAgentAddressActionImpl @Inject()(implicit val executionContext: Exe
             Future.successful(Left(Redirect(routes.EstateStatusController.problemWithService())))
         }
       case _ =>
-        Future.successful(Left(Redirect(routes.UnauthorisedController.onPageLoad)))
+        Future.successful(Left(Redirect(routes.UnauthorisedController.onPageLoad())))
     }
   }
 }

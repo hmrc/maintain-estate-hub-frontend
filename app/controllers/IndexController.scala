@@ -35,7 +35,7 @@ class IndexController @Inject()(
                                  repository: SessionRepository
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  def onPageLoad: Action[AnyContent] = actions.authWithSession.async {
+  def onPageLoad(): Action[AnyContent] = actions.authWithSession.async {
     implicit request =>
 
       request.user.enrolments.enrolments

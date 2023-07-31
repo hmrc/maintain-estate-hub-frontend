@@ -74,7 +74,7 @@ class AnswersFormatters @Inject()(languageUtils: LanguageUtils)
   }
 
   private def country(code: String)(implicit messages: Messages): Html =
-    HtmlFormat.escape(countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse(""))
+    HtmlFormat.escape(countryOptions.options().find(_.value.equals(code)).map(_.label).getOrElse(""))
 
   def utr(answer: String): Html = HtmlFormat.escape(answer)
 

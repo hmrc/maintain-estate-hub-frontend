@@ -21,7 +21,7 @@ import connectors.{EstatesConnector, EstatesStoreConnector}
 import models.http._
 import models.requests.{AgentUser, OrganisationUser}
 import models.{EstateLock, GetEstate, UserAnswers}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import pages.UTRPage
@@ -331,7 +331,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
         val json: JsValue = Json.parse(payload)
 
         val estate: GetEstate = json.transform(
-          (JsPath \ 'getEstate).json.pick
+          (JsPath \ "getEstate").json.pick
         ).get.as[GetEstate]
 
         override def request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EstateStatusController.checkStatus().url)
@@ -348,7 +348,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad.url
+        redirectLocation(result).value mustEqual controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad().url
 
         application.stop()
       }
@@ -362,7 +362,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.UTRController.onPageLoad.url
+      redirectLocation(result).value mustEqual controllers.routes.UTRController.onPageLoad().url
 
       application.stop()
     }

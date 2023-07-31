@@ -70,7 +70,7 @@ class RequireAgentAddressActionSpec extends SpecBase with MockitoSugar with Scal
 
         val redirect = Future.successful(futureResult.futureValue.left.value)
 
-        redirectLocation(redirect).value mustBe controllers.routes.UnauthorisedController.onPageLoad.url
+        redirectLocation(redirect).value mustBe controllers.routes.UnauthorisedController.onPageLoad().url
       }
     }
 

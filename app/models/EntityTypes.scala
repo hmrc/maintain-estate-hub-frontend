@@ -72,12 +72,12 @@ object EstateWillType {
   implicit val writes: Writes[EstateWillType] = Json.writes[EstateWillType]
 
   implicit val reads: Reads[EstateWillType] =
-    ((__ \ 'name).read[NameType] and
-      (__ \ 'dateOfBirth).readNullable[LocalDate] and
-      (__ \ 'dateOfDeath).read[LocalDate] and
-      (__ \ 'identification).readNullable[IdentificationType] and
-      (__ \ 'lineNo).read[String] and
-      (__ \ 'bpMatchStatus).readNullable[String] and
+    ((__ \ "name").read[NameType] and
+      (__ \ "dateOfBirth").readNullable[LocalDate] and
+      (__ \ "dateOfDeath").read[LocalDate] and
+      (__ \ "identification").readNullable[IdentificationType] and
+      (__ \ "lineNo").read[String] and
+      (__ \ "bpMatchStatus").readNullable[String] and
       (__ \ "entityStart").read[LocalDate]).tupled.map{
 
       case (name, dob, dod, Some(identification), lineNo, bpMatchStatus, entityStart) =>

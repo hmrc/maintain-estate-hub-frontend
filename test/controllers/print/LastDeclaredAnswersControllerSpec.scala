@@ -20,7 +20,7 @@ import base.{FakeData, SpecBase}
 import connectors.EstatesConnector
 import models.PersonalRepresentativeType
 import models.http.{Processed, SorryThereHasBeenAProblem}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -60,7 +60,7 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
 
       when(mockEstatesConnector.getEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
-      val request = FakeRequest(GET, controllers.print.routes.LastDeclaredAnswersController.onPageLoad.url)
+      val request = FakeRequest(GET, controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url)
 
       val result = route(application, request).value
 
@@ -84,7 +84,7 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
 
       when(mockEstatesConnector.getEstate(any())(any(), any())).thenReturn(Future.successful(SorryThereHasBeenAProblem))
 
-      val request = FakeRequest(GET, controllers.print.routes.LastDeclaredAnswersController.onPageLoad.url)
+      val request = FakeRequest(GET, controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url)
 
       val result = route(application, request).value
 

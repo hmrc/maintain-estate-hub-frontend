@@ -65,7 +65,7 @@ class MaintainThisEstateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(utr, routes.SessionExpiredController.onPageLoad.url
+        view(utr, routes.SessionExpiredController.onPageLoad().url
         )(request, messages).toString
 
       application.stop()
@@ -80,7 +80,7 @@ class MaintainThisEstateControllerSpec extends SpecBase {
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
+      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

@@ -35,4 +35,4 @@ bin
 /*.ipr
 /.classpath
 *.iws
-.bsp/sbt.json
+.bsp

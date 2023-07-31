@@ -67,7 +67,7 @@ class ViewLastDeclaredAnswersYesNoController @Inject()(
               _ <- repository.set(updatedAnswers)
             } yield {
               if (value) {
-                Redirect(controllers.print.routes.LastDeclaredAnswersController.onPageLoad)
+                Redirect(controllers.print.routes.LastDeclaredAnswersController.onPageLoad())
               } else {
                 Redirect(controllers.routes.WhatIsNextController.onPageLoad())
               }
