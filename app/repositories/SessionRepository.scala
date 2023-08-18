@@ -16,11 +16,10 @@
 
 package repositories
 
-import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
-
 import com.google.inject.ImplementedBy
 import config.FrontendAppConfig
+
 import javax.inject.{Inject, Singleton}
 import models.UserAnswers
 import org.mongodb.scala.model.{FindOneAndUpdateOptions, IndexModel, IndexOptions, Indexes, Updates}
@@ -30,6 +29,7 @@ import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import org.mongodb.scala.model.ReplaceOptions
 
+import java.time.Instant
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -57,7 +57,7 @@ class DefaultSessionRepository @Inject()( val mongo: MongoComponent,
 
     val selector = equal("internalId", id)
 
-    val modifier = Updates.set("updatedAt", LocalDateTime.now())
+    val modifier = Updates.set("updatedAt", Instant.now())
 
     val updateOption = new FindOneAndUpdateOptions().upsert(false)
 
@@ -66,11 +66,10 @@ class DefaultSessionRepository @Inject()( val mongo: MongoComponent,
   }
 
   def set(userAnswers: UserAnswers): Future[Boolean] = {
-
     val selector = equal("internalId", userAnswers.id)
+    val updated = userAnswers.copy(lastUpdated = Instant.now)
 
-    collection.replaceOne(selector, userAnswers.copy(lastUpdated = LocalDateTime.now), ReplaceOptions().upsert(true))
-      .head()
+    collection.replaceOne(selector, updated, ReplaceOptions().upsert(true)).head()
       .map(_.wasAcknowledged())
   }
 
