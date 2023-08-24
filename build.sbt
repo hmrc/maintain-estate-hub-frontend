@@ -47,8 +47,7 @@ lazy val root = (project in file("."))
           "javascripts/maintainestatehubfrontend.js",
           "javascripts/libraries/location-autocomplete.min.js",
           "javascripts/autocomplete.js",
-          "javascripts/iebacklink.js",
-          "javascripts/print.js"
+          "javascripts/iebacklink.js"
         ))
     ),
     // prevent removal of unused code which generates warning errors due to use of third-party libs

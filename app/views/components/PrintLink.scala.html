@@ -14,21 +14,19 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import views.html.helper.CSPNonce
 
-@this(govukButton : GovukButton)
+@this()
 
-@(
-   messageKey: String = "site.continue",
-   isStartButton: Boolean = false,
-   attributes: Map[String, String] = Map.empty,
-   href: Option[String] = None
-)(implicit messages: Messages)
+@(messageKey: String, id: String, isButton: Boolean = false)(implicit messages: Messages, request: RequestHeader)
 
-@govukButton(Button(
-   isStartButton = isStartButton,
-   href = href,
-   content = Text(messages(messageKey)),
-   classes = "",
-   attributes = attributes
-))
+<a id=@id href="#"
+ @if(isButton) {
+  class="govuk-button govuk-button--secondary print-hidden"
+  } else {
+  class="govuk-link"
+ }
+>@messages(messageKey)</a>
+
+<script @{CSPNonce.attr}>document.getElementById("@id").addEventListener("click", () => window.print());</script>
+

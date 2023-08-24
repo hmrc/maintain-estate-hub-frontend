@@ -16,14 +16,15 @@
 
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 @import utils.SectionFormatter.formatAnswerSection
-@import views.html.components.{Heading, Button}
+@import views.html.components.{Heading, Button, PrintLink}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     heading: Heading,
     govukSummaryList: GovukSummaryList,
-    button: Button
+    button: Button,
+    printLink: PrintLink
 )
 
 @(personalRepresentative: Seq[AnswerSection], estateNameAndDeceasedPerson: Seq[AnswerSection])(implicit request: Request[_], messages: Messages)
@@ -39,15 +40,11 @@
         @button(
             messageKey = "site.button.continue.maintaining",
             attributes = Map("id"->"continue"),
-            isPrintButton = false,
             href = Some(controllers.routes.WhatIsNextController.onPageLoad().url)
         )
     </div>
     <div class="section">
-        @button(
-            messageKey = "site.print-or-save",
-            isPrintButton = true
-        )
+        @printLink("site.print-or-save", "print", isButton = true)
     </div>
 
     @for(section <- personalRepresentative){
