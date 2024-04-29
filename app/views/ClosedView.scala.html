@@ -38,9 +38,9 @@
         captionParam = Some(utr)
     )
 
-    <p>@messages("closed.p1.beforeLink") @link(config.estatesHelplineUrl, "guidance", "closed.p1.link", true). @messages("closed.p1.afterLink")</p>
+    <p>@messages("closed.p1.beforeLink") @link(config.estatesHelplineUrl, "guidance", "closed.p1.link", openInNewWindow = true). @messages("closed.p1.afterLink")</p>
 
     @if(isAgent){
-        <p>@messages("closed.p2") @link(config.agentOverviewUrl, "agent-overview-link", "closed.p2.link", true).</p>
+        <p>@messages("closed.p2") @link(config.agentOverviewUrl, "agent-overview-link", "closed.p2.link", openInNewWindow = true).</p>
     }
 }
