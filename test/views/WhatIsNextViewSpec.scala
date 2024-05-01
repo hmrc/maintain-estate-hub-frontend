@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ class WhatIsNextViewSpec extends ViewBehaviours {
         val doc = asDocument(applyView(form))
 
         for (option <- WhatIsNext.options) {
-          assertContainsRadioButton(doc, option._1.id, "value", option._1.value, false)
+          assertContainsRadioButton(doc, option._1.id, "value", option._1.value, isChecked = false)
           if (option._2.nonEmpty) assertRadioButtonContainsHint(doc, option._1.id + "-item-hint", messages(option._2))
         }
       }
@@ -66,11 +66,11 @@ class WhatIsNextViewSpec extends ViewBehaviours {
 
           val doc = asDocument(applyView(form.bind(Map("value" -> s"${option._1.value}"))))
 
-          assertContainsRadioButton(doc, option._1.id, "value", option._1.value, true)
+          assertContainsRadioButton(doc, option._1.id, "value", option._1.value, isChecked = true)
           if (option._2.nonEmpty) assertRadioButtonContainsHint(doc, option._1.id + "-item-hint", messages(option._2))
 
           for (unselectedOption <- WhatIsNext.options.filterNot(o => o == option)) {
-            assertContainsRadioButton(doc, unselectedOption._1.id, "value", unselectedOption._1.value, false)
+            assertContainsRadioButton(doc, unselectedOption._1.id, "value", unselectedOption._1.value, isChecked = false)
             if (unselectedOption._2.nonEmpty) assertRadioButtonContainsHint(doc, unselectedOption._1.id + "-item-hint", messages(unselectedOption._2))
           }
         }
