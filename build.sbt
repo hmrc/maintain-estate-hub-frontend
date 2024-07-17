@@ -1,11 +1,9 @@
 import scoverage.ScoverageKeys
 
-ThisBuild / scalaVersion := "2.13.13"
+ThisBuild / scalaVersion := "2.13.14"
 ThisBuild / majorVersion := 0
 
-lazy val appName: String = "maintain-estate-hub-frontend"
-
-lazy val microservice = Project(appName, file("."))
+lazy val microservice = Project("maintain-estate-hub-frontend", file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(

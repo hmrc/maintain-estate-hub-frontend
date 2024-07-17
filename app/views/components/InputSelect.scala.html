@@ -36,19 +36,18 @@ selectAttribute: Map[String, String] = Map.empty
  id = field.id,
  name = field.name,
  label = Label(isPageHeading = labelAsHeading,
- classes = labelClasses.mkString(" "),
- content = Text(label)
-),
+   classes = labelClasses.mkString(" "),
+   content = Text(label)
+ ),
  hint = if(hint.isDefined) Some(Hint(content = Text(hint.get))) else None,
  items = Seq(SelectItem(value = Some(""), text = placeholder.getOrElse(""))) ++
  options.map(valueOption =>
- SelectItem(
- value = Some(valueOption.value),
- text = valueOption.label,
- selected = field.value.contains(valueOption.value)
- )
-),
- formGroupClasses = formGroupClasses.mkString(" "),
+   SelectItem(
+     value = Some(valueOption.value),
+     text = valueOption.label,
+     selected = field.value.contains(valueOption.value)
+   )),
+ classes = formGroupClasses.mkString(" "),
  attributes = selectAttribute,
  errorMessage = field.error.map(err => ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(err.message, err.args: _*))))
  )
