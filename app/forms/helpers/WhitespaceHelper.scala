@@ -21,4 +21,15 @@ object WhitespaceHelper {
   val emptyToNone: Option[String] => Option[String] = _.filter(_.nonEmpty)
   val trimWhitespace: String => String = _.trim
 
+  private val smartApostrophesOpen: Char = '‘'
+  private val smartApostrophesClose: Char = '’'
+  private val singleQuote: Char = '\''
+
+  def replaceSmartApostrophesAndTrim(input: String) : String = {
+    input.collect {
+      case char if char == smartApostrophesOpen | char == smartApostrophesClose => singleQuote
+      case char => char
+    }.trim
+  }
+
 }

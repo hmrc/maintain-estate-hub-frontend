@@ -20,6 +20,7 @@ import forms.Validation
 import play.api.data.FormError
 import play.api.data.format.Formatter
 import models.Enumerable
+import forms.helpers.WhitespaceHelper.replaceSmartApostrophesAndTrim
 
 import scala.util.control.Exception.nonFatalCatch
 
@@ -30,7 +31,7 @@ trait Formatters {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       data.get(key) match {
         case None | Some("") => Left(Seq(FormError(key, errorKey)))
-        case Some(s) => Right(s)
+        case Some(s) => Right(replaceSmartApostrophesAndTrim(s))
       }
 
     override def unbind(key: String, value: String): Map[String, String] =

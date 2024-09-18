@@ -39,6 +39,9 @@ object MappingsSpec {
 
 class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mappings {
 
+  private val smartApostrophesOpen: Char = '‘'
+  private val smartApostrophesClose: Char = '’'
+
   import MappingsSpec._
 
   "text" must {
@@ -51,6 +54,14 @@ class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mapp
     "bind a valid string" in {
       val result = testForm.bind(Map("value" -> "foobar"))
       result.get mustEqual "foobar"
+    }
+
+    "remove leading and trialing whitespace, and replace smart apostrophes with single quotes" in {
+      val result = testForm.bind(
+        Map("value" -> s"   Peter O${smartApostrophesOpen}Hanraha${smartApostrophesClose}hanrahan    ")
+      )
+
+      result.get mustEqual "Peter O'Hanraha'hanrahan"
     }
 
     "not bind an empty string" in {
