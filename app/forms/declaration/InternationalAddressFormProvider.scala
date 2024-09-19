@@ -17,7 +17,7 @@
 package forms.declaration
 
 import forms.Validation
-import forms.helpers.WhitespaceHelper._
+import forms.helpers.FormHelper._
 import forms.mappings.Mappings
 
 import javax.inject.Inject

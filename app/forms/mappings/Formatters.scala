@@ -20,7 +20,7 @@ import forms.Validation
 import play.api.data.FormError
 import play.api.data.format.Formatter
 import models.Enumerable
-import forms.helpers.WhitespaceHelper.replaceSmartApostrophesAndTrim
+import forms.helpers.FormHelper.replaceSmartApostrophesAndTrim
 
 import scala.util.control.Exception.nonFatalCatch
 

@@ -17,7 +17,7 @@
 package forms.declaration
 
 import forms.Validation
-import forms.helpers.WhitespaceHelper._
+import forms.helpers.FormHelper._
 import models.declaration.AgentDeclaration
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional}
