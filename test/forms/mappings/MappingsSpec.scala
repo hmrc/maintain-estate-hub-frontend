@@ -39,9 +39,6 @@ object MappingsSpec {
 
 class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mappings {
 
-  private val smartApostrophesOpen: Char = '‘'
-  private val smartApostrophesClose: Char = '’'
-
   import MappingsSpec._
 
   "text" must {
@@ -57,6 +54,9 @@ class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mapp
     }
 
     "remove leading and trialing whitespace, and replace smart apostrophes with single quotes" in {
+      val smartApostrophesOpen = '‘'
+      val smartApostrophesClose = '’'
+
       val result = testForm.bind(
         Map("value" -> s"   Peter O${smartApostrophesOpen}Hanraha${smartApostrophesClose}hanrahan    ")
       )

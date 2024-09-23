@@ -25,10 +25,10 @@ object FormHelper {
   private val singleQuote: Char = '\''
 
   def replaceSmartApostrophesAndTrim(input: String) : String = {
-    input.collect {
+    input.trim.collect {
       case char if char == smartApostrophesOpen | char == smartApostrophesClose => singleQuote
       case char => char
-    }.trim
+    }
   }
 
 }
