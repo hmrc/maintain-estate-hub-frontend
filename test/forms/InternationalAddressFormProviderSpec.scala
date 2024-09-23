@@ -18,6 +18,7 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import forms.declaration.InternationalAddressFormProvider
+import models.declaration.InternationalAddress
 import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 
@@ -125,6 +126,21 @@ class InternationalAddressFormProviderSpec extends StringFieldBehaviours {
     "bind whitespace no values" in {
       val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "", "country" -> "country"))
       result.value.value.line3 shouldBe None
+    }
+  }
+
+  "all lines excluding country" must {
+    "bind whitespace, trim text, and replace smart apostrophes with single quotes" in {
+      val smartApostrophesOpen= '‘'
+      val smartApostrophesClose= '’'
+
+      val testAddressLine =  s"   ${smartApostrophesOpen}TestAddressLine${smartApostrophesClose}  "
+
+      val result = form.bind(
+        Map("line1" -> testAddressLine, "line2" -> testAddressLine, "line3" -> testAddressLine, "country" -> "NL")
+      )
+
+      result.value.value shouldBe InternationalAddress("'TestAddressLine'", "'TestAddressLine'", Some("'TestAddressLine'"), "NL")
     }
   }
 

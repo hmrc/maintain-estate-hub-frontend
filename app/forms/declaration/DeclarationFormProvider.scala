@@ -25,7 +25,7 @@ import play.api.data.Mapping
 
 trait DeclarationFormProvider extends Mappings {
 
-  val fullName: Mapping[NameType] = mapping(
+  val fullNameMapping: Mapping[NameType] = mapping(
 
     "firstName" -> text("declaration.error.firstName.required")
       .verifying(
@@ -36,7 +36,6 @@ trait DeclarationFormProvider extends Mappings {
         )
       ),
     "middleName" -> optional(text()
-      .transform(trimWhitespace, identity[String])
       .verifying(
         firstError(
           maxLength(35, "declaration.error.middleName.length"),

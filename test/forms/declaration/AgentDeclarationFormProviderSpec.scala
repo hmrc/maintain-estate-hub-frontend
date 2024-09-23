@@ -18,6 +18,7 @@ package forms.declaration
 
 import forms.Validation
 import forms.behaviours.StringFieldBehaviours
+import models.NameType
 import models.declaration.AgentDeclaration
 import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
@@ -163,6 +164,33 @@ class AgentDeclarationFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
     )
+  }
+
+  "first, middle, last, and agency names" must {
+    "bind whitespace, trim text, and replace smart apostrophes with single quotes" in {
+      val smartApostrophesOpen = '‘'
+      val smartApostrophesClose= '’'
+
+      val firstName = s"   ${smartApostrophesOpen}TestFirstName$smartApostrophesClose  "
+      val middleName = s"   ${smartApostrophesOpen}TestMiddleName$smartApostrophesClose  "
+      val lastName = s"   ${smartApostrophesOpen}TestLastName$smartApostrophesClose  "
+      val agencyName = s"   ${smartApostrophesOpen}TestAgencyName$smartApostrophesClose  "
+
+      val result = form.bind(
+        Map(
+          "firstName" -> firstName, "middleName" -> middleName, "lastName" -> lastName, "agencyName" -> agencyName,
+          "telephoneNumber" -> "07700900000", "crn" -> "123 456 789A", "email" -> "test@test.com "
+        ))
+
+      result.value.value shouldBe
+        AgentDeclaration(
+          name = NameType("'TestFirstName'", Some("'TestMiddleName'"), "'TestLastName'"),
+          agencyName = "'TestAgencyName'",
+          telephoneNumber = "07700900000",
+          crn = "123 456 789A",
+          email = Some("test@test.com")
+        )
+    }
   }
 
   "telephoneNumber" must {

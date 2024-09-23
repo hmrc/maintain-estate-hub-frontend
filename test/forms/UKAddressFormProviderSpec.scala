@@ -18,6 +18,7 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import forms.declaration.UKAddressFormProvider
+import models.declaration.UKAddress
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
@@ -163,6 +164,21 @@ class UKAddressFormProviderSpec extends StringFieldBehaviours {
     "bind whitespace no values" in {
       val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "line3", "line4" -> "", "postcode" -> "AB12CD"))
       result.value.value.line4 shouldBe None
+    }
+  }
+
+  "all lines excluding postcode" must {
+    "bind whitespace, trim text, and replace smart apostrophes with single quotes" in {
+      val smartApostrophesOpen = '‘'
+      val smartApostrophesClose= '’'
+
+      val testAddressLine = s"   ${smartApostrophesOpen}TestAddressLine${smartApostrophesClose}  "
+
+      val result = form.bind(
+        Map("line1" -> testAddressLine, "line2" -> testAddressLine, "line3" -> testAddressLine, "line4" -> testAddressLine, "postcode" -> "AB12CD")
+      )
+
+      result.value.value shouldBe UKAddress("'TestAddressLine'", "'TestAddressLine'", Some("'TestAddressLine'"), Some("'TestAddressLine'"), "AB12CD")
     }
   }
 

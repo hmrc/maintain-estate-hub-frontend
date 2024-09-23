@@ -18,6 +18,7 @@ package forms.declaration
 
 import forms.Validation
 import forms.behaviours.StringFieldBehaviours
+import models.NameType
 import models.declaration.IndividualDeclaration
 import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
@@ -127,6 +128,28 @@ class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
     )
+  }
+
+  "first, middle, and last names" must {
+    "bind whitespace, trim text, and replace smart apostrophes with single quotes" in {
+      val smartApostrophesOpen = '‘'
+      val smartApostrophesClose = '’'
+
+      val firstName = s"   ${smartApostrophesOpen}TestFirstName$smartApostrophesClose  "
+      val middleName = s"   ${smartApostrophesOpen}TestMiddleName$smartApostrophesClose  "
+      val lastName = s"   ${smartApostrophesOpen}TestLastName$smartApostrophesClose  "
+
+      val result = form.bind(
+        Map(
+          "firstName" -> firstName, "middleName" -> middleName, "lastName" -> lastName, "email" -> "test@test.com "
+        ))
+
+      result.value.value shouldBe
+        IndividualDeclaration(
+          name = NameType("'TestFirstName'", Some("'TestMiddleName'"), "'TestLastName'"),
+          email = Some("test@test.com")
+        )
+    }
   }
 
   "email" must {

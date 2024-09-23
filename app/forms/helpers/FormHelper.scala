@@ -19,7 +19,6 @@ package forms.helpers
 object FormHelper {
 
   val emptyToNone: Option[String] => Option[String] = _.filter(_.nonEmpty)
-  val trimWhitespace: String => String = _.trim
 
   private val smartApostrophesOpen: Char = '‘'
   private val smartApostrophesClose: Char = '’'

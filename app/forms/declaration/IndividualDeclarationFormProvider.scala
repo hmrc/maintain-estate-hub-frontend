@@ -27,9 +27,8 @@ class IndividualDeclarationFormProvider extends DeclarationFormProvider {
   def apply(): Form[models.declaration.IndividualDeclaration] =
     Form(
       mapping(
-        "" -> fullName,
+        "" -> fullNameMapping,
         "email" -> optional(text()
-          .transform(trimWhitespace, identity[String])
           .verifying(
             firstError(
               regexp(Validation.emailRegex, "declaration.error.email.invalid"))

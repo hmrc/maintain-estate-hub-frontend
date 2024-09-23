@@ -27,7 +27,7 @@ class AgentDeclarationFormProvider extends DeclarationFormProvider {
   def apply(): Form[AgentDeclaration] =
     Form(
       mapping(
-        "" -> fullName,
+        "" -> fullNameMapping,
         "agencyName" -> text("declaration.error.agencyName.required").verifying(
           firstError(
             maxLength(56, "declaration.error.agencyName.length"),
@@ -49,7 +49,6 @@ class AgentDeclarationFormProvider extends DeclarationFormProvider {
           )
         ),
         "email" -> optional(text()
-          .transform(trimWhitespace, identity[String])
           .verifying(
             firstError(
               regexp(Validation.emailRegex, "declaration.error.email.invalid"))
