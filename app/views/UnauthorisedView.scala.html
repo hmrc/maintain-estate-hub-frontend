@@ -14,11 +14,12 @@
  * limitations under the License.
  *@
 
-@import views.html.components.Heading
+@import views.html.components.{Heading, BulletList}
 
 @this(
     main_template: MainTemplate,
-    heading: Heading
+    heading: Heading,
+    bulletList: BulletList
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -28,4 +29,17 @@
     ) {
 
     @heading("unauthorised.heading")
+
+    <p>@messages("unauthorised.p1")</p>
+    <p>@messages("unauthorised.p2")</p>
+    <p>@messages("unauthorised.p3")</p>
+
+    @bulletList(
+        "unauthorised",
+        List(
+            "bullet1",
+            "bullet2"
+        )
+    )
+
 }
