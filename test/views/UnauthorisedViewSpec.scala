@@ -18,6 +18,8 @@ package views
 
 import views.behaviours.ViewBehaviours
 import views.html.UnauthorisedView
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 
 class UnauthorisedViewSpec extends ViewBehaviours {
 
@@ -28,6 +30,25 @@ class UnauthorisedViewSpec extends ViewBehaviours {
     val view = application.injector.instanceOf[UnauthorisedView]
 
     val applyView = view.apply()(fakeRequest, messages)
+
+    val doc: Document = Jsoup.parse(applyView.toString())
+
+    "contain the expected heading" in {
+      assert(doc.select("h1").text == messages("unauthorised.heading"))
+    }
+
+    "contain the correct paragraphs" in {
+      val paragraphs = doc.select("p").eachText()
+      assert(paragraphs.contains(messages("unauthorised.p1")))
+      assert(paragraphs.contains(messages("unauthorised.p2")))
+      assert(paragraphs.contains(messages("unauthorised.p3")))
+    }
+
+    "render the bullet list correctly" in {
+      val bulletPoints = doc.select("ul li").eachText()
+      assert(bulletPoints.contains(messages("unauthorised.bullet1")))
+      assert(bulletPoints.contains(messages("unauthorised.bullet2")))
+    }
 
     behave like normalPage(applyView, "unauthorised")
   }
