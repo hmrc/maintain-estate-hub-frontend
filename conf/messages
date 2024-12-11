@@ -102,10 +102,10 @@ site.error = Error:
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = There is a problem
 unauthorised.p1 = You signed in using a Government Gateway user ID for an individual.
-unauthorised.p2 = To use this service you need a Government Gateway user ID for the trust. You can set one up when you register a trust.
+unauthorised.p2 = To use this service you need a Government Gateway user ID for the estate. You can set one up when you register an estate.
 unauthorised.p3 = You need to either:
-unauthorised.bullet1 = sign out and set up a Government Gateway user ID for the trust you want to register
-unauthorised.bullet2 = sign out and sign in with the trust’s Government Gateway user ID if the trust already has one
+unauthorised.bullet1 = sign out and set up a Government Gateway user ID for the estate you want to register
+unauthorised.bullet2 = sign out and sign in with the estate’s Government Gateway user ID if the estate already has one
 
 featureNotAvailable.title = This part of the online service is not available yet
 featureNotAvailable.heading = This part of the online service is not available yet
