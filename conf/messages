@@ -46,9 +46,9 @@ site.warning = Warning
 site.confirm-send = Confirm and send
 
 #timeout dialog
-timeout.title=Your application will time out soon
-timeout.message=We will reset your application if you do not respond in
-timeout.keep-alive-button=Continue application
+timeout.title=You are about to be signed out
+timeout.message=For your security, we will sign you out in
+timeout.keep-alive-button=Stay signed in
 
 site.address.country.select = Select a country
 
