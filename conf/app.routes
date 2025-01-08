@@ -14,6 +14,7 @@ GET        /this-service-has-been-reset                 controllers.SessionExpir
 POST       /this-service-has-been-reset                 controllers.SessionExpiredController.onSubmit()
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad()
+POST       /unauthorised                                controllers.UnauthorisedController.onSubmit
 
 GET        /keep-alive                                  controllers.SessionTimeoutController.keepAlive
 
@@ -68,3 +69,6 @@ POST       /agency/address/international                controllers.declaration.
 GET        /confirmation                                controllers.confirmation.ConfirmationController.onPageLoad()
 
 GET        /there-has-been-a-problem-declaring          controllers.declaration.ProblemDeclaringController.onPageLoad()
+
+GET        /sign-out-confirmed                          controllers.SignOutConfirmationController.onPageLoad
+POST       /sign-out-confirmed                          controllers.SignOutConfirmationController.onSubmit

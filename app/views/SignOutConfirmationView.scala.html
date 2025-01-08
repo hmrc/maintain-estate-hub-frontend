@@ -15,39 +15,28 @@
  *@
 
 @import config.FrontendAppConfig
-@import views.html.components.{Heading, BulletList, SubmitButton}
+@import views.html.components.{Heading, Link}
 
 @this(
-main_template: MainTemplate,
-heading: Heading,
-bulletList: BulletList,
-appConfig: FrontendAppConfig,
-formHelper: FormWithCSRF,
-submitButton: SubmitButton
+    main_template: MainTemplate,
+    config: FrontendAppConfig,
+    heading: Heading,
+    link: Link
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("unauthorised.title"),
+    title = messages("sign_out.title"),
+    timeoutEnabled = false,
     canSignOut = false
 ) {
 
-    @heading("unauthorised.heading")
+    @heading("sign_out.heading")
 
-    <p>@messages("unauthorised.p1")</p>
-    <p>@messages("unauthorised.p2")</p>
-    <p>@messages("unauthorised.p3")</p>
+    <p>@messages("sign_out.p1")
+      @link(config.guidanceUrl, "guidanceUrl", "sign_out.link", true).
+    </p>
 
-    @bulletList(
-        "unauthorised",
-        List(
-           "bullet1",
-           "bullet2"
-        )
-    )
-
-    @formHelper(action = UnauthorisedController.onSubmit, Symbol("autoComplete") -> "off") {
-        @submitButton(Some(messages("site.sign_out")))
-    }
+    <p>@messages("sign_out.p2")</p>
 }

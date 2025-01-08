@@ -428,3 +428,9 @@ closure.administrationPeriodEndDate.error.past = The date the administration per
 closure.changePersonalRepDetailsYesNo.title = Do you want to change the personal representative details before closing?
 closure.changePersonalRepDetailsYesNo.heading = Do you want to change the personal representative details before closing?
 closure.changePersonalRepDetailsYesNo.error.required = Select yes if you want to change the personal representative details before closing
+
+sign_out.title = You have signed out
+sign_out.heading = You have signed out
+sign_out.p1 = You can
+sign_out.link = register or sign in to manage an estate
+sign_out.p2 = You can create a new Government Gateway user ID for the estate when you register the estate.

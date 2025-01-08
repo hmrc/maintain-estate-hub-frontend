@@ -16,22 +16,24 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.UnauthorisedView
+import views.html.SignOutConfirmationView
 
-class UnauthorisedController @Inject()(
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: UnauthorisedView
-                                      ) extends FrontendBaseController with I18nSupport {
+class SignOutConfirmationController @Inject()(
+                                               val controllerComponents: MessagesControllerComponents,
+                                               appConfig: FrontendAppConfig,
+                                               view: SignOutConfirmationView
+                                             ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = Action { implicit request =>
+  def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(view())
   }
 
   def onSubmit: Action[AnyContent] = Action {
-    Redirect(controllers.routes.SignOutConfirmationController.onPageLoad)
+    Redirect(appConfig.loginUrl)
   }
 }

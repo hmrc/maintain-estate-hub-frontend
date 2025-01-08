@@ -353,4 +353,9 @@ closure.administrationPeriodEndDate.error.past=Ni all y dyddiad y daeth y cyfnod
 closure.changePersonalRepDetailsYesNo.title=A ydych am newid manylion y cynrychiolydd personol cyn cau?
 closure.changePersonalRepDetailsYesNo.heading=A ydych am newid manylion y cynrychiolydd personol cyn cau?
 closure.changePersonalRepDetailsYesNo.error.required=Dewiswch ‘Iawn’ os ydych am newid manylion y cynrychiolydd personol cyn cau
+sign_out.title = Rydych wedi allgofnodi
+sign_out.heading = Rydych wedi allgofnodi
+sign_out.p1 = Gallwch
+sign_out.link = mewngofnodi i gofrestru neu reoli ystâd
+sign_out.p2 = Gallwch greu Dynodydd Defnyddiwr (ID) newydd ar gyfer Porth y Llywodraeth ar gyfer yr ystâd pan fyddwch yn cofrestru’r ystâd.
 
