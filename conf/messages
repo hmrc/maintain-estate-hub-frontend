@@ -432,5 +432,5 @@ closure.changePersonalRepDetailsYesNo.error.required = Select yes if you want to
 sign_out.title = You have signed out
 sign_out.heading = You have signed out
 sign_out.p1 = You can
-sign_out.link = register or sign in to manage an estate
+sign_out.link = sign in to register or manage an estate
 sign_out.p2 = You can create a new Government Gateway user ID for the estate when you register the estate.
