@@ -18,12 +18,12 @@ package connectors
 
 import com.google.inject.ImplementedBy
 import config.FrontendAppConfig
-import javax.inject.Inject
 import models.http.{AuthInternalServerError, EstatesAuthResponse}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[EstatesAuthConnectorImpl])
@@ -32,20 +32,28 @@ trait EstatesAuthConnector {
   def authorisedForUtr(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstatesAuthResponse]
 }
 
-class EstatesAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConfig)
+class EstatesAuthConnectorImpl @Inject()(http: HttpClientV2, config: FrontendAppConfig)
   extends EstatesAuthConnector {
 
   val baseUrl: String = config.estatesAuthUrl + "/estates-auth"
 
   override def agentIsAuthorised(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstatesAuthResponse] = {
-    http.GET[EstatesAuthResponse](s"$baseUrl/agent-authorised").recoverWith {
+    val fullUrl = s"$baseUrl/agent-authorised"
+    http.get(url"$fullUrl").execute[EstatesAuthResponse].recoverWith {
       case _ => Future.successful(AuthInternalServerError)
     }
+//    http.GET[EstatesAuthResponse](s"$baseUrl/agent-authorised").recoverWith {
+//      case _ => Future.successful(AuthInternalServerError)
+//    }
   }
 
   override def authorisedForUtr(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstatesAuthResponse] = {
-    http.GET[EstatesAuthResponse](s"$baseUrl/authorised/$utr").recoverWith {
+    val fullUrl = s"$baseUrl/authorised/$utr"
+    http.get(url"$fullUrl").execute[EstatesAuthResponse].recoverWith {
       case _ => Future.successful(AuthInternalServerError)
     }
+//    http.GET[EstatesAuthResponse](s"$baseUrl/authorised/$utr").recoverWith {
+//      case _ => Future.successful(AuthInternalServerError)
+//    }
   }
 }
