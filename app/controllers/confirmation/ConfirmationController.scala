@@ -23,7 +23,7 @@ import models.http.Processed
 import models.{EstatePerRepIndType, EstatePerRepOrgType, PersonalRepresentativeType}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Session
@@ -42,7 +42,7 @@ class ConfirmationController @Inject()(
 ) extends FrontendBaseController with I18nSupport with Logging {
 
   private def personalRepName(personalRepresentative: PersonalRepresentativeType)
-                             (implicit request: Request[_]): String = {
+                             (implicit request: RequestHeader): String = {
     personalRepresentative match {
       case PersonalRepresentativeType(Some(EstatePerRepIndType(name, _, _, _, _, _, _, _)), None) =>
         name.displayName
