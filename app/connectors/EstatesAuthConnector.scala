@@ -42,9 +42,6 @@ class EstatesAuthConnectorImpl @Inject()(http: HttpClientV2, config: FrontendApp
     http.get(url"$fullUrl").execute[EstatesAuthResponse].recoverWith {
       case _ => Future.successful(AuthInternalServerError)
     }
-//    http.GET[EstatesAuthResponse](s"$baseUrl/agent-authorised").recoverWith {
-//      case _ => Future.successful(AuthInternalServerError)
-//    }
   }
 
   override def authorisedForUtr(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstatesAuthResponse] = {
@@ -52,8 +49,5 @@ class EstatesAuthConnectorImpl @Inject()(http: HttpClientV2, config: FrontendApp
     http.get(url"$fullUrl").execute[EstatesAuthResponse].recoverWith {
       case _ => Future.successful(AuthInternalServerError)
     }
-//    http.GET[EstatesAuthResponse](s"$baseUrl/authorised/$utr").recoverWith {
-//      case _ => Future.successful(AuthInternalServerError)
-//    }
   }
 }

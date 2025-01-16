@@ -31,7 +31,6 @@ class EstatesStoreConnector @Inject()(http: HttpClientV2, config : FrontendAppCo
   def get(utr : String)
          (implicit hc : HeaderCarrier, ec : ExecutionContext): Future[Option[EstateLock]] = {
     http.get(url"$estateLockedUrl").execute[Option[EstateLock]](EstateLock.httpReads(utr), ec)
-   // http.GET[Option[EstateLock]](estateLockedUrl)(EstateLock.httpReads(utr), hc, ec)
   }
 
 }

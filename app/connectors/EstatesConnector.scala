@@ -45,25 +45,21 @@ class EstatesConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) 
   def getEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
    val fullUrl = getEstateUrl(utr)
     http.get(url"$fullUrl").execute[EstateResponse](EstateStatusReads.httpReads,ec)
-   // http.GET[EstateResponse](getEstateUrl(utr))(EstateStatusReads.httpReads, hc, ec)
   }
 
   def getTransformedEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
     val fullUrl = getTransformedEstateUrl(utr)
     http.get(url"$fullUrl").execute[EstateResponse](EstateStatusReads.httpReads,ec)
-//    http.GET[EstateResponse](getTransformedEstateUrl(utr))(EstateStatusReads.httpReads, hc, ec)
   }
 
   def declare(utr: String, payload: JsValue)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {
     val fullUrl = declareUrl(utr)
     http.post(url"$fullUrl").withBody(payload).execute[VariationResponse](VariationResponse.httpReads, ec)
-   // http.POST[JsValue, VariationResponse](declareUrl(utr), payload)(implicitly[Writes[JsValue]], VariationResponse.httpReads, hc, ec)
   }
 
   def close(utr: String, closeDate: LocalDate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val fullUrl = closeUrl(utr)
     http.post(url"$fullUrl").withBody(Json.toJson(closeDate)).execute[HttpResponse]
-    //http.POST[JsValue, HttpResponse](closeUrl(utr), Json.toJson(closeDate))
   }
 
   def getDateOfDeath(utr: String)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[LocalDate] = {
@@ -73,17 +69,11 @@ class EstatesConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) 
       case JsSuccess(dateOfDeath, _) => dateOfDeath
       case _ => config.minDate
     })
-
-//    http.GET[JsValue](getDateOfDeathUrl(utr)).map(_.validate[LocalDate] match {
-//      case JsSuccess(dateOfDeath, _) => dateOfDeath
-//      case _ => config.minDate
-//    })
   }
 
   def clearTransformations(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val fullUrl = clearTransformationsUrl(utr)
     http.post(url"$fullUrl").execute[HttpResponse]
-   // http.POSTEmpty[HttpResponse](clearTransformationsUrl(utr))
   }
 
 }
