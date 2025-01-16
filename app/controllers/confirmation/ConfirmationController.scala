@@ -42,7 +42,7 @@ class ConfirmationController @Inject()(
 ) extends FrontendBaseController with I18nSupport with Logging {
 
   private def personalRepName(personalRepresentative: PersonalRepresentativeType)
-                             (implicit request: Request[_]): String = {
+                             (implicit request: RequestHeader): String = {
     personalRepresentative match {
       case PersonalRepresentativeType(Some(EstatePerRepIndType(name, _, _, _, _, _, _, _)), None) =>
         name.displayName

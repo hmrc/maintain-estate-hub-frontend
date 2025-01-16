@@ -29,7 +29,7 @@
         insetText: InsetText
 )
 
-@(form: Form[_], declarationEmailEnabled: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], declarationEmailEnabled: Boolean)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("declaration.title")}",

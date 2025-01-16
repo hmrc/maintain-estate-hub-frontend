@@ -34,7 +34,7 @@
     administrationPeriodAndPersonalRep: Seq[AnswerSection],
     estateNameAndDeceasedPerson: Seq[AnswerSection],
     prefix: String
-)(implicit request: Request[_], messages: Messages)
+)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = messages(s"$prefix.title"),
