@@ -19,17 +19,17 @@ package controllers.testOnlyDoNotUseInAppConf
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import play.api.Logging
-import play.api.libs.json.{JsValue, Writes}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TestUserConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
+class TestUserConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) {
 
   private val dataUrl: String = s"${config.enrolmentStoreProxyUrl}/enrolment-store-stub/data"
 
@@ -45,11 +45,11 @@ class TestUserConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
     val headers = Seq(
       ("content-type", "application/json")
     )
-    http.POST[JsValue, Unit](dataUrl, user, headers)(implicitly[Writes[JsValue]], InsertedReads.httpReads, hc, ec)
+    http.post(url"$dataUrl").setHeader(headers : _*).withBody(user).execute[Unit](InsertedReads.httpReads, ec)
   }
 
   def delete()(implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
-    http.DELETE[HttpResponse](dataUrl)
+    http.delete(url"$dataUrl").execute[HttpResponse]
   }
 }
 
