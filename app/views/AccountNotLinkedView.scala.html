@@ -26,7 +26,7 @@
     button: Button
 )
 
-@(utr: String)(implicit request: Request[_], messages: Messages)
+@(utr: String)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = messages("accountNotLinked.title"),

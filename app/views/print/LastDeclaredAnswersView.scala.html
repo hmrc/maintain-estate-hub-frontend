@@ -27,7 +27,7 @@
     printLink: PrintLink
 )
 
-@(personalRepresentative: Seq[AnswerSection], estateNameAndDeceasedPerson: Seq[AnswerSection])(implicit request: Request[_], messages: Messages)
+@(personalRepresentative: Seq[AnswerSection], estateNameAndDeceasedPerson: Seq[AnswerSection])(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = messages("lastDeclared.title"),

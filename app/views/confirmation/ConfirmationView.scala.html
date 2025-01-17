@@ -26,7 +26,7 @@
     link: Link
 )
 
-@(name: String, tvn: String, isAgent: Boolean, isClosing: Boolean)(implicit request: Request[_], messages: Messages)
+@(name: String, tvn: String, isAgent: Boolean, isClosing: Boolean)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${messages("confirmationPage.title", tvn)}"
