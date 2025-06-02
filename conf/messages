@@ -28,7 +28,7 @@ index.guidance = Welcome to your new frontend. Please see the README file for a 
 session_expired.title = For your security, we signed you out
 session_expired.heading = For your security, we signed you out
 session_expired.guidance = This is because you have been inactive on the service for 15 minutes.
-session_expired.guidance.2 = You will need to sign in to continue maintaining the estate.
+session_expired.guidance.2 = You will need to sign in to continue managing the estate.
 
 site.back = Back
 site.delete = Remove
@@ -95,7 +95,7 @@ internationalAddress.error.line2.invalidCharacters = Address line 2 must only in
 internationalAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 site.print-or-save = Print or save this page
-site.button.continue.maintaining = Continue maintaining this estate
+site.button.continue.maintaining = Continue managing this estate
 
 site.error = Error:
 
@@ -127,7 +127,7 @@ utrDoesNotMatchRecords.p3.link = register here (opens in new window or tab)
 utrDoesNotMatchRecords.p4 = If you need help with the service
 utrDoesNotMatchRecords.p4.link = contact the deceased estate helpline
 utrDoesNotMatchRecords.p5 = You can
-utrDoesNotMatchRecords.p5.link = return to register and maintain an estate for a client
+utrDoesNotMatchRecords.p5.link = return to register and manage an estate for a client
 
 inProcessing.title = Sorry, you cannot access this estate
 inProcessing.heading = Sorry, you cannot access this estate
@@ -137,7 +137,7 @@ inProcessing.p2 = Try again later.
 inProcessing.p3 = If you need help with the service
 inProcessing.p3.link = contact the deceased estate helpline
 inProcessing.p4 = You can
-inProcessing.p4.link = return to register and maintain an estate for a client
+inProcessing.p4.link = return to register and manage an estate for a client
 
 closed.title = You cannot access this estate online as it has been closed
 closed.heading = You cannot access this estate online as it has been closed
@@ -146,7 +146,7 @@ closed.p1.beforeLink = If this has been done in error or you need help with the 
 closed.p1.link = contact the bereavement and deceased estate helpline to reopen the estate records (opens in a new tab)
 closed.p1.afterLink = We will contact you or the personal representative if a tax return is needed or we need more information.
 closed.p2 = You can
-closed.p2.link = return to register and maintain an estate for a client
+closed.p2.link = return to register and manage an estate for a client
 
 locked.title = We are unable to match the information you gave to the estate register
 locked.heading = We are unable to match the information you gave to the estate register
@@ -160,7 +160,7 @@ problemWithService.heading = Sorry, there is a problem with the service
 problemWithService.p1 = Try again later.
 problemWithService.p2.beforeLink = You can
 problemWithService.p2.link = contact the estates helpline (opens in a new window or tab)
-problemWithService.p2.afterLink = if you need to speak to someone about registering and maintaining an estate.
+problemWithService.p2.afterLink = if you need to speak to someone about registering and managing an estate.
 problemWithService.p3 = You can
 problemWithService.p3.link = return to register an estate for a client
 
@@ -181,13 +181,13 @@ UTR.error.invalidCharacters = Enter the estate’s Unique Taxpayer Reference in 
 UTR.linkMessage = You can
 UTR.linkText = find a lost UTR (opens in a new window or tab)
 
-maintainThisEstate.title = Maintain this estate
-maintainThisEstate.heading = Maintain this estate
+maintainThisEstate.title = Manage this estate
+maintainThisEstate.heading = Manage this estate
 maintainThisEstate.caption = This estate’s UTR: {0}
 maintainThisEstate.p1.a = The estate with the Unique Taxpayer Reference (UTR)
 maintainThisEstate.p1.b = has been linked with this account.
 maintainThisEstate.p2 = You can add and update the personal representative in this estate. Your changes will not be saved until you have declared.
-maintainThisEstate.p3 = If you need to register or maintain another estate, you will need to use another Government Gateway account.
+maintainThisEstate.p3 = If you need to register or manage another estate, you will need to use another Government Gateway account.
 maintainThisEstate.p4 = If you need help using this service
 maintainThisEstate.p4.a = contact the deceased estate helpline (opens in a new window or tab)
 
@@ -260,7 +260,7 @@ declared.p3 = The estate’s declaration was sent on {0}
 agentNotAuthorised.caption = This estate’s UTR: {0}
 agentNotAuthorised.title = You cannot access this estate
 agentNotAuthorised.heading = You cannot access this estate
-agentNotAuthorised.p1 = To access the estate, the personal representative needs to authorise your access so you can maintain the estate online on their behalf.
+agentNotAuthorised.p1 = To access the estate, the personal representative needs to authorise your access so you can manage the estate online on their behalf
 agentNotAuthorised.subheading1 = The personal representative needs to authorise your online access to the estate
 agentNotAuthorised.p2 = Through Agent Services you can create an authorisation link to send to the personal representative. The personal representative needs to use this link to authorise your access to the estate.
 agentNotAuthorised.p3 = The personal representative needs to use the same Government Gateway account used to claim the estate to approve your request.
@@ -276,12 +276,12 @@ agentNotAuthorised.bullet.4 = what level of support HMRC needs to offer the pers
 agentNotAuthorised.p7 = If you need help with this service
 agentNotAuthorised.p7.a = contact the estates helpline (opens in a new window or tab)
 agentNotAuthorised.subheading3 = The personal representative can access the estate
-agentNotAuthorised.p8 = The personal representative can still claim, view and maintain the estate using their Government Gateway account. The account they use must be an organisation account, not an individual account.
+agentNotAuthorised.p8 = The personal representative can still claim, view and manage the estate using their Government Gateway account. The account they use must be an organisation account, not an individual account.
 agentNotAuthorised.p9 = If they do not have an organisation account they can
 agentNotAuthorised.p9.a = create a Government Gateway account online (opens in a new window or tab)
 agentNotAuthorised.p10 = The personal representative needs to correctly answer questions about the estate so HMRC can prove the connection between the personal representative and the estate.
 agentNotAuthorised.p11 = You can return to the service to
-agentNotAuthorised.p11.a = register and maintain an estate for a client
+agentNotAuthorised.p11.a = register and manage an estate for a client
 
 agentNotAuthorised.old.title = Sorry, you cannot access this estate
 agentNotAuthorised.old.heading = Sorry, you cannot access this estate
@@ -293,25 +293,25 @@ agentNotAuthorised.old.p3 = The personal representative who claimed the estate m
 agentNotAuthorised.old.p4 = If you need help with this service
 agentNotAuthorised.old.p4.link = contact the deceased estate helpline
 agentNotAuthorised.old.p5 = You can
-agentNotAuthorised.old.p5.link = return to register and maintain an estate for a client.
+agentNotAuthorised.old.p5.link = return to register and manage an estate for a client.
 
 estateNotClaimed.title = Sorry, you cannot access this estate
 estateNotClaimed.heading = Sorry, you cannot access this estate
 estateNotClaimed.caption = This estate’s UTR: {0}
-estateNotClaimed.p1 = The personal representative will need to complete the next two steps so you can maintain the estate online on their behalf.
+estateNotClaimed.p1 = The personal representative will need to complete the next two steps so you can manage the estate online on their behalf.
 estateNotClaimed.b1.heading = Personal representative needs to claim the estate
 estateNotClaimed.b1.p1 = A personal representative needs to log onto the Estate Registration Service using their Government Gateway account. The account they use must be an organisation account, not an individual account.
 estateNotClaimed.b1.p2 = If they do not have an account, they can
 estateNotClaimed.b1.p2.link = register for one here (opens in a new tab)
 estateNotClaimed.b1.p3 = The personal representative needs to correctly answer questions about the estate so HMRC can prove the connection between the personal representative and the estate.
-estateNotClaimed.b1.p4 = The personal representative must complete this step before you can request authorisation from them to maintain the estate.
+estateNotClaimed.b1.p4 = The personal representative must complete this step before you can request authorisation from them to manage the estate.
 estateNotClaimed.b2.heading = Personal representative needs to authorise your online access to the estate
 estateNotClaimed.b2.p1 = Through Agent Services you can create an authorisation link to send to the personal representative.
 estateNotClaimed.b2.p2 = The personal representative needs to use the same Government Gateway organisation account used to claim the estate to approve your request.
 estateNotClaimed.b2.p3 = If you need help with the service
 estateNotClaimed.b2.p3.link = contact the deceased estate helpline
 estateNotClaimed.b2.p4 = You can
-estateNotClaimed.b2.p4.link = return to register and maintain an estate for a client
+estateNotClaimed.b2.p4.link = return to register and manage an estate for a client
 
 
 problemDeclaring.heading = Sorry, there is a problem with the service
@@ -320,7 +320,7 @@ problemDeclaring.p1 = Try again later.
 problemDeclaring.p2 = If you need need help with the service
 problemDeclaring.p3 = You can
 problemDeclaring.contact.link = contact the deceased estate helpline (opens in a new window or tab)
-problemDeclaring.return.link = return to register and maintain an estate for a client
+problemDeclaring.return.link = return to register and manage an estate for a client
 
 
 agencyRegisteredAddressUkYesNo.title = Is your agency’s registered address in the UK?
@@ -398,7 +398,7 @@ confirmationPage.paragraph2 = Your request to close this estate will be processe
 confirmationPage.paragraph3 = If this has been done in error, you can
 confirmationPage.paragraph3.link = contact the deceased estate helpline to reopen the records (opens in a new tab)
 confirmationPage.agent.you.can = You can
-confirmationPage.agent.link = return to register and maintain an estate for a client
+confirmationPage.agent.link = return to register and manage an estate for a client
 
 closure.hasAdministrationPeriodEndedYesNo.title = Has the administration period ended?
 closure.hasAdministrationPeriodEndedYesNo.heading = Has the administration period ended?
