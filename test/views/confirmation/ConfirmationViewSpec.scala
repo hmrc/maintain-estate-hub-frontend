@@ -49,7 +49,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
       val doc = asDocument(view)
       val agentOverviewLink = doc.getElementById("agent-overview")
       assertAttributeValueForElement(agentOverviewLink, "href", frontendAppConfig.agentOverviewUrl)
-      assertContainsTextForId(doc, "agent-overview", "return to register and maintain an estate for a client")
+      assertContainsTextForId(doc, "agent-overview", "return to register and manage an estate for a client")
     }
 
   }
