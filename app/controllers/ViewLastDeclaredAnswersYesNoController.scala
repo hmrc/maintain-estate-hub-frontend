@@ -76,4 +76,15 @@ class ViewLastDeclaredAnswersYesNoController @Inject()(
         )
   }
 
+  def checkForUTR(): Action[AnyContent] = actions.verifyUTR {
+    implicit request =>
+
+      val preparedForm = request.userAnswers.get(ViewLastDeclaredAnswersYesNoPage) match {
+        case None => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm, request.utr))
+  }
+
 }
