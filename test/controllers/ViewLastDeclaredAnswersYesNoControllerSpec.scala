@@ -161,5 +161,18 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
 
       application.stop()
     }
+
+    "redirect " in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request = FakeRequest(GET, routes.ViewLastDeclaredAnswersYesNoController.checkForUTR().url)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual OK
+
+      application.stop()
+    }
   }
 }
