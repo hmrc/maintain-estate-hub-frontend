@@ -62,7 +62,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to(fakeIdentifierAction),
         bind[UTRAuthenticationAction].toInstance(new FakeUTRAuthenticationAction(utr)),
-        bind[UTRAction].toInstance(new FakeUTRAction(utr)),
+        bind[UTRAction].toInstance(new FakeUTRRetrievalAction(utr)),
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
         bind[SessionRepository].toInstance(fakeRepository)
       )

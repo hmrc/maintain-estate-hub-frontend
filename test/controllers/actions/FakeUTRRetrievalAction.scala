@@ -21,7 +21,7 @@ import play.api.mvc.Result
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeUTRAction(utr: String) extends UTRAction {
+class FakeUTRRetrievalAction(utr: String) extends UTRAction {
 
   override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = Future.successful(Right(DataRequestWithUTR(request.request, request.userAnswers, request.user, utr)))
 
