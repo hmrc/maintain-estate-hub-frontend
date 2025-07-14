@@ -24,7 +24,7 @@ class Actions @Inject()(
                          identify: IdentifierAction,
                          getData: DataRetrievalAction,
                          requireData: DataRequiredAction,
-                         getUTR: UTRAction,
+                         getUTR: UTRRetrievalAction,
                          verifyUtr: UTRAuthenticationAction,
                          requireAgentAddress: RequireAgentAddressAction,
                          getTvn: RequireTvnAction
@@ -39,7 +39,7 @@ class Actions @Inject()(
   def authenticatedForUtr : ActionBuilder[DataRequestWithUTR, AnyContent] =
     authWithData andThen getUTR
 
-  def verifyUTR : ActionBuilder[DataRequestWithUTR, AnyContent] =
+  def validateUTR : ActionBuilder[DataRequestWithUTR, AnyContent] =
     authWithData andThen verifyUtr
 
   def requireAgent : ActionBuilder[AgentRequestWithAddress, AnyContent] =

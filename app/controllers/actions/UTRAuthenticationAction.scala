@@ -54,7 +54,7 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
 }
 
 @ImplementedBy(classOf[UTRAuthenticationActionImpl])
-trait UTRAuthenticationAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
+trait  UTRAuthenticationAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
 
   def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]]
 }

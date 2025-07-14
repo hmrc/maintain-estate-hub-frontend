@@ -28,8 +28,8 @@ import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UTRActionImpl @Inject()()(override implicit val executionContext: ExecutionContext
-) extends UTRAction with Logging {
+class UTRRetrievalActionImpl @Inject()()(override implicit val executionContext: ExecutionContext
+) extends UTRRetrievalAction with Logging {
 
   override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = {
 
@@ -46,8 +46,8 @@ class UTRActionImpl @Inject()()(override implicit val executionContext: Executio
 
 }
 
-@ImplementedBy(classOf[UTRActionImpl])
-trait UTRAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
+@ImplementedBy(classOf[UTRRetrievalActionImpl])
+trait UTRRetrievalAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
 
   def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]]
 }
