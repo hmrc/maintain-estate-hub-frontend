@@ -348,7 +348,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.ViewLastDeclaredAnswersYesNoController.checkForUTR().url
 
         application.stop()
       }

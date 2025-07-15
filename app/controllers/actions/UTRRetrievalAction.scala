@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,31 +21,24 @@ import models.requests.{DataRequest, DataRequestWithUTR}
 import pages.UTRPage
 import play.api.Logging
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{ActionRefiner, BodyParsers, Result}
-import services.EstateAuthenticationService
+import play.api.mvc.{ActionRefiner, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
-                                            service: EstateAuthenticationService
-                                            )(override implicit val executionContext: ExecutionContext
-) extends UTRAuthenticationAction with Logging {
+class UTRRetrievalActionImpl @Inject()()(override implicit val executionContext: ExecutionContext
+) extends UTRRetrievalAction with Logging {
 
   override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     request.userAnswers.get(UTRPage) map { utr =>
-      service.authenticateForUtr(utr)(request, hc) map {
-        case Left(redirect) => Left(redirect)
-        case Right(b) =>
-          Right(DataRequestWithUTR(b.request, b.userAnswers, b.user, utr))
-      }
+      Future.successful(Right(DataRequestWithUTR(request.request, request.userAnswers, request.user, utr)))
     } getOrElse {
-      logger.info(s"[Session ID: ${Session.id(hc)}] cannot authenticate user due to no cached utr")
+      logger.info(s"[Session ID: ${Session.id(hc)}] cannot proceed further due to no cached utr")
       Future.successful(Left(Redirect(controllers.routes.IndexController.onPageLoad())))
     }
 
@@ -53,8 +46,8 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
 
 }
 
-@ImplementedBy(classOf[UTRAuthenticationActionImpl])
-trait  UTRAuthenticationAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
+@ImplementedBy(classOf[UTRRetrievalActionImpl])
+trait UTRRetrievalAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
 
   def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]]
 }

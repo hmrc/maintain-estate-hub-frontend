@@ -43,6 +43,7 @@ GET        /continue-maintaining-this-estate            controllers.MaintainThis
 GET        /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onPageLoad()
 POST       /want-to-see-last-declared                   controllers.ViewLastDeclaredAnswersYesNoController.onSubmit()
 
+GET        /check-utr                                   controllers.ViewLastDeclaredAnswersYesNoController.checkForUTR()
 
 GET        /last-declared                               controllers.print.LastDeclaredAnswersController.onPageLoad()
 GET        /declared                                    controllers.print.DeclaredAnswersController.onPageLoad()

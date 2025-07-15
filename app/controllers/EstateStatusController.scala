@@ -112,7 +112,7 @@ class EstateStatusController @Inject()(
     connector.getEstate(utr) flatMap {
       case Processed(estate, _) =>
         logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr estate is in a processed state")
-        Future.successful(Redirect(controllers.routes.ViewLastDeclaredAnswersYesNoController.onPageLoad()))
+        Future.successful(Redirect(controllers.routes.ViewLastDeclaredAnswersYesNoController.checkForUTR()))
       case Processing =>
         logger.info(s"[Session ID: ${Session.id(hc)}][UTR: $utr] $utr unable to retrieve estate due it being in processing")
         Future.successful(Redirect(controllers.routes.EstateStatusController.inProcessing()))

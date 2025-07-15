@@ -53,4 +53,3 @@ lazy val microservice = Project("maintain-estate-hub-frontend", file("."))
     uglify / includeFilter := GlobFilter("maintainestatehubfrontend-*.js")
   )
 
-addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle")
