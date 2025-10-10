@@ -7,6 +7,7 @@ lazy val microservice = Project("maintain-estate-hub-frontend", file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
+    CodeCoverageSettings(),
     routesImport += "models._",
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
@@ -19,10 +20,6 @@ lazy val microservice = Project("maintain-estate-hub-frontend", file("."))
       "controllers.routes._"
     ),
     PlayKeys.playDefaultPort := 8828,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;.*Routes.*;.*handlers.*;.*components.*;.*testOnlyDoNotUseInAppConf.*;",
-    ScoverageKeys.coverageMinimumStmtTotal := 85,
-    ScoverageKeys.coverageFailOnMinimum := true,
-    ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq(
       "-feature",
       "-Wconf:src=routes/.*:s",
