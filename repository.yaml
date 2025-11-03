@@ -1,3 +1,7 @@
+digital-service: Estates
+description: Acts as a hub for navigating users to various estate registration maintenance areas
+type: Service
+service-type: frontend
 repoVisibility: public_0C3F0CE3E6E6448FAD341E7BFA50FCD333E06A20CFF05FCACE61154DDBBADF71
 test-repositories:
   - maintain-estate-performance-tests
