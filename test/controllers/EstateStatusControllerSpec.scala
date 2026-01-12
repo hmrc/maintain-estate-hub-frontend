@@ -327,7 +327,7 @@ class EstateStatusControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       "a Processed status is received from the estates connector" in new LocalSetup {
 
-        val payload: String = Source.fromFile(getClass.getResource("/display-estate.json").getPath).mkString
+        val payload: String = Source.fromInputStream(getClass.getResourceAsStream("/display-estate.json")).mkString
         val json: JsValue = Json.parse(payload)
 
         val estate: GetEstate = json.transform(

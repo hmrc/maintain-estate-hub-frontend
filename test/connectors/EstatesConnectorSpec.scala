@@ -173,7 +173,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
       "must return playback data inside a Processed estate" in {
 
         val utr = "2000000000"
-        val payload = Source.fromFile(getClass.getResource("/display-estate.json").getPath).mkString
+        val payload = Source.fromInputStream(getClass.getResourceAsStream("/display-estate.json")).mkString
 
         val application = applicationBuilder()
           .configure(
@@ -367,7 +367,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
       "must return playback data inside a Processed estate" in {
 
         val utr = "2000000000"
-        val payload = Source.fromFile(getClass.getResource("/display-estate.json").getPath).mkString
+        val payload = Source.fromInputStream(getClass.getResourceAsStream("/display-estate.json")).mkString
 
         val application = applicationBuilder()
           .configure(
