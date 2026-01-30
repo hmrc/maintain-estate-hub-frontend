@@ -30,7 +30,7 @@ import views.html.closure.AdministrationPeriodEndDateNeededView
 
 class AdministrationPeriodEndDateNeededControllerSpec extends SpecBase with MockitoSugar {
 
-  val utr: String                                         = "1234567890"
+  val utr: String = "1234567890"
 
   lazy val administrationPeriodEndDateNeededRoute: String =
     routes.AdministrationPeriodEndDateNeededController.onPageLoad().url

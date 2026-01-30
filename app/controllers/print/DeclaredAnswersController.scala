@@ -31,43 +31,47 @@ import views.html.print.DeclaredAnswersView
 
 import scala.concurrent.ExecutionContext
 
-class DeclaredAnswersController @Inject()(
-                                           override val messagesApi: MessagesApi,
-                                           actions: Actions,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           view: DeclaredAnswersView,
-                                           print: PrintHelper,
-                                           estatesConnector: EstatesConnector
-                                         )(implicit ec: ExecutionContext
-) extends FrontendBaseController with I18nSupport with Logging {
+class DeclaredAnswersController @Inject() (
+  override val messagesApi: MessagesApi,
+  actions: Actions,
+  val controllerComponents: MessagesControllerComponents,
+  view: DeclaredAnswersView,
+  print: PrintHelper,
+  estatesConnector: EstatesConnector
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  def onPageLoad(): Action[AnyContent] = actions.requireTvn.async {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.requireTvn.async { implicit request =>
+    estatesConnector.getTransformedEstate(request.utr) map {
+      case Processed(estate, _) =>
 
-      estatesConnector.getTransformedEstate(request.utr) map {
-        case Processed(estate, _) =>
+        val personalRep          = print.personalRepresentative(estate)
+        val estateName           = print.estateName(estate)
+        val administrationPeriod = print.administrationPeriod(estate)
+        val deceasedPerson       = print.deceasedPerson(estate)
 
-          val personalRep = print.personalRepresentative(estate)
-          val estateName = print.estateName(estate)
-          val administrationPeriod = print.administrationPeriod(estate)
-          val deceasedPerson = print.deceasedPerson(estate)
-
-          Ok(view(
+        Ok(
+          view(
             tvn = request.tvn,
             declarationSent = DateFormatter.formatDate(request.submissionDate),
             crn = request.clientReferenceNumber,
             administrationPeriodAndPersonalRep = administrationPeriod ++ personalRep,
             estateNameAndDeceasedPerson = estateName ++ deceasedPerson,
             prefix = if (estate.isClosing) "declared.final" else "declared"
-          ))
-        case estate =>
-          logger.warn(s"[Session ID: ${Session.id(hc)}][UTR: ${request.utr}] unable to render declared answers due to estate being in state: $estate")
-          Redirect(controllers.routes.EstateStatusController.problemWithService())
-      } recover {
-        case e =>
-          logger.error(s"[Session ID: ${Session.id(hc)}][UTR: ${request.utr}]  unable to render declared answers due to ${e.getMessage}")
-          Redirect(controllers.routes.EstateStatusController.problemWithService())
-      }
+          )
+        )
+      case estate =>
+        logger.warn(
+          s"[Session ID: ${Session.id(hc)}][UTR: ${request.utr}] unable to render declared answers due to estate being in state: $estate"
+        )
+        Redirect(controllers.routes.EstateStatusController.problemWithService())
+    } recover { case e =>
+      logger.error(
+        s"[Session ID: ${Session.id(hc)}][UTR: ${request.utr}]  unable to render declared answers due to ${e.getMessage}"
+      )
+      Redirect(controllers.routes.EstateStatusController.problemWithService())
+    }
 
   }
+
 }

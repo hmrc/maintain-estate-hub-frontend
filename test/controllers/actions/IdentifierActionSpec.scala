@@ -39,7 +39,7 @@ class IdentifierActionSpec extends SpecBase {
   val appConfig: FrontendAppConfig     = injector.instanceOf[FrontendAppConfig]
   val bodyParsers: BodyParsers.Default = injector.instanceOf[BodyParsers.Default]
 
-  private val noEnrollment   = Enrolments(Set())
+  private val noEnrollment = Enrolments(Set())
 
   private val agentEnrolment = Enrolments(
     Set(Enrolment("HMRC-AS-AGENT", List(EnrolmentIdentifier("AgentReferenceNumber", "SomeVal")), "Activated", None))

@@ -30,47 +30,47 @@ import views.html.declaration.AgencyRegisteredAddressUkYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AgencyRegisteredAddressUkYesNoController @Inject()(
-                                                          override val messagesApi: MessagesApi,
-                                                          sessionRepository: SessionRepository,
-                                                          actions: Actions,
-                                                          yesNoFormProvider: YesNoFormProvider,
-                                                          val controllerComponents: MessagesControllerComponents,
-                                                          view: AgencyRegisteredAddressUkYesNoView
-                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AgencyRegisteredAddressUkYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  actions: Actions,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: AgencyRegisteredAddressUkYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = yesNoFormProvider.withPrefix("agencyRegisteredAddressUkYesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(AgencyRegisteredAddressUkYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(AgencyRegisteredAddressUkYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, controllers.declaration.routes.AgencyRegisteredAddressUkYesNoController.onSubmit()))
+    Ok(view(preparedForm, controllers.declaration.routes.AgencyRegisteredAddressUkYesNoController.onSubmit()))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
+  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, controllers.declaration.routes.AgencyRegisteredAddressUkYesNoController.onSubmit()))),
-
-        isUk => {
+          Future.successful(
+            BadRequest(
+              view(formWithErrors, controllers.declaration.routes.AgencyRegisteredAddressUkYesNoController.onSubmit())
+            )
+          ),
+        isUk =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AgencyRegisteredAddressUkYesNoPage, isUk))
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield {
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield
             if (isUk) {
               Redirect(controllers.declaration.routes.AgencyRegisteredAddressUkController.onPageLoad())
             } else {
               Redirect(controllers.declaration.routes.AgencyRegisteredAddressInternationalController.onPageLoad())
             }
-          }
-        }
       )
 
   }

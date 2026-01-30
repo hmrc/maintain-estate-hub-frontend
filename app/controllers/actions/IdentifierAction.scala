@@ -33,34 +33,34 @@ import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
+trait IdentifierAction
+    extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
 
-class AuthenticatedIdentifierAction @Inject()(
-                                               override val authConnector: AuthConnector,
-                                               config: FrontendAppConfig,
-                                               val parser: BodyParsers.Default,
-                                               authenticationService: EstateAuthenticationService
-                                             )
-                                             (implicit val executionContext: ExecutionContext
-                                             ) extends IdentifierAction with AuthorisedFunctions with Logging {
+class AuthenticatedIdentifierAction @Inject() (
+  override val authConnector: AuthConnector,
+  config: FrontendAppConfig,
+  val parser: BodyParsers.Default,
+  authenticationService: EstateAuthenticationService
+)(implicit val executionContext: ExecutionContext)
+    extends IdentifierAction with AuthorisedFunctions with Logging {
 
-  private def authoriseAgent[A](internalId: String,
-                                enrolments: Enrolments,
-                                block: IdentifierRequest[A] => Future[Result])
-                               (implicit request: Request[A], hc: HeaderCarrier) = {
+  private def authoriseAgent[A](
+    internalId: String,
+    enrolments: Enrolments,
+    block: IdentifierRequest[A] => Future[Result]
+  )(implicit request: Request[A], hc: HeaderCarrier) =
 
     authenticationService.authenticateAgent() flatMap {
-      case Right(arn) => block(IdentifierRequest(request ,AgentUser(internalId, enrolments, arn)))
+      case Right(arn)           => block(IdentifierRequest(request, AgentUser(internalId, enrolments, arn)))
       case Left(result: Result) => Future.successful(result)
     }
-  }
 
-  private def authenticateOrganisation[A](internalId: String,
-                                          enrolments: Enrolments,
-                                          block: IdentifierRequest[A] => Future[Result])
-                                         (implicit request: Request[A]) = {
+  private def authenticateOrganisation[A](
+    internalId: String,
+    enrolments: Enrolments,
+    block: IdentifierRequest[A] => Future[Result]
+  )(implicit request: Request[A]) =
     block(IdentifierRequest(request, OrganisationUser(internalId, enrolments)))
-  }
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -83,8 +83,9 @@ class AuthenticatedIdentifierAction @Inject()(
         logger.warn(s"[Session ID: ${Session.id(hc)}] Unable to retrieve retrievals")
         Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     } recover {
-      case _: NoActiveSession => Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
+      case _: NoActiveSession        => Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
       case _: AuthorisationException => Redirect(controllers.routes.UnauthorisedController.onPageLoad())
     }
   }
+
 }

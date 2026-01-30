@@ -29,9 +29,8 @@ import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
-                                            service: EstateAuthenticationService
-                                            )(override implicit val executionContext: ExecutionContext
+class UTRAuthenticationActionImpl @Inject() (val parser: BodyParsers.Default, service: EstateAuthenticationService)(
+  implicit override val executionContext: ExecutionContext
 ) extends UTRAuthenticationAction with Logging {
 
   override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = {
@@ -41,7 +40,7 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
     request.userAnswers.get(UTRPage) map { utr =>
       service.authenticateForUtr(utr)(request, hc) map {
         case Left(redirect) => Left(redirect)
-        case Right(b) =>
+        case Right(b)       =>
           Right(DataRequestWithUTR(b.request, b.userAnswers, b.user, utr))
       }
     } getOrElse {
@@ -54,7 +53,7 @@ class UTRAuthenticationActionImpl @Inject()(val parser: BodyParsers.Default,
 }
 
 @ImplementedBy(classOf[UTRAuthenticationActionImpl])
-trait  UTRAuthenticationAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
+trait UTRAuthenticationAction extends ActionRefiner[DataRequest, DataRequestWithUTR] {
 
   def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]]
 }

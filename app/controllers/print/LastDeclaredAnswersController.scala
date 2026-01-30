@@ -30,37 +30,39 @@ import views.html.print.LastDeclaredAnswersView
 
 import scala.concurrent.ExecutionContext
 
-class LastDeclaredAnswersController  @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                actions: Actions,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: LastDeclaredAnswersView,
-                                                print: PrintHelper,
-                                                estatesConnector: EstatesConnector
-                                              )(implicit ec: ExecutionContext
-) extends FrontendBaseController with I18nSupport with Logging {
+class LastDeclaredAnswersController @Inject() (
+  override val messagesApi: MessagesApi,
+  actions: Actions,
+  val controllerComponents: MessagesControllerComponents,
+  view: LastDeclaredAnswersView,
+  print: PrintHelper,
+  estatesConnector: EstatesConnector
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    estatesConnector.getEstate(request.utr) map {
+      case Processed(estate, _) =>
 
-      estatesConnector.getEstate(request.utr) map {
-        case Processed(estate, _) =>
+        val personalRep    = print.personalRepresentative(estate)
+        val estateName     = print.estateName(estate)
+        val deceasedPerson = print.deceasedPerson(estate)
 
-          val personalRep = print.personalRepresentative(estate)
-          val estateName = print.estateName(estate)
-          val deceasedPerson = print.deceasedPerson(estate)
-
-          Ok(view(
+        Ok(
+          view(
             personalRepresentative = personalRep,
             estateNameAndDeceasedPerson = estateName ++ deceasedPerson
-          ))
-        case estate =>
-          logger.warn(s"[Session ID: ${Session.id(hc)}] unable to render last declared answers due to estate being in state: $estate")
-          Redirect(controllers.routes.EstateStatusController.problemWithService())
-      } recover {
-        case e =>
-          logger.error(s"[Session ID: ${Session.id(hc)}] unable to render last declared answers due to ${e.getMessage}")
-          Redirect(controllers.routes.EstateStatusController.problemWithService())
-      }
+          )
+        )
+      case estate =>
+        logger.warn(
+          s"[Session ID: ${Session.id(hc)}] unable to render last declared answers due to estate being in state: $estate"
+        )
+        Redirect(controllers.routes.EstateStatusController.problemWithService())
+    } recover { case e =>
+      logger.error(s"[Session ID: ${Session.id(hc)}] unable to render last declared answers due to ${e.getMessage}")
+      Redirect(controllers.routes.EstateStatusController.problemWithService())
+    }
   }
+
 }
