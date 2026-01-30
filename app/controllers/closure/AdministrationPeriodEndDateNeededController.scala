@@ -27,31 +27,27 @@ import views.html.closure.AdministrationPeriodEndDateNeededView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AdministrationPeriodEndDateNeededController @Inject()(
-                                                             sessionRepository: SessionRepository,
-                                                             actions: Actions,
-                                                             val controllerComponents: MessagesControllerComponents,
-                                                             view: AdministrationPeriodEndDateNeededView
-                                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AdministrationPeriodEndDateNeededController @Inject() (
+  sessionRepository: SessionRepository,
+  actions: Actions,
+  val controllerComponents: MessagesControllerComponents,
+  view: AdministrationPeriodEndDateNeededView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
-    implicit request =>
-
-      Ok(view())
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr { implicit request =>
+    Ok(view())
   }
 
-  def cleanupAndRedirect(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
-
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers
-          .remove(WhatIsNextPage)
-          .flatMap(_.deleteAtPath(pages.closure.basePath))
-        )
-        _ <- sessionRepository.set(updatedAnswers)
-      } yield {
-        Redirect(controllers.routes.WhatIsNextController.onPageLoad())
-      }
+  def cleanupAndRedirect(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    for {
+      updatedAnswers <- Future.fromTry(
+                          request.userAnswers
+                            .remove(WhatIsNextPage)
+                            .flatMap(_.deleteAtPath(pages.closure.basePath))
+                        )
+      _              <- sessionRepository.set(updatedAnswers)
+    } yield Redirect(controllers.routes.WhatIsNextController.onPageLoad())
   }
 
 }

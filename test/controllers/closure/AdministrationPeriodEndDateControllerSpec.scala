@@ -38,11 +38,11 @@ import scala.concurrent.Future
 
 class AdministrationPeriodEndDateControllerSpec extends SpecBase {
 
-  private val formProvider = new DateFormProvider()
-  private val startDate: LocalDate = LocalDate.parse("2000-01-01")
-  private val form: Form[LocalDate] = formProvider.withConfig("closure.administrationPeriodEndDate", startDate)
+  private val formProvider           = new DateFormProvider()
+  private val startDate: LocalDate   = LocalDate.parse("2000-01-01")
+  private val form: Form[LocalDate]  = formProvider.withConfig("closure.administrationPeriodEndDate", startDate)
   private lazy val dateRoute: String = routes.AdministrationPeriodEndDateController.onPageLoad().url
-  private val utr: String = "utr"
+  private val utr: String            = "utr"
   private val validAnswer: LocalDate = LocalDate.parse("2020-01-01")
 
   private def applicationBuilder(userAnswers: UserAnswers): Application = {
@@ -50,10 +50,12 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
     when(fakeConnector.getDateOfDeath(any())(any(), any())).thenReturn(Future.successful(startDate))
     when(fakeConnector.close(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
 
-    super.applicationBuilder(Some(userAnswers))
-    .overrides(
-      bind[EstatesConnector].toInstance(fakeConnector)
-    ).build()
+    super
+      .applicationBuilder(Some(userAnswers))
+      .overrides(
+        bind[EstatesConnector].toInstance(fakeConnector)
+      )
+      .build()
   }
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(UTRPage, utr).success.value
@@ -104,16 +106,18 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
 
       val request = FakeRequest(POST, dateRoute)
         .withFormUrlEncodedBody(
-          "value.day" -> validAnswer.getDayOfMonth.toString,
+          "value.day"   -> validAnswer.getDayOfMonth.toString,
           "value.month" -> validAnswer.getMonthValue.toString,
-          "value.year" -> validAnswer.getYear.toString
+          "value.year"  -> validAnswer.getYear.toString
         )
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.closure.routes.ChangePersonalRepDetailsYesNoController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.closure.routes.ChangePersonalRepDetailsYesNoController
+        .onPageLoad()
+        .url
 
       application.stop()
     }
@@ -145,9 +149,9 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
 
       val request = FakeRequest(POST, dateRoute)
         .withFormUrlEncodedBody(
-          "value.day" -> validAnswer.getDayOfMonth.toString,
+          "value.day"   -> validAnswer.getDayOfMonth.toString,
           "value.month" -> validAnswer.getMonthValue.toString,
-          "value.year" -> validAnswer.getYear.toString
+          "value.year"  -> validAnswer.getYear.toString
         )
 
       val result = route(application, request).value
@@ -159,4 +163,5 @@ class AdministrationPeriodEndDateControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

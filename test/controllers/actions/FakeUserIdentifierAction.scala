@@ -22,7 +22,7 @@ import play.api.mvc._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeUserIdentifierAction @Inject()(bodyParsers: PlayBodyParsers)(user: User) extends IdentifierAction {
+class FakeUserIdentifierAction @Inject() (bodyParsers: PlayBodyParsers)(user: User) extends IdentifierAction {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
     block(IdentifierRequest(request, user))
@@ -32,4 +32,5 @@ class FakeUserIdentifierAction @Inject()(bodyParsers: PlayBodyParsers)(user: Use
 
   override protected def executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
+
 }

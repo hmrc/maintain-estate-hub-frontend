@@ -33,27 +33,28 @@ class EstatesAuthConnectorSpec extends AsyncFreeSpec with Matchers with WireMock
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
-  private val authorisedUrl: String = "/estates-auth/agent-authorised"
+  private val authorisedUrl: String                 = "/estates-auth/agent-authorised"
   private def authorisedUrlFor(utr: String): String = s"/estates-auth/authorised/$utr"
 
-  private def responseFromJson(json: JsValue) = {
+  private def responseFromJson(json: JsValue) =
     aResponse().withStatus(Status.OK).withBody(json.toString())
-  }
 
-  private def allowedResponse = responseFromJson(Json.obj("authorised" -> true))
+  private def allowedResponse      = responseFromJson(Json.obj("authorised" -> true))
   private def allowedAgentResponse = responseFromJson(Json.obj("arn" -> "SomeArn"))
 
   private val redirectResponse = responseFromJson(Json.obj("redirectUrl" -> "redirect-url"))
 
-  private def wireMock(url: String, response: ResponseDefinitionBuilder) = {
+  private def wireMock(url: String, response: ResponseDefinitionBuilder) =
     server.stubFor(get(urlEqualTo(url)).willReturn(response))
-  }
 
   lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(Seq(
-      "microservice.services.estates-auth.port" -> server.port(),
-      "auditing.enabled" -> false
-    ): _*).build()
+    .configure(
+      Seq(
+        "microservice.services.estates-auth.port" -> server.port(),
+        "auditing.enabled"                        -> false
+      ): _*
+    )
+    .build()
 
   private lazy val connector = app.injector.instanceOf[EstatesAuthConnector]
 
@@ -133,4 +134,5 @@ class EstatesAuthConnectorSpec extends AsyncFreeSpec with Matchers with WireMock
       }
     }
   }
+
 }

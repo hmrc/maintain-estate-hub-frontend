@@ -28,8 +28,9 @@ class FakeAllowedEstateAuthenticationService extends EstateAuthenticationService
   override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] =
     Future.successful(Right("SomeARN"))
 
-  override def authenticateForUtr[A](utr: String)
-                                    (implicit request: DataRequest[A], hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]] =
+  override def authenticateForUtr[A](
+    utr: String
+  )(implicit request: DataRequest[A], hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]] =
     Future.successful(Right(request))
 
 }
@@ -39,8 +40,9 @@ class FakeDeniedEstateAuthenticationService extends EstateAuthenticationService 
   override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] =
     Future.successful(Left(Redirect("redirect-url")))
 
-  override def authenticateForUtr[A](utr: String)
-                                    (implicit request: DataRequest[A], hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]] =
+  override def authenticateForUtr[A](
+    utr: String
+  )(implicit request: DataRequest[A], hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]] =
     Future.successful(Left(Redirect("redirect-url")))
 
 }
@@ -50,8 +52,9 @@ class FakeFailingEstateAuthenticationService extends EstateAuthenticationService
   override def authenticateAgent()(implicit hc: HeaderCarrier): Future[Either[Result, String]] =
     Future.successful(Left(Results.Unauthorized))
 
-  override def authenticateForUtr[A](utr: String)
-                                    (implicit request: DataRequest[A], hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]] =
+  override def authenticateForUtr[A](
+    utr: String
+  )(implicit request: DataRequest[A], hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]] =
     Future.successful(Left(Results.Unauthorized))
 
 }

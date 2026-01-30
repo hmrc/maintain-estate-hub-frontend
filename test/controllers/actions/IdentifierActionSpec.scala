@@ -36,27 +36,31 @@ class IdentifierActionSpec extends SpecBase {
   type RetrievalType = Option[String] ~ Option[AffinityGroup] ~ Enrolments
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
-  val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+  val appConfig: FrontendAppConfig     = injector.instanceOf[FrontendAppConfig]
   val bodyParsers: BodyParsers.Default = injector.instanceOf[BodyParsers.Default]
 
-  private val noEnrollment = Enrolments(Set())
-  private val agentEnrolment = Enrolments(Set(Enrolment("HMRC-AS-AGENT", List(EnrolmentIdentifier("AgentReferenceNumber", "SomeVal")), "Activated", None)))
+  private val noEnrollment   = Enrolments(Set())
+
+  private val agentEnrolment = Enrolments(
+    Set(Enrolment("HMRC-AS-AGENT", List(EnrolmentIdentifier("AgentReferenceNumber", "SomeVal")), "Activated", None))
+  )
 
   class Harness(authAction: IdentifierAction) {
-    def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }
+    def onPageLoad(): Action[AnyContent] = authAction(_ => Results.Ok)
   }
 
   class ThrowingHarness(authAction: IdentifierAction) {
-    def onPageLoad(): Action[AnyContent] = authAction { _ => throw new IllegalStateException("Thrown by test") }
+    def onPageLoad(): Action[AnyContent] = authAction(_ => throw new IllegalStateException("Thrown by test"))
   }
 
-  private def authRetrievals(affinityGroup: AffinityGroup, enrolment: Enrolments): Future[Some[String] ~ Some[AffinityGroup] ~ Enrolments] =
+  private def authRetrievals(
+    affinityGroup: AffinityGroup,
+    enrolment: Enrolments
+  ): Future[Some[String] ~ Some[AffinityGroup] ~ Enrolments] =
     Future.successful(new ~(new ~(Some("id"), Some(affinityGroup)), enrolment))
 
-  private def actionToTest(application: Application,
-                           authService: EstateAuthenticationService) = {
+  private def actionToTest(application: Application, authService: EstateAuthenticationService) =
     new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, authService)
-  }
 
   "invoking an AuthenticatedIdentifier" when {
 
@@ -70,14 +74,15 @@ class IdentifierActionSpec extends SpecBase {
           .thenReturn(authRetrievals(AffinityGroup.Agent, noEnrollment))
 
         val mockAuthService = mock[EstateAuthenticationService]
-        when (mockAuthService.authenticateAgent()(any())).thenReturn(Future.successful(Left(Redirect("test-redirect-url"))))
+        when(mockAuthService.authenticateAgent()(any()))
+          .thenReturn(Future.successful(Left(Redirect("test-redirect-url"))))
 
         val action = actionToTest(application, mockAuthService)
 
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
-        status(result) mustBe SEE_OTHER
+        status(result)           mustBe SEE_OTHER
         redirectLocation(result) mustBe Some("test-redirect-url")
         application.stop()
       }
@@ -86,16 +91,17 @@ class IdentifierActionSpec extends SpecBase {
     "Agent user has correct enrolled in Agent Services Account" must {
       "allow user to continue" in {
 
-        val application = applicationBuilderForUser(userAnswers = None, AffinityGroup.Agent, FakeUser.agent(agentEnrolment)).build()
+        val application =
+          applicationBuilderForUser(userAnswers = None, AffinityGroup.Agent, FakeUser.agent(agentEnrolment)).build()
 
         val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 
         when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any()))
           .thenReturn(authRetrievals(AffinityGroup.Agent, agentEnrolment))
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe OK
         application.stop()
@@ -112,9 +118,9 @@ class IdentifierActionSpec extends SpecBase {
         when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any()))
           .thenReturn(authRetrievals(AffinityGroup.Organisation, agentEnrolment))
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe OK
         application.stop()
@@ -131,11 +137,11 @@ class IdentifierActionSpec extends SpecBase {
         when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any()))
           .thenReturn(authRetrievals(AffinityGroup.Individual, noEnrollment))
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
-        status(result) mustBe SEE_OTHER
+        status(result)           mustBe SEE_OTHER
         redirectLocation(result) mustBe Some(controllers.routes.UnauthorisedController.onPageLoad().url)
 
         application.stop()
@@ -149,11 +155,13 @@ class IdentifierActionSpec extends SpecBase {
 
         val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 
-        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed MissingBearerToken())
+        when(
+          mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())
+        ) thenReturn (Future failed MissingBearerToken())
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
 
@@ -167,13 +175,15 @@ class IdentifierActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed BearerTokenExpired())
+        when(
+          mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())
+        ) thenReturn (Future failed BearerTokenExpired())
 
         val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
 
@@ -187,13 +197,15 @@ class IdentifierActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed InsufficientEnrolments())
+        when(
+          mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())
+        ) thenReturn (Future failed InsufficientEnrolments())
 
         val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
 
@@ -207,13 +219,15 @@ class IdentifierActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed InsufficientConfidenceLevel())
+        when(
+          mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())
+        ) thenReturn (Future failed InsufficientConfidenceLevel())
 
         val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
 
@@ -227,13 +241,15 @@ class IdentifierActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed UnsupportedAuthProvider())
+        when(
+          mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())
+        ) thenReturn (Future failed UnsupportedAuthProvider())
 
         val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
 
@@ -247,13 +263,15 @@ class IdentifierActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed UnsupportedAffinityGroup())
+        when(
+          mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())
+        ) thenReturn (Future failed UnsupportedAffinityGroup())
 
         val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
 
@@ -267,13 +285,15 @@ class IdentifierActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())) thenReturn (Future failed UnsupportedCredentialRole())
+        when(
+          mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any())
+        ) thenReturn (Future failed UnsupportedCredentialRole())
 
         val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 
-        val action = actionToTest(application, fakeAuthService)
+        val action     = actionToTest(application, fakeAuthService)
         val controller = new Harness(action)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
 
@@ -293,13 +313,13 @@ class IdentifierActionSpec extends SpecBase {
 
       val fakeAuthService = injector.instanceOf[FakeAllowedEstateAuthenticationService]
 
-      val action = actionToTest(application, fakeAuthService)
+      val action     = actionToTest(application, fakeAuthService)
       val controller = new ThrowingHarness(action)
-      val result = controller.onPageLoad()(fakeRequest)
+      val result     = controller.onPageLoad()(fakeRequest)
 
       assertThrows[IllegalStateException](status(result))
       application.stop()
     }
   }
-}
 
+}

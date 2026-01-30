@@ -29,7 +29,7 @@ import views.html.UTRView
 
 class UTRControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new UTRFormProvider()
+  val formProvider       = new UTRFormProvider()
   val form: Form[String] = formProvider()
 
   lazy val utrRoute: String = routes.UTRController.onPageLoad().url
@@ -97,9 +97,15 @@ class UTRControllerSpec extends SpecBase with MockitoSugar {
 
       val utr = "0987654321"
 
-      val enrolments = Enrolments(Set(Enrolment(
-        "HMRC-TERS-ORG", Seq(EnrolmentIdentifier("SAUTR", utr)), "Activated"
-      )))
+      val enrolments = Enrolments(
+        Set(
+          Enrolment(
+            "HMRC-TERS-ORG",
+            Seq(EnrolmentIdentifier("SAUTR", utr)),
+            "Activated"
+          )
+        )
+      )
 
       val application =
         applicationBuilderForUser(
@@ -108,7 +114,8 @@ class UTRControllerSpec extends SpecBase with MockitoSugar {
           affinityGroup = AffinityGroup.Organisation
         ).build()
 
-      implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, utrRoute).withFormUrlEncodedBody(("value", utr))
+      implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+        FakeRequest(POST, utrRoute).withFormUrlEncodedBody(("value", utr))
 
       val result = route(application, request).value
 
@@ -140,6 +147,6 @@ class UTRControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
   }
+
 }

@@ -44,4 +44,5 @@ class LastDeclaredAnswersViewSpec extends ViewBehaviours {
 
     behave like pageWithContinueButton(applyView)
   }
+
 }

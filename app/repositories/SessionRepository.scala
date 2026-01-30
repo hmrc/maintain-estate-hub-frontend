@@ -33,24 +33,27 @@ import java.time.Instant
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DefaultSessionRepository @Inject()( val mongo: MongoComponent,
-                                          val config: FrontendAppConfig)
-                                        (implicit val ec: ExecutionContext)
-
-  extends PlayMongoRepository[UserAnswers](
-    mongoComponent = mongo,
-    domainFormat = Format(UserAnswers.reads,UserAnswers.writes),
-    collectionName = "user-answers",
-    indexes = Seq(
-      IndexModel(
-        Indexes.ascending("lastUpdated"),
-        IndexOptions().name("user-answers-last-updated-index").expireAfter(config.cachettlInSeconds, TimeUnit.SECONDS).unique(false)),
-      IndexModel(
-        Indexes.ascending("internalId"),
-        IndexOptions().name("internal-auth-id-index")
-      )
-    ), replaceIndexes = config.dropIndexes
-  )
+class DefaultSessionRepository @Inject() (val mongo: MongoComponent, val config: FrontendAppConfig)(implicit
+  val ec: ExecutionContext
+) extends PlayMongoRepository[UserAnswers](
+      mongoComponent = mongo,
+      domainFormat = Format(UserAnswers.reads, UserAnswers.writes),
+      collectionName = "user-answers",
+      indexes = Seq(
+        IndexModel(
+          Indexes.ascending("lastUpdated"),
+          IndexOptions()
+            .name("user-answers-last-updated-index")
+            .expireAfter(config.cachettlInSeconds, TimeUnit.SECONDS)
+            .unique(false)
+        ),
+        IndexModel(
+          Indexes.ascending("internalId"),
+          IndexOptions().name("internal-auth-id-index")
+        )
+      ),
+      replaceIndexes = config.dropIndexes
+    )
     with SessionRepository {
 
   def get(id: String): Future[Option[UserAnswers]] = {
@@ -67,15 +70,17 @@ class DefaultSessionRepository @Inject()( val mongo: MongoComponent,
 
   def set(userAnswers: UserAnswers): Future[Boolean] = {
     val selector = equal("internalId", userAnswers.id)
-    val updated = userAnswers.copy(lastUpdated = Instant.now)
+    val updated  = userAnswers.copy(lastUpdated = Instant.now)
 
-    collection.replaceOne(selector, updated, ReplaceOptions().upsert(true)).head()
+    collection
+      .replaceOne(selector, updated, ReplaceOptions().upsert(true))
+      .head()
       .map(_.wasAcknowledged())
   }
 
   def resetCache(internalId: String): Future[Boolean] = {
 
-    val selector = equal("internalId",internalId)
+    val selector = equal("internalId", internalId)
 
     collection.deleteOne(selector).headOption().map(_.exists(_.wasAcknowledged()))
 

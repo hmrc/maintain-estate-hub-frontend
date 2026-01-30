@@ -23,7 +23,7 @@ import uk.gov.hmrc.auth.core.Enrolments
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeOrganisationIdentifierAction @Inject()(bodyParsers: PlayBodyParsers) extends IdentifierAction {
+class FakeOrganisationIdentifierAction @Inject() (bodyParsers: PlayBodyParsers) extends IdentifierAction {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
     block(IdentifierRequest(request, OrganisationUser("id", Enrolments(Set()))))
@@ -33,4 +33,5 @@ class FakeOrganisationIdentifierAction @Inject()(bodyParsers: PlayBodyParsers) e
 
   override protected def executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
+
 }

@@ -20,9 +20,9 @@ import models.declaration.{Address, InternationalAddress, UKAddress}
 
 object Implicits {
 
-  private def convertAddress(address: Address) : AddressType = {
+  private def convertAddress(address: Address): AddressType =
     address match {
-      case UKAddress(line1, line2, line3, line4, postcode) =>
+      case UKAddress(line1, line2, line3, line4, postcode)    =>
         AddressType(
           line1,
           line2,
@@ -41,10 +41,9 @@ object Implicits {
           country = country
         )
     }
-  }
 
   implicit class UkOrNonUkAddressConverter(address: Address) {
-    def convert : AddressType = convertAddress(address)
+    def convert: AddressType = convertAddress(address)
   }
 
 }

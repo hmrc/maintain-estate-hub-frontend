@@ -32,21 +32,24 @@ object EstateLock extends Logging {
 
   implicit def httpReads(utr: String)(implicit hc: HeaderCarrier): HttpReads[Option[EstateLock]] =
     (method: String, url: String, response: HttpResponse) => {
-      logger.info(s"[Session ID: ${Session.id(hc)}] response status received from estates store api: ${response.status}")
+      logger.info(
+        s"[Session ID: ${Session.id(hc)}] response status received from estates store api: ${response.status}"
+      )
 
       response.status match {
         case OK =>
           response.json.asOpt[EstateLock] match {
-            case validClaim@Some(c) =>
+            case validClaim @ Some(c) =>
               if (c.utr.toLowerCase.trim == utr.toLowerCase.trim) {
                 validClaim
               } else {
                 None
               }
-            case None => None
+            case None                 => None
           }
-        case _ =>
+        case _  =>
           None
       }
     }
+
 }

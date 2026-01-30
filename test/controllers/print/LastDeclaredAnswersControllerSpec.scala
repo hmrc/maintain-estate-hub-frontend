@@ -32,8 +32,8 @@ import scala.concurrent.Future
 
 class LastDeclaredAnswersControllerSpec extends SpecBase {
 
-  lazy val mockEstatesConnector : EstatesConnector = mock[EstatesConnector]
-  lazy val mockPrintHelper: PrintHelper = mock[PrintHelper]
+  lazy val mockEstatesConnector: EstatesConnector = mock[EstatesConnector]
+  lazy val mockPrintHelper: PrintHelper           = mock[PrintHelper]
 
   when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
   when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
@@ -45,8 +45,8 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
 
       lazy val data = FakeData.fakeGetEstateWithPersonalRep(
         PersonalRepresentativeType(
-        estatePerRepInd = Some(FakeData.personalRepresentativeIndividualNino),
-        estatePerRepOrg = None
+          estatePerRepInd = Some(FakeData.personalRepresentativeIndividualNino),
+          estatePerRepOrg = None
         ),
         correspondenceAddress = FakeData.correspondenceAddressUk
       )
@@ -58,7 +58,8 @@ class LastDeclaredAnswersControllerSpec extends SpecBase {
         )
         .build()
 
-      when(mockEstatesConnector.getEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
+      when(mockEstatesConnector.getEstate(any())(any(), any()))
+        .thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
       val request = FakeRequest(GET, controllers.print.routes.LastDeclaredAnswersController.onPageLoad().url)
 

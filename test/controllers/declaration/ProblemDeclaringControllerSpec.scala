@@ -49,4 +49,5 @@ class ProblemDeclaringControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

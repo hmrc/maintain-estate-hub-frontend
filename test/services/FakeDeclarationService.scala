@@ -24,22 +24,32 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class FakeDeclarationService extends DeclarationService {
 
-  override def declare(utr: String, declaration: IndividualDeclaration)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VariationResponse] =
+  override def declare(utr: String, declaration: IndividualDeclaration)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[VariationResponse] =
     Future.successful(TVN("tvn"))
 
-  override def declare(agentRequest: AgentRequestWithAddress[_], declaration: AgentDeclaration)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VariationResponse] =
+  override def declare(agentRequest: AgentRequestWithAddress[_], declaration: AgentDeclaration)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[VariationResponse] =
     Future.successful(TVN("tvn"))
 
 }
 
 class FakeFailingDeclarationService extends DeclarationService {
 
-  override def declare(utr: String, declaration: IndividualDeclaration)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VariationResponse] =
+  override def declare(utr: String, declaration: IndividualDeclaration)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[VariationResponse] =
     Future.successful(InternalServerError)
 
-  override def declare(agentRequest: AgentRequestWithAddress[_], declaration: AgentDeclaration)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VariationResponse] =
+  override def declare(agentRequest: AgentRequestWithAddress[_], declaration: AgentDeclaration)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[VariationResponse] =
     Future.successful(InternalServerError)
 
 }

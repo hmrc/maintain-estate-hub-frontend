@@ -20,15 +20,14 @@ object FormHelper {
 
   val emptyToNone: Option[String] => Option[String] = _.filter(_.nonEmpty)
 
-  private val smartApostrophesOpen: Char = '‘'
+  private val smartApostrophesOpen: Char  = '‘'
   private val smartApostrophesClose: Char = '’'
-  private val singleQuote: Char = '\''
+  private val singleQuote: Char           = '\''
 
-  def replaceSmartApostrophesAndTrim(input: String) : String = {
+  def replaceSmartApostrophesAndTrim(input: String): String =
     input.trim.collect {
       case char if char == smartApostrophesOpen | char == smartApostrophesClose => singleQuote
-      case char => char
+      case char                                                                 => char
     }
-  }
 
 }

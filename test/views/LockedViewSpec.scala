@@ -29,10 +29,7 @@ class LockedViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(utr)(fakeRequest, messages)
 
-    behave like normalPageTitleWithCaption(applyView,
-      "locked",
-      utr,
-      "p1", "p2", "link1")
+    behave like normalPageTitleWithCaption(applyView, "locked", utr, "p1", "p2", "link1")
 
   }
 

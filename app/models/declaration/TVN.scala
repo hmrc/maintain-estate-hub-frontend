@@ -24,11 +24,11 @@ import utils.Session
 
 sealed trait VariationResponse
 
-final case class TVN(tvn : String) extends VariationResponse
+final case class TVN(tvn: String) extends VariationResponse
 case object InternalServerError extends VariationResponse
 
 object TVN {
-  implicit val formats : OFormat[TVN] = Json.format[TVN]
+  implicit val formats: OFormat[TVN] = Json.format[TVN]
 }
 
 object VariationResponse extends Logging {
@@ -40,7 +40,7 @@ object VariationResponse extends Logging {
       response.status match {
         case OK =>
           response.json.as[TVN]
-        case _ =>
+        case _  =>
           InternalServerError
       }
     }

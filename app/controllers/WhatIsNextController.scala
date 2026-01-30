@@ -35,61 +35,54 @@ import views.html.WhatIsNextView
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class WhatIsNextController @Inject()(
-                                      override val messagesApi: MessagesApi,
-                                      repository: SessionRepository,
-                                      actions: Actions,
-                                      formProvider: WhatIsNextFormProvider,
-                                      val controllerComponents: MessagesControllerComponents,
-                                      view: WhatIsNextView,
-                                      config: FrontendAppConfig,
-                                      connector: EstatesConnector
-                                    )(implicit ec: ExecutionContext)
-
-  extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class WhatIsNextController @Inject() (
+  override val messagesApi: MessagesApi,
+  repository: SessionRepository,
+  actions: Actions,
+  formProvider: WhatIsNextFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: WhatIsNextView,
+  config: FrontendAppConfig,
+  connector: EstatesConnector
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form: Form[WhatIsNext] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(WhatIsNextPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(WhatIsNextPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
-
-      def clearTransforms(value: WhatIsNext): Future[HttpResponse] = {
-        if (request.userAnswers.get(WhatIsNextPage).contains(value)) {
-          Future.successful(HttpResponse(OK, "Selection unchanged. No need to clear transforms."))
-        } else {
-          connector.clearTransformations(request.utr)
-        }
+  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    def clearTransforms(value: WhatIsNext): Future[HttpResponse] =
+      if (request.userAnswers.get(WhatIsNextPage).contains(value)) {
+        Future.successful(HttpResponse(OK, "Selection unchanged. No need to clear transforms."))
+      } else {
+        connector.clearTransformations(request.utr)
       }
 
-      def redirectUrl(value: WhatIsNext): String = value match {
-        case DeclareNewPersonalRep => config.addNewPersonalRepUrl(request.utr)
-        case MakeChanges => config.amendExistingPersonalRepUrl(request.utr)
-        case CloseEstate => controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
-      }
+    def redirectUrl(value: WhatIsNext): String = value match {
+      case DeclareNewPersonalRep => config.addNewPersonalRepUrl(request.utr)
+      case MakeChanges           => config.amendExistingPersonalRepUrl(request.utr)
+      case CloseEstate           => controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
-
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
-            _ <- clearTransforms(value)
+            _              <- clearTransforms(value)
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsNextPage, value))
-            _ <- repository.set(updatedAnswers)
+            _              <- repository.set(updatedAnswers)
           } yield Redirect(redirectUrl(value))
-        }
       )
   }
+
 }

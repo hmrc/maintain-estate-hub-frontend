@@ -23,7 +23,7 @@ import pages._
 import play.api.mvc.Call
 
 @Singleton
-class Navigator @Inject()() {
+class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call =
     _ => _ => routes.IndexController.onPageLoad()
@@ -32,4 +32,5 @@ class Navigator @Inject()() {
     case _ =>
       normalRoutes(page)(userAnswers)
   }
+
 }

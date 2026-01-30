@@ -24,13 +24,11 @@ import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class EstatesStoreConnector @Inject()(http: HttpClientV2, config : FrontendAppConfig) {
+class EstatesStoreConnector @Inject() (http: HttpClientV2, config: FrontendAppConfig) {
 
   private val estateLockedUrl: String = config.estatesStoreUrl + "/lock"
 
-  def get(utr : String)
-         (implicit hc : HeaderCarrier, ec : ExecutionContext): Future[Option[EstateLock]] = {
+  def get(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[EstateLock]] =
     http.get(url"$estateLockedUrl").execute[Option[EstateLock]](EstateLock.httpReads(utr), ec)
-  }
 
 }

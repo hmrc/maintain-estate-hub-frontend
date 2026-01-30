@@ -21,11 +21,13 @@ import java.time.LocalDate
 import models.{AddressType, NameType}
 import play.api.libs.json.{Format, Json}
 
-case class AgentDetails(arn: String,
-                        agentName: String,
-                        agentAddress: AddressType,
-                        agentTelephoneNumber: String,
-                        clientReference: String)
+case class AgentDetails(
+  arn: String,
+  agentName: String,
+  agentAddress: AddressType,
+  agentTelephoneNumber: String,
+  clientReference: String
+)
 
 object AgentDetails {
   implicit val agentDetailsFormat: Format[AgentDetails] = Json.format[AgentDetails]
@@ -37,9 +39,7 @@ object Declaration {
   implicit val declarationFormat: Format[Declaration] = Json.format[Declaration]
 }
 
-case class DeclarationForApi(declaration: Declaration,
-                             agentDetails: Option[AgentDetails],
-                             endDate: Option[LocalDate])
+case class DeclarationForApi(declaration: Declaration, agentDetails: Option[AgentDetails], endDate: Option[LocalDate])
 
 object DeclarationForApi {
   implicit val declarationForApiFormat: Format[DeclarationForApi] = Json.format[DeclarationForApi]

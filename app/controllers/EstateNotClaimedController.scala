@@ -24,20 +24,19 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html._
 
-class EstateNotClaimedController @Inject()(
-                                            val controllerComponents: MessagesControllerComponents,
-                                            actions: Actions,
-                                            view: EstateNotClaimedView
-                                          ) extends FrontendBaseController with I18nSupport {
+class EstateNotClaimedController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  actions: Actions,
+  view: EstateNotClaimedView
+) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = actions.authWithData {
-    implicit request =>
-
-      request.userAnswers.get(UTRPage) match {
-        case Some(utr) =>
-          Ok(view(utr))
-        case None =>
-          Redirect(routes.UTRController.onPageLoad())
-      }
+  def onPageLoad(): Action[AnyContent] = actions.authWithData { implicit request =>
+    request.userAnswers.get(UTRPage) match {
+      case Some(utr) =>
+        Ok(view(utr))
+      case None      =>
+        Redirect(routes.UTRController.onPageLoad())
+    }
   }
+
 }

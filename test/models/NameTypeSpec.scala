@@ -21,7 +21,7 @@ import base.SpecBase
 class NameTypeSpec extends SpecBase {
 
   private val nameWithNoMiddleName: NameType = NameType("Joe", None, "Bloggs")
-  private val nameWithMiddleName: NameType = NameType("Joe", Some("Joseph"), "Bloggs")
+  private val nameWithMiddleName: NameType   = NameType("Joe", Some("Joseph"), "Bloggs")
 
   ".displayName" must {
     "display first name and last name only" when {

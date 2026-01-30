@@ -32,9 +32,15 @@ class ProblemWithServiceViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like normalPage(applyView,
+      behave like normalPage(
+        applyView,
         "problemWithService",
-        "p1", "p2.beforeLink", "p2.link", "p2.afterLink", "p3", "p3.link"
+        "p1",
+        "p2.beforeLink",
+        "p2.link",
+        "p2.afterLink",
+        "p3",
+        "p3.link"
       )
 
       behave like pageWithSignOutButton(applyView)
@@ -49,12 +55,10 @@ class ProblemWithServiceViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like normalPage(applyView,
-        "problemWithService",
-        "p1", "p2.beforeLink", "p2.link", "p2.afterLink"
-      )
+      behave like normalPage(applyView, "problemWithService", "p1", "p2.beforeLink", "p2.link", "p2.afterLink")
 
       behave like pageWithSignOutButton(applyView)
     }
   }
+
 }

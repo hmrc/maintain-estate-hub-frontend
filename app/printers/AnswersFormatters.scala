@@ -29,20 +29,17 @@ import javax.inject.Inject
 
 import scala.util.Try
 
-class AnswersFormatters @Inject()(languageUtils: LanguageUtils)
-                                 (implicit countryOptions: CountryOptions) {
+class AnswersFormatters @Inject() (languageUtils: LanguageUtils)(implicit countryOptions: CountryOptions) {
 
-  def date(date: LocalDate)(implicit messages: Messages): Html = {
+  def date(date: LocalDate)(implicit messages: Messages): Html =
     HtmlFormat.escape(languageUtils.Dates.formatDate(date))
-  }
 
-  def yesOrNo(answer: Boolean)(implicit messages: Messages): Html = {
+  def yesOrNo(answer: Boolean)(implicit messages: Messages): Html =
     if (answer) {
       HtmlFormat.escape(messages("site.yes"))
     } else {
       HtmlFormat.escape(messages("site.no"))
     }
-  }
 
   def address(address: AddressType)(implicit messages: Messages): Html = {
 
@@ -55,7 +52,7 @@ class AnswersFormatters @Inject()(languageUtils: LanguageUtils)
           address.line4.map(HtmlFormat.escape),
           Some(HtmlFormat.escape(x))
         ).flatten
-      case _ =>
+      case _                                    =>
         Seq(
           Some(HtmlFormat.escape(address.line1)),
           Some(HtmlFormat.escape(address.line2)),
@@ -89,8 +86,7 @@ class AnswersFormatters @Inject()(languageUtils: LanguageUtils)
     breakLines(lines)
   }
 
-  private def breakLines(lines: Seq[Html]): Html = {
+  private def breakLines(lines: Seq[Html]): Html =
     Html(lines.mkString("<br />"))
-  }
 
 }

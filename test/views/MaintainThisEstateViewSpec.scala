@@ -27,7 +27,7 @@ class MaintainThisEstateViewSpec extends ViewBehaviours {
 
   val view: MaintainThisEstateView = application.injector.instanceOf[MaintainThisEstateView]
 
-  val fakeUtr: String = "1234567890"
+  val fakeUtr: String     = "1234567890"
   val continueUrl: String = "redirect"
 
   val applyView: HtmlFormat.Appendable = view.apply(fakeUtr, continueUrl)(fakeRequest, messages)
@@ -42,9 +42,15 @@ class MaintainThisEstateViewSpec extends ViewBehaviours {
       applyView,
       "maintainThisEstate",
       fakeUtr,
-      "p1.a", "p1.b", "p2", "p3", "p4", "p4.a"
+      "p1.a",
+      "p1.b",
+      "p2",
+      "p3",
+      "p4",
+      "p4.a"
     )
 
     behave like pageWithContinueButton(applyView)
   }
+
 }

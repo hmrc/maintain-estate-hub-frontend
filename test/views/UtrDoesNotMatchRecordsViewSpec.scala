@@ -33,9 +33,17 @@ class UtrDoesNotMatchRecordsViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like normalPage(applyView,
+      behave like normalPage(
+        applyView,
         "utrDoesNotMatchRecords",
-        "p1", "p2", "p3", "p3.link", "p4", "p4.link", "p5", "p5.link"
+        "p1",
+        "p2",
+        "p3",
+        "p3.link",
+        "p4",
+        "p4.link",
+        "p5",
+        "p5.link"
       )
     }
 
@@ -49,10 +57,8 @@ class UtrDoesNotMatchRecordsViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like normalPage(applyView,
-        "utrDoesNotMatchRecords",
-        "p1", "p2", "p3", "p3.link", "p4", "p4.link"
-      )
+      behave like normalPage(applyView, "utrDoesNotMatchRecords", "p1", "p2", "p3", "p3.link", "p4", "p4.link")
     }
   }
+
 }

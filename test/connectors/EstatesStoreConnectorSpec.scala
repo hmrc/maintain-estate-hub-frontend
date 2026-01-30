@@ -25,7 +25,13 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.WireMockHelper
 
-class EstatesStoreConnectorSpec extends SpecBase with WireMockHelper with BeforeAndAfterAll with BeforeAndAfterEach with ScalaFutures with IntegrationPatience {
+class EstatesStoreConnectorSpec
+    extends SpecBase
+    with WireMockHelper
+    with BeforeAndAfterAll
+    with BeforeAndAfterEach
+    with ScalaFutures
+    with IntegrationPatience {
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
@@ -36,14 +42,14 @@ class EstatesStoreConnectorSpec extends SpecBase with WireMockHelper with Before
         .configure(
           Seq(
             "microservice.services.estates-store.port" -> server.port(),
-            "auditing.enabled" -> false
+            "auditing.enabled"                         -> false
           ): _*
-        ).build()
+        )
+        .build()
 
       val connector = application.injector.instanceOf[EstatesStoreConnector]
 
-      val json = Json.parse(
-        """
+      val json = Json.parse("""
           |{
           | "utr":"123456789",
           | "managedByAgent":false,

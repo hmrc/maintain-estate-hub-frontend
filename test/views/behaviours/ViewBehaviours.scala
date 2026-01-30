@@ -22,12 +22,10 @@ import views.ViewSpecBase
 
 trait ViewBehaviours extends ViewSpecBase {
 
-  private def findBannerTitle(view: HtmlFormat.Appendable):String =
-      asDocument(view).getElementsByClass("govuk-service-navigation__service-name").text().trim
+  private def findBannerTitle(view: HtmlFormat.Appendable): String =
+    asDocument(view).getElementsByClass("govuk-service-navigation__service-name").text().trim
 
-  def normalPage(view: HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 expectedGuidanceKeys: String*): Unit = {
+  def normalPage(view: HtmlFormat.Appendable, messageKeyPrefix: String, expectedGuidanceKeys: String*): Unit =
 
     "behave like a normal page" when {
 
@@ -35,7 +33,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "have the correct banner title" in {
 
-           findBannerTitle(view) mustBe messages("service.name")
+          findBannerTitle(view) mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -63,20 +61,16 @@ trait ViewBehaviours extends ViewSpecBase {
         }
       }
     }
-  }
 
-  def pageWithHint[A](form: Form[A],
-                      createView: Form[A] => HtmlFormat.Appendable,
-                      expectedHintKey: String): Unit = {
+  def pageWithHint[A](form: Form[A], createView: Form[A] => HtmlFormat.Appendable, expectedHintKey: String): Unit =
 
     "behave like a page with hint text" in {
 
       val doc = asDocument(createView(form))
       assertContainsHint(doc, "value", Some(messages(s"$expectedHintKey.hint")))
     }
-  }
 
-  def pageWithAPrintButton(view: HtmlFormat.Appendable): Unit = {
+  def pageWithAPrintButton(view: HtmlFormat.Appendable): Unit =
 
     "behave like a page with a print button" must {
 
@@ -86,12 +80,13 @@ trait ViewBehaviours extends ViewSpecBase {
         assertRenderedById(doc, "print")
       }
     }
-  }
 
-  def normalPageTitleWithCaption(view: HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 captionParam: String,
-                 expectedGuidanceKeys: String*): Unit = {
+  def normalPageTitleWithCaption(
+    view: HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    captionParam: String,
+    expectedGuidanceKeys: String*
+  ): Unit =
 
     "behave like a normal page" when {
 
@@ -111,7 +106,12 @@ trait ViewBehaviours extends ViewSpecBase {
         "display the correct page title with caption" in {
 
           val doc = asDocument(view)
-          assertPageTitleWithCaptionEqualsMessages(doc, s"$messageKeyPrefix.caption",  captionParam, s"$messageKeyPrefix.heading")
+          assertPageTitleWithCaptionEqualsMessages(
+            doc,
+            s"$messageKeyPrefix.caption",
+            captionParam,
+            s"$messageKeyPrefix.heading"
+          )
         }
 
         "display the correct guidance" in {
@@ -127,9 +127,8 @@ trait ViewBehaviours extends ViewSpecBase {
         }
       }
     }
-  }
 
-  def pageWithBackLink(view: HtmlFormat.Appendable): Unit = {
+  def pageWithBackLink(view: HtmlFormat.Appendable): Unit =
 
     "behave like a page with a back link" must {
 
@@ -139,9 +138,8 @@ trait ViewBehaviours extends ViewSpecBase {
         assertRenderedById(doc, "back-link")
       }
     }
-  }
 
-  def pageWithASubmitButton(view: HtmlFormat.Appendable) = {
+  def pageWithASubmitButton(view: HtmlFormat.Appendable) =
 
     "behave like a page with a submit button" must {
       "have a submit button" in {
@@ -149,9 +147,8 @@ trait ViewBehaviours extends ViewSpecBase {
         assertRenderedById(doc, "submit")
       }
     }
-  }
 
-  def pageWithSignOutButton(view: HtmlFormat.Appendable): Unit = {
+  def pageWithSignOutButton(view: HtmlFormat.Appendable): Unit =
 
     "behave like a page with a sign out button" must {
 
@@ -161,9 +158,8 @@ trait ViewBehaviours extends ViewSpecBase {
         assertRenderedById(doc, "sign-out")
       }
     }
-  }
 
-  def pageWithContinueButton(view: HtmlFormat.Appendable): Unit = {
+  def pageWithContinueButton(view: HtmlFormat.Appendable): Unit =
 
     "behave like a page with a continue button" must {
 
@@ -173,19 +169,16 @@ trait ViewBehaviours extends ViewSpecBase {
         assertRenderedById(doc, "continue")
       }
     }
-  }
 
-  def expectedHref(view: HtmlFormat.Appendable, id: String, expectedHref: String) : Unit = {
+  def expectedHref(view: HtmlFormat.Appendable, id: String, expectedHref: String): Unit =
 
     s"have a link for $id" in {
-      val doc = asDocument(view)
+      val doc  = asDocument(view)
       val link = doc.getElementById(id)
       link.attr("href") mustBe expectedHref
     }
 
-  }
-
-  def pageWithSubHeading(view: HtmlFormat.Appendable, text: String): Unit = {
+  def pageWithSubHeading(view: HtmlFormat.Appendable, text: String): Unit =
 
     "behave like a page with a sub-heading" must {
 
@@ -195,9 +188,8 @@ trait ViewBehaviours extends ViewSpecBase {
         assertContainsText(doc, text)
       }
     }
-  }
 
-  def pageWithoutLogoutButton(view: HtmlFormat.Appendable) = {
+  def pageWithoutLogoutButton(view: HtmlFormat.Appendable) =
 
     "behave like a page without a logout button" must {
       "not have a logout button" in {
@@ -205,5 +197,5 @@ trait ViewBehaviours extends ViewSpecBase {
         assertNotRenderedById(doc, "logOut")
       }
     }
-  }
+
 }

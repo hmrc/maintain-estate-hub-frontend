@@ -81,4 +81,5 @@ class LogoutControllerSpec extends SpecBase with MockitoSugar {
       }
     }
   }
+
 }

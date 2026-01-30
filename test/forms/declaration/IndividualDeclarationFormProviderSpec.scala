@@ -31,10 +31,10 @@ class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
 
   ".firstName" must {
 
-    val fieldName = "firstName"
+    val fieldName   = "firstName"
     val requiredKey = s"$prefix.$fieldName.required"
-    val lengthKey = s"$prefix.$fieldName.length"
-    val maxLength = 35
+    val lengthKey   = s"$prefix.$fieldName.length"
+    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
@@ -99,10 +99,10 @@ class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
 
   ".lastName" must {
 
-    val fieldName = "lastName"
+    val fieldName   = "lastName"
     val requiredKey = s"$prefix.$fieldName.required"
-    val lengthKey = s"$prefix.$fieldName.length"
-    val maxLength = 35
+    val lengthKey   = s"$prefix.$fieldName.length"
+    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
@@ -132,17 +132,21 @@ class IndividualDeclarationFormProviderSpec extends StringFieldBehaviours {
 
   "first, middle, and last names" must {
     "bind whitespace, trim text, and replace smart apostrophes with single quotes" in {
-      val smartApostrophesOpen = '‘'
+      val smartApostrophesOpen  = '‘'
       val smartApostrophesClose = '’'
 
-      val firstName = s"   ${smartApostrophesOpen}TestFirstName$smartApostrophesClose  "
+      val firstName  = s"   ${smartApostrophesOpen}TestFirstName$smartApostrophesClose  "
       val middleName = s"   ${smartApostrophesOpen}TestMiddleName$smartApostrophesClose  "
-      val lastName = s"   ${smartApostrophesOpen}TestLastName$smartApostrophesClose  "
+      val lastName   = s"   ${smartApostrophesOpen}TestLastName$smartApostrophesClose  "
 
       val result = form.bind(
         Map(
-          "firstName" -> firstName, "middleName" -> middleName, "lastName" -> lastName, "email" -> "test@test.com "
-        ))
+          "firstName"  -> firstName,
+          "middleName" -> middleName,
+          "lastName"   -> lastName,
+          "email"      -> "test@test.com "
+        )
+      )
 
       result.value.value shouldBe
         IndividualDeclaration(

@@ -32,7 +32,7 @@ import views.html.declaration.AgentDeclarationView
 
 class AgentDeclarationControllerSpec extends SpecBase {
 
-  val formProvider = new AgentDeclarationFormProvider()
+  val formProvider                 = new AgentDeclarationFormProvider()
   val form: Form[AgentDeclaration] = formProvider()
 
   lazy val onSubmit: Call = routes.AgentDeclarationController.onSubmit()
@@ -41,7 +41,10 @@ class AgentDeclarationControllerSpec extends SpecBase {
 
     "return OK and the correct view for a onPageLoad" in {
 
-      val userAnswers = emptyUserAnswers.set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ")).success.value
+      val userAnswers = emptyUserAnswers
+        .set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ"))
+        .success
+        .value
 
       val application = applicationBuilderForUser(
         userAnswers = Some(userAnswers),
@@ -65,7 +68,10 @@ class AgentDeclarationControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ")).success.value
+      val userAnswers = emptyUserAnswers
+        .set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ"))
+        .success
+        .value
 
       val application = applicationBuilderForUser(
         userAnswers = Some(userAnswers),
@@ -93,7 +99,10 @@ class AgentDeclarationControllerSpec extends SpecBase {
 
     "redirect to confirmation for a POST" in {
 
-      val userAnswers = emptyUserAnswers.set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ")).success.value
+      val userAnswers = emptyUserAnswers
+        .set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ"))
+        .success
+        .value
 
       val utr = "0987654321"
 
@@ -126,7 +135,10 @@ class AgentDeclarationControllerSpec extends SpecBase {
 
     "render problem declaring when error retrieving TVN" in {
 
-      val userAnswers = emptyUserAnswers.set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ")).success.value
+      val userAnswers = emptyUserAnswers
+        .set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ"))
+        .success
+        .value
 
       val utr = "0987654321"
 

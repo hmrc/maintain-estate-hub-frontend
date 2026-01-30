@@ -35,10 +35,19 @@ class OldAgentNotAuthorisedViewSpec extends ViewBehaviours {
 
     behave like pageWithSubHeading(applyView, fakeUtr)
 
-    behave like normalPageTitleWithCaption(applyView,
+    behave like normalPageTitleWithCaption(
+      applyView,
       "agentNotAuthorised.old",
       fakeUtr,
-      "p1", "p2", "p2.link", "p3", "p4", "p4.link", "p5", "p5.link"
+      "p1",
+      "p2",
+      "p2.link",
+      "p3",
+      "p4",
+      "p4.link",
+      "p5",
+      "p5.link"
     )
   }
+
 }

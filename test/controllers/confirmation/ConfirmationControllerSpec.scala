@@ -39,8 +39,12 @@ class ConfirmationControllerSpec extends SpecBase {
   private val fakeTvn = "XCTVN0000004912"
 
   private val playbackAnswers: UserAnswers = emptyUserAnswers
-    .set(TVNPage, fakeTvn).success.value
-    .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
+    .set(TVNPage, fakeTvn)
+    .success
+    .value
+    .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10))
+    .success
+    .value
 
   "Confirmation Controller" must {
 
@@ -96,7 +100,7 @@ class ConfirmationControllerSpec extends SpecBase {
         user = AgentUser("id", Enrolments(Set()), "arn"),
         affinityGroup = AffinityGroup.Agent
       ).overrides(
-          bind[EstatesConnector].to(fakeConnector)
+        bind[EstatesConnector].to(fakeConnector)
       ).build()
 
       val request = FakeRequest(GET, controllers.confirmation.routes.ConfirmationController.onPageLoad().url)

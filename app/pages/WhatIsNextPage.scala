@@ -28,12 +28,11 @@ case object WhatIsNextPage extends QuestionPage[WhatIsNext] {
 
   override def toString: String = "whatIsNext"
 
-  override def cleanup(value: Option[WhatIsNext], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[WhatIsNext], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(DeclareNewPersonalRep) | Some(MakeChanges)  =>
+      case Some(DeclareNewPersonalRep) | Some(MakeChanges) =>
         userAnswers.deleteAtPath(pages.closure.basePath)
-      case _ => super.cleanup(value, userAnswers)
+      case _                                               => super.cleanup(value, userAnswers)
     }
-  }
 
 }

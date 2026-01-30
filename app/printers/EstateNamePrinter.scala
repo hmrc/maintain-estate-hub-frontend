@@ -22,7 +22,7 @@ import viewmodels.AnswerSection
 
 import javax.inject.Inject
 
-class EstateNamePrinter @Inject()(answerRowConverter: AnswerRowConverter) {
+class EstateNamePrinter @Inject() (answerRowConverter: AnswerRowConverter) {
 
   import ImplicitConverters._
 
@@ -36,11 +36,12 @@ class EstateNamePrinter @Inject()(answerRowConverter: AnswerRowConverter) {
 
     questions match {
       case Nil => None
-      case _ => AnswerSection(
-        headingKey = Some(messages("print.estate.name")),
-        rows = questions,
-        sectionKey = Some(messages("print.estate.name"))
-      ).toOption
+      case _   =>
+        AnswerSection(
+          headingKey = Some(messages("print.estate.name")),
+          rows = questions,
+          sectionKey = Some(messages("print.estate.name"))
+        ).toOption
     }
   }
 

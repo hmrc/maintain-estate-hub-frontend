@@ -19,7 +19,9 @@ package pages
 import base.TestUserAnswers
 import models.declaration.{InternationalAddress, UKAddress}
 import pages.behaviours.PageBehaviours
-import pages.declaration.{AgencyRegisteredAddressInternationalPage, AgencyRegisteredAddressUkPage, AgencyRegisteredAddressUkYesNoPage}
+import pages.declaration.{
+  AgencyRegisteredAddressInternationalPage, AgencyRegisteredAddressUkPage, AgencyRegisteredAddressUkYesNoPage
+}
 
 class AgencyRegisteredAddressUkYesNoPageSpec extends PageBehaviours {
 
@@ -36,8 +38,12 @@ class AgencyRegisteredAddressUkYesNoPageSpec extends PageBehaviours {
 
     "remove international address" in {
       val initial = TestUserAnswers.emptyUserAnswers
-        .set(AgencyRegisteredAddressUkYesNoPage, false).success.value
-        .set(AgencyRegisteredAddressInternationalPage, InternationalAddress("line1", "line2", country = "FR")).success.value
+        .set(AgencyRegisteredAddressUkYesNoPage, false)
+        .success
+        .value
+        .set(AgencyRegisteredAddressInternationalPage, InternationalAddress("line1", "line2", country = "FR"))
+        .success
+        .value
 
       val cleaned = initial.set(AgencyRegisteredAddressUkYesNoPage, true).success.value
 
@@ -46,8 +52,12 @@ class AgencyRegisteredAddressUkYesNoPageSpec extends PageBehaviours {
 
     "remove uk address" in {
       val initial = TestUserAnswers.emptyUserAnswers
-        .set(AgencyRegisteredAddressUkYesNoPage, true).success.value
-        .set(AgencyRegisteredAddressUkPage, UKAddress("line1", "line2", postcode = "postcode")).success.value
+        .set(AgencyRegisteredAddressUkYesNoPage, true)
+        .success
+        .value
+        .set(AgencyRegisteredAddressUkPage, UKAddress("line1", "line2", postcode = "postcode"))
+        .success
+        .value
 
       val cleaned = initial.set(AgencyRegisteredAddressUkYesNoPage, false).success.value
 
@@ -55,4 +65,5 @@ class AgencyRegisteredAddressUkYesNoPageSpec extends PageBehaviours {
     }
 
   }
+
 }

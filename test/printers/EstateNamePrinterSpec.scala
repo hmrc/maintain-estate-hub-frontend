@@ -25,23 +25,26 @@ class EstateNamePrinterSpec extends SpecBase {
 
   "estate name printer" must {
 
-      "print" in {
-        val printer = injector.instanceOf[EstateNamePrinter]
+    "print" in {
+      val printer = injector.instanceOf[EstateNamePrinter]
 
-        val result = printer.name(Correspondence(
+      val result = printer.name(
+        Correspondence(
           abroadIndicator = false,
           name = "Estate of person",
           address = FakeData.correspondenceAddressUk,
           phoneNumber = "+448282828282"
-        ))
-
-        result.value mustBe AnswerSection(
-          headingKey = Some("Estate name"),
-          rows = Seq(
-            AnswerRow("What is the estate’s name?", Html("Estate of person"))
-          ),
-          sectionKey = Some("Estate name")
         )
-      }
+      )
+
+      result.value mustBe AnswerSection(
+        headingKey = Some("Estate name"),
+        rows = Seq(
+          AnswerRow("What is the estate’s name?", Html("Estate of person"))
+        ),
+        sectionKey = Some("Estate name")
+      )
     }
+  }
+
 }

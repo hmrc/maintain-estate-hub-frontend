@@ -58,7 +58,7 @@ class WhatIsNextViewSpec extends ViewBehaviours {
       }
     }
 
-    for (option <- WhatIsNext.options) {
+    for (option <- WhatIsNext.options)
 
       s"rendered with a value of '${option._1.value}'" must {
 
@@ -70,11 +70,18 @@ class WhatIsNextViewSpec extends ViewBehaviours {
           if (option._2.nonEmpty) assertRadioButtonContainsHint(doc, option._1.id + "-item-hint", messages(option._2))
 
           for (unselectedOption <- WhatIsNext.options.filterNot(o => o == option)) {
-            assertContainsRadioButton(doc, unselectedOption._1.id, "value", unselectedOption._1.value, isChecked = false)
-            if (unselectedOption._2.nonEmpty) assertRadioButtonContainsHint(doc, unselectedOption._1.id + "-item-hint", messages(unselectedOption._2))
+            assertContainsRadioButton(
+              doc,
+              unselectedOption._1.id,
+              "value",
+              unselectedOption._1.value,
+              isChecked = false
+            )
+            if (unselectedOption._2.nonEmpty)
+              assertRadioButtonContainsHint(doc, unselectedOption._1.id + "-item-hint", messages(unselectedOption._2))
           }
         }
       }
-    }
   }
+
 }

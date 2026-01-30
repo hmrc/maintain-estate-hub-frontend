@@ -30,16 +30,18 @@ class CountryOptionsNonUKSpec extends SpecBase with MockitoSugar {
     "build correctly the English InputOptions with non-UK country list and country code" in {
 
       val application = new GuiceApplicationBuilder()
-        .configure(Map(
-          "location.canonical.list.all" -> "non-uk-countries-canonical-list-test.json"
-        ))
+        .configure(
+          Map(
+            "location.canonical.list.all" -> "non-uk-countries-canonical-list-test.json"
+          )
+        )
         .build()
 
-      val messagesApi = app.injector.instanceOf[MessagesApi]
+      val messagesApi       = app.injector.instanceOf[MessagesApi]
       implicit val messages = MessagesImpl(lang = Lang(ENGLISH), messagesApi = messagesApi)
 
-        val countryOption: CountryOptions = application.injector.instanceOf[CountryOptionsNonUK]
-        countryOption.options() mustEqual Seq(InputOption("BE", "Belgium"), InputOption("IE", "Ireland"))
+      val countryOption: CountryOptions = application.injector.instanceOf[CountryOptionsNonUK]
+      countryOption.options() mustEqual Seq(InputOption("BE", "Belgium"), InputOption("IE", "Ireland"))
 
       application.stop()
     }
@@ -47,12 +49,14 @@ class CountryOptionsNonUKSpec extends SpecBase with MockitoSugar {
     "build correctly the Welsh InputOptions with non-UK country list and country code" in {
 
       val application = new GuiceApplicationBuilder()
-        .configure(Map(
-          "location.canonical.list.allCY" -> "non-uk-countries-canonical-list-test-cy.json"
-        ))
+        .configure(
+          Map(
+            "location.canonical.list.allCY" -> "non-uk-countries-canonical-list-test-cy.json"
+          )
+        )
         .build()
 
-      val messagesApi = app.injector.instanceOf[MessagesApi]
+      val messagesApi       = app.injector.instanceOf[MessagesApi]
       implicit val messages = MessagesImpl(lang = Lang(WELSH), messagesApi = messagesApi)
 
       val countryOption: CountryOptions = application.injector.instanceOf[CountryOptionsNonUK]
@@ -64,9 +68,11 @@ class CountryOptionsNonUKSpec extends SpecBase with MockitoSugar {
     "throw the error if the country json does not exist" in {
 
       val application = new GuiceApplicationBuilder()
-        .configure(Map(
-          "location.canonical.list.all" -> "countries-canonical-test.json"
-        ))
+        .configure(
+          Map(
+            "location.canonical.list.all" -> "countries-canonical-test.json"
+          )
+        )
         .build()
 
       an[ConfigException.BadValue] shouldBe thrownBy {
@@ -76,7 +82,5 @@ class CountryOptionsNonUKSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }
-
-
-

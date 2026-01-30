@@ -29,45 +29,45 @@ import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TestUserConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) {
+class TestUserConnector @Inject() (http: HttpClientV2, config: FrontendAppConfig) {
 
   private val dataUrl: String = s"${config.enrolmentStoreProxyUrl}/enrolment-store-stub/data"
 
   object InsertedReads {
+
     implicit lazy val httpReads: HttpReads[Unit] =
-      (method: String, url: String, response: HttpResponse) => {
+      (method: String, url: String, response: HttpResponse) =>
         // Ignore the response from enrolment-store-stub
         ()
-      }
+
   }
 
   def insert(user: JsValue)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Unit] = {
     val headers = Seq(
       ("content-type", "application/json")
     )
-    http.post(url"$dataUrl").setHeader(headers : _*).withBody(user).execute[Unit](InsertedReads.httpReads, ec)
+    http.post(url"$dataUrl").setHeader(headers: _*).withBody(user).execute[Unit](InsertedReads.httpReads, ec)
   }
 
-  def delete()(implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
+  def delete()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
     http.delete(url"$dataUrl").execute[HttpResponse]
-  }
+
 }
 
-class EnrolmentStoreStubController @Inject()(
-                                              connector: TestUserConnector,
-                                              val controllerComponents: MessagesControllerComponents
-                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging {
+class EnrolmentStoreStubController @Inject() (
+  connector: TestUserConnector,
+  val controllerComponents: MessagesControllerComponents
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with Logging {
 
-  def insertTestUserIntoEnrolmentStore(): Action[JsValue] = Action.async(parse.json) {
-    implicit request =>
-      logger.info(s"[Session ID: ${Session.id(hc)}] inserting test user: ${request.body}")
-      connector.insert(request.body).map(_ => Ok)
+  def insertTestUserIntoEnrolmentStore(): Action[JsValue] = Action.async(parse.json) { implicit request =>
+    logger.info(s"[Session ID: ${Session.id(hc)}] inserting test user: ${request.body}")
+    connector.insert(request.body).map(_ => Ok)
   }
 
-  def flush(): Action[AnyContent] = Action.async {
-    implicit request =>
-      logger.info(s"[Session ID: ${Session.id(hc)}] flushing test users from enrolment-store")
-      connector.delete().map(_ => Ok)
+  def flush(): Action[AnyContent] = Action.async { implicit request =>
+    logger.info(s"[Session ID: ${Session.id(hc)}] flushing test users from enrolment-store")
+    connector.delete().map(_ => Ok)
   }
 
 }

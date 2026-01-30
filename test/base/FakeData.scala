@@ -22,10 +22,10 @@ import models._
 
 object FakeData {
 
-  lazy val correspondenceAddressUk: AddressType = AddressType("line1", "line2", None, None, Some("NE991ZZ"), "GB")
+  lazy val correspondenceAddressUk: AddressType    = AddressType("line1", "line2", None, None, Some("NE991ZZ"), "GB")
   lazy val correspondenceAddressNonUk: AddressType = AddressType("line1", "line2", Some("line3"), None, None, "DE")
 
-  lazy val personalRepresentativeIndividualNino : EstatePerRepIndType = EstatePerRepIndType(
+  lazy val personalRepresentativeIndividualNino: EstatePerRepIndType = EstatePerRepIndType(
     name = NameType("Adam", None, "Conder"),
     dateOfBirth = LocalDate.of(2010, 5, 3),
     identification = IdentificationType(
@@ -40,7 +40,7 @@ object FakeData {
     phoneNumber = "+447838383823"
   )
 
-  lazy val personalRepresentativeIndividualPassportOrIdCardNonUkAddress : EstatePerRepIndType = EstatePerRepIndType(
+  lazy val personalRepresentativeIndividualPassportOrIdCardNonUkAddress: EstatePerRepIndType = EstatePerRepIndType(
     name = NameType("Adam", None, "Conder"),
     dateOfBirth = LocalDate.of(2010, 5, 3),
     identification = IdentificationType(
@@ -55,7 +55,7 @@ object FakeData {
     phoneNumber = "+447838383823"
   )
 
-  lazy val personalRepresentativeIndividualPassportOrIdCardUkAddress : EstatePerRepIndType = EstatePerRepIndType(
+  lazy val personalRepresentativeIndividualPassportOrIdCardUkAddress: EstatePerRepIndType = EstatePerRepIndType(
     name = NameType("Adam", None, "Conder"),
     dateOfBirth = LocalDate.of(2010, 5, 3),
     identification = IdentificationType(
@@ -70,7 +70,7 @@ object FakeData {
     phoneNumber = "+447838383823"
   )
 
-  lazy val personalRepresentativeBusinessUtr : EstatePerRepOrgType = EstatePerRepOrgType(
+  lazy val personalRepresentativeBusinessUtr: EstatePerRepOrgType = EstatePerRepOrgType(
     orgName = "Company Ltd",
     identification = IdentificationOrgType(
       utr = Some("1234567892"),
@@ -83,7 +83,7 @@ object FakeData {
     phoneNumber = "+447838383823"
   )
 
-  lazy val personalRepresentativeBusinessWithoutUtrUk : EstatePerRepOrgType = EstatePerRepOrgType(
+  lazy val personalRepresentativeBusinessWithoutUtrUk: EstatePerRepOrgType = EstatePerRepOrgType(
     orgName = "Company Ltd",
     identification = IdentificationOrgType(
       utr = None,
@@ -96,7 +96,7 @@ object FakeData {
     phoneNumber = "+447838383823"
   )
 
-  lazy val personalRepresentativeBusinessWithoutUtrNonUk : EstatePerRepOrgType = EstatePerRepOrgType(
+  lazy val personalRepresentativeBusinessWithoutUtrNonUk: EstatePerRepOrgType = EstatePerRepOrgType(
     orgName = "Company Ltd",
     identification = IdentificationOrgType(
       utr = None,
@@ -165,9 +165,11 @@ object FakeData {
     entityStart = LocalDate.parse("2020-02-03")
   )
 
-  def fakeGetEstateWithPersonalRep(personalRep: PersonalRepresentativeType,
-                                   correspondenceAddress: AddressType,
-                                   trustEndDate: Option[LocalDate] = None): GetEstate = GetEstate(
+  def fakeGetEstateWithPersonalRep(
+    personalRep: PersonalRepresentativeType,
+    correspondenceAddress: AddressType,
+    trustEndDate: Option[LocalDate] = None
+  ): GetEstate = GetEstate(
     matchData = MatchData("1234567890"),
     correspondence = Correspondence(
       abroadIndicator = false,

@@ -37,7 +37,7 @@ class AnswersFormattersSpec extends SpecBase {
       }
 
       val recentDate: LocalDate = LocalDate.parse("2015-01-25")
-      val oldDate: LocalDate = LocalDate.parse("1840-12-01")
+      val oldDate: LocalDate    = LocalDate.parse("1840-12-01")
 
       "in English mode" must {
         "format date in English" when {
@@ -88,13 +88,13 @@ class AnswersFormattersSpec extends SpecBase {
     ".nino" must {
 
       "format a nino with prefix and suffix" in {
-        val nino = "JP121212A"
+        val nino   = "JP121212A"
         val result = answersFormatters.nino(nino)
         result mustBe Html("JP 12 12 12 A")
       }
 
       "suppress IllegalArgumentException and not format nino" in {
-        val nino = "JP121212"
+        val nino   = "JP121212"
         val result = answersFormatters.nino(nino)
         result mustBe Html("JP121212")
       }
@@ -102,7 +102,7 @@ class AnswersFormattersSpec extends SpecBase {
 
     ".utr" must {
       "return UTR" in {
-        val utr = "1234567890"
+        val utr    = "1234567890"
         val result = answersFormatters.utr(utr)
         result mustBe Html(utr)
       }
@@ -114,14 +114,15 @@ class AnswersFormattersSpec extends SpecBase {
         "return formatted address" when {
 
           "lines 3 and 4 provided" in {
-            val address: AddressType = AddressType("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), Some("AB1 1AB"), "GB")
-            val result: Html = answersFormatters.address(address)
+            val address: AddressType =
+              AddressType("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), Some("AB1 1AB"), "GB")
+            val result: Html         = answersFormatters.address(address)
             result mustBe Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB1 1AB")
           }
 
           "lines 3 and 4 not provided" in {
             val address: AddressType = AddressType("Line 1", "Line 2", None, None, Some("AB1 1AB"), "GB")
-            val result: Html = answersFormatters.address(address)
+            val result: Html         = answersFormatters.address(address)
             result mustBe Html("Line 1<br />Line 2<br />AB1 1AB")
           }
         }
@@ -132,13 +133,13 @@ class AnswersFormattersSpec extends SpecBase {
 
           "line 3 provided" in {
             val address: AddressType = AddressType("Line 1", "Line 2", Some("Line 3"), None, None, "FR")
-            val result: Html = answersFormatters.address(address)
+            val result: Html         = answersFormatters.address(address)
             result mustBe Html("Line 1<br />Line 2<br />Line 3<br />France")
           }
 
           "line 3 not provided" in {
             val address: AddressType = AddressType("Line 1", "Line 2", None, None, None, "FR")
-            val result: Html = answersFormatters.address(address)
+            val result: Html         = answersFormatters.address(address)
             result mustBe Html("Line 1<br />Line 2<br />France")
           }
         }
@@ -148,9 +149,10 @@ class AnswersFormattersSpec extends SpecBase {
     ".passportOrIdCard" must {
       "return formatted passport or ID card details" in {
         val passportOrIdCard: PassportType = PassportType("1234567890", LocalDate.parse("2020-01-01"), "FR")
-        val result: Html = answersFormatters.passportOrIdCard(passportOrIdCard)
+        val result: Html                   = answersFormatters.passportOrIdCard(passportOrIdCard)
         result mustBe Html("France<br />1234567890<br />1 January 2020")
       }
     }
   }
+
 }

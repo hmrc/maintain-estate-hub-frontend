@@ -44,7 +44,7 @@ class RequireTvnActionSpec extends SpecBase with MockitoSugar with ScalaFutures 
 
         val action = new Harness()
 
-        val user = OrganisationUser("id", Enrolments(Set()))
+        val user    = OrganisationUser("id", Enrolments(Set()))
         val request = DataRequestWithUTR(fakeRequest, emptyUserAnswers, user, "utr")
 
         val futureResult = action.callRefine(request)
@@ -62,10 +62,14 @@ class RequireTvnActionSpec extends SpecBase with MockitoSugar with ScalaFutures 
         val action = new Harness()
 
         val userAnswers = emptyUserAnswers
-          .set(TVNPage, "tvn").success.value
-          .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
+          .set(TVNPage, "tvn")
+          .success
+          .value
+          .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10))
+          .success
+          .value
 
-        val user = OrganisationUser("id", Enrolments(Set()))
+        val user    = OrganisationUser("id", Enrolments(Set()))
         val request = DataRequestWithUTR(fakeRequest, userAnswers, user, "utr")
 
         val futureResult = action.callRefine(request)
@@ -74,4 +78,5 @@ class RequireTvnActionSpec extends SpecBase with MockitoSugar with ScalaFutures 
       }
     }
   }
+
 }

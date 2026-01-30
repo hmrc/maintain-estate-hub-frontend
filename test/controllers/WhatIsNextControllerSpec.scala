@@ -23,7 +23,7 @@ import forms.WhatIsNextFormProvider
 import models.WhatIsNext
 import models.WhatIsNext.CloseEstate
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, verify, when, times}
+import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{UTRPage, WhatIsNextPage}
 import play.api.data.Form
@@ -38,7 +38,7 @@ import scala.concurrent.Future
 
 class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new WhatIsNextFormProvider()
+  val formProvider           = new WhatIsNextFormProvider()
   val form: Form[WhatIsNext] = formProvider()
 
   lazy val onPageLoad: String = routes.WhatIsNextController.onPageLoad().url
@@ -74,8 +74,12 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(UTRPage, "0987654321").success.value
-        .set(WhatIsNextPage, WhatIsNext.MakeChanges).success.value
+        .set(UTRPage, "0987654321")
+        .success
+        .value
+        .set(WhatIsNextPage, WhatIsNext.MakeChanges)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -113,7 +117,9 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       val utr = "0987654321"
 
       val userAnswers = emptyUserAnswers
-        .set(UTRPage, utr).success.value
+        .set(UTRPage, utr)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), utr = utr)
         .overrides(bind[EstatesConnector].toInstance(fakeConnector))
@@ -136,7 +142,9 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       val utr = "0987654321"
 
       val userAnswers = emptyUserAnswers
-        .set(UTRPage, utr).success.value
+        .set(UTRPage, utr)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), utr = utr)
         .overrides(bind[EstatesConnector].toInstance(fakeConnector))
@@ -159,7 +167,9 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       val utr = "0987654321"
 
       val userAnswers = emptyUserAnswers
-        .set(UTRPage, utr).success.value
+        .set(UTRPage, utr)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[EstatesConnector].toInstance(fakeConnector))
@@ -172,7 +182,9 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustBe controllers.closure.routes.HasAdministrationPeriodEndedYesNoController.onPageLoad().url
+      redirectLocation(result).value mustBe controllers.closure.routes.HasAdministrationPeriodEndedYesNoController
+        .onPageLoad()
+        .url
 
       application.stop()
     }
@@ -185,8 +197,12 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       val utr = "0987654321"
 
       val userAnswers = emptyUserAnswers
-        .set(UTRPage, utr).success.value
-        .set(WhatIsNextPage, CloseEstate).success.value
+        .set(UTRPage, utr)
+        .success
+        .value
+        .set(WhatIsNextPage, CloseEstate)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -214,7 +230,9 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       val utr = "0987654321"
 
       val userAnswers = emptyUserAnswers
-        .set(UTRPage, utr).success.value
+        .set(UTRPage, utr)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -242,8 +260,12 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       val utr = "0987654321"
 
       val userAnswers = emptyUserAnswers
-        .set(UTRPage, utr).success.value
-        .set(WhatIsNextPage, CloseEstate).success.value
+        .set(UTRPage, utr)
+        .success
+        .value
+        .set(WhatIsNextPage, CloseEstate)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -287,6 +309,6 @@ class WhatIsNextControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
   }
+
 }

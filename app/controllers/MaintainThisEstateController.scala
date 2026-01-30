@@ -26,28 +26,25 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.MaintainThisEstateView
 
 @Singleton
-class MaintainThisEstateController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              actions: Actions,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              config: FrontendAppConfig,
-                                              view: MaintainThisEstateView
-                                           ) extends FrontendBaseController with I18nSupport {
+class MaintainThisEstateController @Inject() (
+  override val messagesApi: MessagesApi,
+  actions: Actions,
+  val controllerComponents: MessagesControllerComponents,
+  config: FrontendAppConfig,
+  view: MaintainThisEstateView
+) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(needsIv: Boolean): Action[AnyContent] = actions.authWithData {
-    implicit request =>
+  def onPageLoad(needsIv: Boolean): Action[AnyContent] = actions.authWithData { implicit request =>
+    request.userAnswers.get(UTRPage).map { utr =>
+      val continueUrl: String = if (needsIv) {
+        config.verifyIdentityForAnEstateUrl(utr)
+      } else {
+        // TODO - Build Information Maintaining this Estate (TRUS-2781)
+        routes.SessionExpiredController.onPageLoad().url
+      }
 
-      request.userAnswers.get(UTRPage).map { utr =>
-
-        val continueUrl: String = if (needsIv) {
-          config.verifyIdentityForAnEstateUrl(utr)
-        } else {
-          //TODO - Build Information Maintaining this Estate (TRUS-2781)
-          routes.SessionExpiredController.onPageLoad().url
-        }
-
-        Ok(view(utr, continueUrl))
-      } getOrElse Redirect(routes.SessionExpiredController.onPageLoad())
+      Ok(view(utr, continueUrl))
+    } getOrElse Redirect(routes.SessionExpiredController.onPageLoad())
 
   }
 

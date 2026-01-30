@@ -32,13 +32,15 @@ class AdministrationPeriodPrinterSpec extends SpecBase {
 
       val result = printer.period(Some(LocalDate.parse("2020-01-01")))
 
-      result mustBe Some(AnswerSection(
-        headingKey = Some("Administration period"),
-        rows = Seq(
-          AnswerRow(messages("What is the date the administration period ended?"), Html("1 January 2020"))
-        ),
-        sectionKey = Some("Administration period")
-      ))
+      result mustBe Some(
+        AnswerSection(
+          headingKey = Some("Administration period"),
+          rows = Seq(
+            AnswerRow(messages("What is the date the administration period ended?"), Html("1 January 2020"))
+          ),
+          sectionKey = Some("Administration period")
+        )
+      )
     }
 
     "not print if close date doesn't exist" in {
@@ -48,4 +50,5 @@ class AdministrationPeriodPrinterSpec extends SpecBase {
       result mustBe None
     }
   }
+
 }

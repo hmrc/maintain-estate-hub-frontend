@@ -106,4 +106,5 @@ class DeceasedPersonPrinterSpec extends SpecBase {
     }
 
   }
+
 }

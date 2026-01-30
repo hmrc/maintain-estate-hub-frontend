@@ -46,13 +46,23 @@ class AgentDeclarationViewSpec extends QuestionViewBehaviours[AgentDeclaration] 
         form,
         applyView,
         messageKeyPrefix,
-        Seq(("firstName", None), ("middleName", None), ("lastName", None), ("agencyName", None), ("telephoneNumber", None), ("crn", None), ("email", None))
+        Seq(
+          ("firstName", None),
+          ("middleName", None),
+          ("lastName", None),
+          ("agencyName", None),
+          ("telephoneNumber", None),
+          ("crn", None),
+          ("email", None)
+        )
       )
 
       "have a warning" in {
         val doc = asDocument(applyView(form))
 
-        doc.text() must include("I confirm that the information my client has given is true and complete to the best of their knowledge. I will make sure it is kept up to date, including any change of address. If I find out that an error has been made or something has changed, I will update the information.")
+        doc.text() must include(
+          "I confirm that the information my client has given is true and complete to the best of their knowledge. I will make sure it is kept up to date, including any change of address. If I find out that an error has been made or something has changed, I will update the information."
+        )
       }
     }
 
@@ -71,16 +81,24 @@ class AgentDeclarationViewSpec extends QuestionViewBehaviours[AgentDeclaration] 
         form,
         applyView,
         messageKeyPrefix,
-        Seq(("firstName", None), ("middleName", None), ("lastName", None), ("agencyName", None), ("telephoneNumber", None), ("crn", None))
+        Seq(
+          ("firstName", None),
+          ("middleName", None),
+          ("lastName", None),
+          ("agencyName", None),
+          ("telephoneNumber", None),
+          ("crn", None)
+        )
       )
 
       "have a warning" in {
         val doc = asDocument(applyView(form))
 
-        doc.text() must include("I confirm that the information my client has given is true and complete to the best of their knowledge. I will make sure it is kept up to date, including any change of address. If I find out that an error has been made or something has changed, I will update the information.")
+        doc.text() must include(
+          "I confirm that the information my client has given is true and complete to the best of their knowledge. I will make sure it is kept up to date, including any change of address. If I find out that an error has been made or something has changed, I will update the information."
+        )
       }
     }
   }
-
 
 }
