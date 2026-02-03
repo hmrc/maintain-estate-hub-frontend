@@ -23,8 +23,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class FakeUTRRetrievalAction(utr: String) extends UTRRetrievalAction {
 
-  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] = Future.successful(Right(DataRequestWithUTR(request.request, request.userAnswers, request.user, utr)))
+  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithUTR[A]]] =
+    Future.successful(Right(DataRequestWithUTR(request.request, request.userAnswers, request.user, utr)))
 
-  override protected implicit val executionContext: ExecutionContext =
+  implicit override protected val executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
+
 }

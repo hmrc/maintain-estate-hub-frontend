@@ -26,13 +26,13 @@ class WhatIsNextFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "declarationWhatNext.error.required"
 
     behave like optionsField[WhatIsNext](
       form,
       fieldName,
-      validValues  = WhatIsNext.values,
+      validValues = WhatIsNext.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 
@@ -44,4 +44,3 @@ class WhatIsNextFormProviderSpec extends OptionFieldBehaviours {
   }
 
 }
-

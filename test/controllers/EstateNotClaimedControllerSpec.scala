@@ -63,4 +63,5 @@ class EstateNotClaimedControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

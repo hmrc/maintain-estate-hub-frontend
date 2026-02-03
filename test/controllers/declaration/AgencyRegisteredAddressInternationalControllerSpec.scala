@@ -31,7 +31,8 @@ class AgencyRegisteredAddressInternationalControllerSpec extends SpecBase {
 
   val form = formProvider()
 
-  lazy val agencyRegisteredAddressInternationalRoute = routes.AgencyRegisteredAddressInternationalController.onPageLoad().url
+  lazy val agencyRegisteredAddressInternationalRoute =
+    routes.AgencyRegisteredAddressInternationalController.onPageLoad().url
 
   "AgencyRegisteredAddressInternational Controller" must {
 
@@ -41,7 +42,7 @@ class AgencyRegisteredAddressInternationalControllerSpec extends SpecBase {
 
       val request = FakeRequest(GET, agencyRegisteredAddressInternationalRoute)
 
-      val view = application.injector.instanceOf[AgencyRegisteredAddressInternationalView]
+      val view           = application.injector.instanceOf[AgencyRegisteredAddressInternationalView]
       val countryOptions = application.injector.instanceOf[CountryOptionsNonUK].options()
 
       val result = route(application, request).value
@@ -57,13 +58,18 @@ class AgencyRegisteredAddressInternationalControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(AgencyRegisteredAddressInternationalPage, InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
+        .set(
+          AgencyRegisteredAddressInternationalPage,
+          InternationalAddress("line 1", "line 2", Some("line 3"), "country")
+        )
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, agencyRegisteredAddressInternationalRoute)
 
-      val view = application.injector.instanceOf[AgencyRegisteredAddressInternationalView]
+      val view           = application.injector.instanceOf[AgencyRegisteredAddressInternationalView]
       val countryOptions = application.injector.instanceOf[CountryOptionsNonUK].options()
 
       val result = route(application, request).value
@@ -71,7 +77,10 @@ class AgencyRegisteredAddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(InternationalAddress("line 1","line 2", Some("line 3"), "country")), countryOptions)(request, messages).toString
+        view(form.fill(InternationalAddress("line 1", "line 2", Some("line 3"), "country")), countryOptions)(
+          request,
+          messages
+        ).toString
 
       application.stop()
     }
@@ -104,7 +113,7 @@ class AgencyRegisteredAddressInternationalControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[AgencyRegisteredAddressInternationalView]
+      val view           = application.injector.instanceOf[AgencyRegisteredAddressInternationalView]
       val countryOptions = application.injector.instanceOf[CountryOptionsNonUK].options()
 
       val result = route(application, request).value
@@ -117,4 +126,5 @@ class AgencyRegisteredAddressInternationalControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -40,4 +40,5 @@ class HasAdministrationPeriodEndedYesNoPageSpec extends PageBehaviours {
       userAnswers.get.get(ChangePersonalRepDetailsYesNoPage) mustNot be(defined)
     }
   }
+
 }

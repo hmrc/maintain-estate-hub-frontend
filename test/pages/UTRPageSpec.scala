@@ -18,7 +18,6 @@ package pages
 
 import pages.behaviours.PageBehaviours
 
-
 class UTRPageSpec extends PageBehaviours {
 
   "UTRPage" must {
@@ -29,4 +28,5 @@ class UTRPageSpec extends PageBehaviours {
 
     beRemovable[String](UTRPage)
   }
+
 }

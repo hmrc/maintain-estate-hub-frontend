@@ -52,7 +52,9 @@ class IndividualDeclarationViewSpec extends QuestionViewBehaviours[IndividualDec
       "have a warning" in {
         val doc = asDocument(applyView(form))
 
-        doc.text() must include("I confirm that the information I have given is true and complete to the best of my knowledge. I will make sure it is kept up to date, including any change of address. If I find out that I have made an error or something has changed, I will update the information.")
+        doc.text() must include(
+          "I confirm that the information I have given is true and complete to the best of my knowledge. I will make sure it is kept up to date, including any change of address. If I find out that I have made an error or something has changed, I will update the information."
+        )
       }
     }
 
@@ -77,10 +79,11 @@ class IndividualDeclarationViewSpec extends QuestionViewBehaviours[IndividualDec
       "have a warning" in {
         val doc = asDocument(applyView(form))
 
-        doc.text() must include("I confirm that the information I have given is true and complete to the best of my knowledge. I will make sure it is kept up to date, including any change of address. If I find out that I have made an error or something has changed, I will update the information.")
+        doc.text() must include(
+          "I confirm that the information I have given is true and complete to the best of my knowledge. I will make sure it is kept up to date, including any change of address. If I find out that I have made an error or something has changed, I will update the information."
+        )
       }
     }
   }
-
 
 }

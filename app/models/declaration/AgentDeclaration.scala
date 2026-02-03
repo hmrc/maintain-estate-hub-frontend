@@ -19,11 +19,13 @@ package models.declaration
 import models.NameType
 import play.api.libs.json.{Json, OFormat}
 
-final case class AgentDeclaration(name: NameType,
-                                  agencyName: String,
-                                  telephoneNumber: String,
-                                  crn: String,
-                                  email: Option[String])
+final case class AgentDeclaration(
+  name: NameType,
+  agencyName: String,
+  telephoneNumber: String,
+  crn: String,
+  email: Option[String]
+)
 
 object AgentDeclaration {
   implicit lazy val formats: OFormat[AgentDeclaration] = Json.format[AgentDeclaration]

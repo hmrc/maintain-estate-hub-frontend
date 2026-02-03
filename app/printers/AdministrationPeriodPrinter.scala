@@ -22,13 +22,13 @@ import viewmodels.AnswerSection
 import java.time.LocalDate
 import javax.inject.Inject
 
-class AdministrationPeriodPrinter @Inject()(answerRowConverter: AnswerRowConverter) {
+class AdministrationPeriodPrinter @Inject() (answerRowConverter: AnswerRowConverter) {
 
   import ImplicitConverters._
 
   def period(closeDate: Option[LocalDate])(implicit messages: Messages): Option[AnswerSection] = {
 
-    val bound = answerRowConverter.bind()
+    val bound       = answerRowConverter.bind()
     val key: String = "print.administrationPeriod"
 
     closeDate match {
@@ -40,11 +40,12 @@ class AdministrationPeriodPrinter @Inject()(answerRowConverter: AnswerRowConvert
 
         questions match {
           case Nil => None
-          case _ => AnswerSection(
-            headingKey = Some(messages(key)),
-            rows = questions,
-            sectionKey = Some(messages(key))
-          ).toOption
+          case _   =>
+            AnswerSection(
+              headingKey = Some(messages(key)),
+              rows = questions,
+              sectionKey = Some(messages(key))
+            ).toOption
         }
 
       case _ => None

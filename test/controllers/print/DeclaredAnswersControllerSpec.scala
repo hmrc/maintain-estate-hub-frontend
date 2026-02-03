@@ -36,7 +36,7 @@ import scala.concurrent.Future
 class DeclaredAnswersControllerSpec extends SpecBase {
 
   lazy val mockEstatesConnector: EstatesConnector = mock[EstatesConnector]
-  lazy val mockPrintHelper: PrintHelper = mock[PrintHelper]
+  lazy val mockPrintHelper: PrintHelper           = mock[PrintHelper]
 
   when(mockPrintHelper.personalRepresentative(any())(any())).thenReturn(Nil)
   when(mockPrintHelper.estateName(any())(any())).thenReturn(Nil)
@@ -46,8 +46,12 @@ class DeclaredAnswersControllerSpec extends SpecBase {
   "DeclaredController" when {
 
     val userAnswers = emptyUserAnswers
-      .set(TVNPage, "tvn").success.value
-      .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10)).success.value
+      .set(TVNPage, "tvn")
+      .success
+      .value
+      .set(SubmissionDatePage, LocalDateTime.of(2010, 10, 5, 3, 10))
+      .success
+      .value
 
     "not closing" must {
 
@@ -65,9 +69,11 @@ class DeclaredAnswersControllerSpec extends SpecBase {
           .overrides(
             bind[EstatesConnector].toInstance(mockEstatesConnector),
             bind[PrintHelper].toInstance(mockPrintHelper)
-          ).build()
+          )
+          .build()
 
-        when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
+        when(mockEstatesConnector.getTransformedEstate(any())(any(), any()))
+          .thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
         val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
 
@@ -101,9 +107,11 @@ class DeclaredAnswersControllerSpec extends SpecBase {
           .overrides(
             bind[EstatesConnector].toInstance(mockEstatesConnector),
             bind[PrintHelper].toInstance(mockPrintHelper)
-          ).build()
+          )
+          .build()
 
-        when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(Processed(data, "formBundleNo")))
+        when(mockEstatesConnector.getTransformedEstate(any())(any(), any()))
+          .thenReturn(Future.successful(Processed(data, "formBundleNo")))
 
         val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
 
@@ -128,9 +136,11 @@ class DeclaredAnswersControllerSpec extends SpecBase {
           .overrides(
             bind[EstatesConnector].toInstance(mockEstatesConnector),
             bind[PrintHelper].toInstance(mockPrintHelper)
-          ).build()
+          )
+          .build()
 
-        when(mockEstatesConnector.getTransformedEstate(any())(any(), any())).thenReturn(Future.successful(SorryThereHasBeenAProblem))
+        when(mockEstatesConnector.getTransformedEstate(any())(any(), any()))
+          .thenReturn(Future.successful(SorryThereHasBeenAProblem))
 
         val request = FakeRequest(GET, controllers.print.routes.DeclaredAnswersController.onPageLoad().url)
 
@@ -144,4 +154,5 @@ class DeclaredAnswersControllerSpec extends SpecBase {
       }
     }
   }
+
 }

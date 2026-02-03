@@ -29,7 +29,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.individual(Some(FakeData.personalRepresentativeIndividualNino), FakeData.correspondenceAddressUk)
+        val result =
+          printer.individual(Some(FakeData.personalRepresentativeIndividualNino), FakeData.correspondenceAddressUk)
 
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
@@ -55,7 +56,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.individual(Some(FakeData.personalRepresentativeIndividualNino), FakeData.correspondenceAddressNonUk)
+        val result =
+          printer.individual(Some(FakeData.personalRepresentativeIndividualNino), FakeData.correspondenceAddressNonUk)
 
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
@@ -81,7 +83,10 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.individual(Some(FakeData.personalRepresentativeIndividualPassportOrIdCardUkAddress), FakeData.correspondenceAddressUk)
+        val result = printer.individual(
+          Some(FakeData.personalRepresentativeIndividualPassportOrIdCardUkAddress),
+          FakeData.correspondenceAddressUk
+        )
 
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
@@ -90,7 +95,10 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is the personal representative’s name?", Html("Adam Conder")),
             AnswerRow("What is Adam Conder’s date of birth?", Html("3 May 2010")),
             AnswerRow("Does Adam Conder have a National Insurance number?", Html("No")),
-            AnswerRow("What are Adam Conder’s passport or ID card details?", Html("Germany<br />1234567890<br />1 January 2020")),
+            AnswerRow(
+              "What are Adam Conder’s passport or ID card details?",
+              Html("Germany<br />1234567890<br />1 January 2020")
+            ),
             AnswerRow("Does Adam Conder live in the UK?", Html("Yes")),
             AnswerRow("What is Adam Conder’s address?", Html("lane 1<br />lane 2<br />NE211ZZ")),
             AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
@@ -107,7 +115,10 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.individual(Some(FakeData.personalRepresentativeIndividualPassportOrIdCardNonUkAddress), FakeData.correspondenceAddressUk)
+        val result = printer.individual(
+          Some(FakeData.personalRepresentativeIndividualPassportOrIdCardNonUkAddress),
+          FakeData.correspondenceAddressUk
+        )
 
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
@@ -116,7 +127,10 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
             AnswerRow("What is the personal representative’s name?", Html("Adam Conder")),
             AnswerRow("What is Adam Conder’s date of birth?", Html("3 May 2010")),
             AnswerRow("Does Adam Conder have a National Insurance number?", Html("No")),
-            AnswerRow("What are Adam Conder’s passport or ID card details?", Html("Germany<br />1234567890<br />1 January 2020")),
+            AnswerRow(
+              "What are Adam Conder’s passport or ID card details?",
+              Html("Germany<br />1234567890<br />1 January 2020")
+            ),
             AnswerRow("Does Adam Conder live in the UK?", Html("No")),
             AnswerRow("What is Adam Conder’s address?", Html("line1<br />line2<br />line3<br />France")),
             AnswerRow("What is Adam Conder’s telephone number?", Html("+447838383823")),
@@ -136,7 +150,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.business(Some(FakeData.personalRepresentativeBusinessUtr), FakeData.correspondenceAddressUk)
+        val result =
+          printer.business(Some(FakeData.personalRepresentativeBusinessUtr), FakeData.correspondenceAddressUk)
 
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
@@ -160,7 +175,8 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.business(Some(FakeData.personalRepresentativeBusinessUtr), FakeData.correspondenceAddressNonUk)
+        val result =
+          printer.business(Some(FakeData.personalRepresentativeBusinessUtr), FakeData.correspondenceAddressNonUk)
 
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
@@ -184,7 +200,10 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.business(Some(FakeData.personalRepresentativeBusinessWithoutUtrUk), FakeData.correspondenceAddressNonUk)
+        val result = printer.business(
+          Some(FakeData.personalRepresentativeBusinessWithoutUtrUk),
+          FakeData.correspondenceAddressNonUk
+        )
 
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),
@@ -208,7 +227,10 @@ class PersonalRepresentativePrinterSpec extends SpecBase {
       "print" in {
         val printer = injector.instanceOf[PersonalRepresentativePrinter]
 
-        val result = printer.business(Some(FakeData.personalRepresentativeBusinessWithoutUtrNonUk), FakeData.correspondenceAddressNonUk)
+        val result = printer.business(
+          Some(FakeData.personalRepresentativeBusinessWithoutUtrNonUk),
+          FakeData.correspondenceAddressNonUk
+        )
 
         result.value mustBe AnswerSection(
           headingKey = Some("Personal representative"),

@@ -39,4 +39,5 @@ class Module extends AbstractModule {
 
     bind(classOf[CountryOptions]).annotatedWith(classOf[NonUKCountries]).to(classOf[CountryOptionsNonUK])
   }
+
 }

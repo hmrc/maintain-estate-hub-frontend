@@ -65,8 +65,7 @@ class MaintainThisEstateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(utr, routes.SessionExpiredController.onPageLoad().url
-        )(request, messages).toString
+        view(utr, routes.SessionExpiredController.onPageLoad().url)(request, messages).toString
 
       application.stop()
     }
@@ -85,4 +84,5 @@ class MaintainThisEstateControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

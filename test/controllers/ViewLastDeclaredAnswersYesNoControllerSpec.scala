@@ -33,13 +33,15 @@ import scala.concurrent.Future
 
 class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("viewLastDeclaredYesNo")
-  val utr: String = "utr"
+  val formProvider            = new YesNoFormProvider()
+  val form: Form[Boolean]     = formProvider.withPrefix("viewLastDeclaredYesNo")
+  val utr: String             = "utr"
   lazy val yesNoRoute: String = routes.ViewLastDeclaredAnswersYesNoController.onPageLoad().url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(UTRPage, utr).success.value
+    .set(UTRPage, utr)
+    .success
+    .value
 
   "ViewLastDeclaredAnswersYesNo Controller" must {
 
@@ -175,4 +177,5 @@ class ViewLastDeclaredAnswersYesNoControllerSpec extends SpecBase with MockitoSu
       application.stop()
     }
   }
+
 }

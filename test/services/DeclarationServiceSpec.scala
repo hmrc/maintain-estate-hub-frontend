@@ -35,7 +35,7 @@ import scala.concurrent.Future
 
 class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValues with RecoverMethods {
 
-  private val utr = "0987654321"
+  private val utr                             = "0987654321"
   private val mockConnector: EstatesConnector = mock[EstatesConnector]
 
   private val individualDeclaration: IndividualDeclaration = IndividualDeclaration(
@@ -68,9 +68,8 @@ class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValue
 
         val service = app.injector.instanceOf[DeclarationService]
 
-        whenReady(service.declare(utr, individualDeclaration)) {
-          result =>
-            result mustBe TVN("123456")
+        whenReady(service.declare(utr, individualDeclaration)) { result =>
+          result mustBe TVN("123456")
         }
       }
 
@@ -85,9 +84,8 @@ class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValue
 
         val service = app.injector.instanceOf[DeclarationService]
 
-        whenReady(service.declare(utr, individualDeclaration)) {
-          result =>
-            result mustBe InternalServerError
+        whenReady(service.declare(utr, individualDeclaration)) { result =>
+          result mustBe InternalServerError
         }
       }
 
@@ -107,11 +105,16 @@ class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValue
         val service = app.injector.instanceOf[DeclarationService]
 
         val address = UKAddress("Line1", "Line2", postcode = "NE981ZZ")
-        val request = AgentRequestWithAddress(FakeRequest(), emptyUserAnswers, AgentUser("id", Enrolments(Set()), "crn"), "utr", address)
+        val request = AgentRequestWithAddress(
+          FakeRequest(),
+          emptyUserAnswers,
+          AgentUser("id", Enrolments(Set()), "crn"),
+          "utr",
+          address
+        )
 
-        whenReady(service.declare(request, agentDeclaration)) {
-          result =>
-            result mustBe TVN("123456")
+        whenReady(service.declare(request, agentDeclaration)) { result =>
+          result mustBe TVN("123456")
         }
       }
 
@@ -127,14 +130,20 @@ class DeclarationServiceSpec extends SpecBase with ScalaFutures with EitherValue
         val service = app.injector.instanceOf[DeclarationService]
 
         val address = UKAddress("Line1", "Line2", postcode = "NE981ZZ")
-        val request = AgentRequestWithAddress(FakeRequest(), emptyUserAnswers, AgentUser("id", Enrolments(Set()), "crn"), "utr", address)
+        val request = AgentRequestWithAddress(
+          FakeRequest(),
+          emptyUserAnswers,
+          AgentUser("id", Enrolments(Set()), "crn"),
+          "utr",
+          address
+        )
 
-        whenReady(service.declare(request, agentDeclaration)) {
-          result =>
-            result mustBe InternalServerError
+        whenReady(service.declare(request, agentDeclaration)) { result =>
+          result mustBe InternalServerError
         }
       }
 
     }
   }
+
 }

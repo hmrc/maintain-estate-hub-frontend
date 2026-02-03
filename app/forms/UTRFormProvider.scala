@@ -31,6 +31,8 @@ class UTRFormProvider @Inject() extends Mappings {
             minLength(10, "UTR.error.length"),
             regexp(Validation.utrRegex, "UTR.error.invalidCharacters"),
             isNotEmpty("value", "UTR.error.required")
-          ))
+          )
+        )
     )
+
 }

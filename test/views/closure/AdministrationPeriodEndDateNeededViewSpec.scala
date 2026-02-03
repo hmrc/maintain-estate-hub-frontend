@@ -29,12 +29,9 @@ class AdministrationPeriodEndDateNeededViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
 
-    behave like normalPage(applyView,
-      "closure.administrationPeriodEndDateNeeded",
-      "p",
-      "link"
-    )
+    behave like normalPage(applyView, "closure.administrationPeriodEndDateNeeded", "p", "link")
 
     behave like pageWithASubmitButton(applyView)
   }
+
 }

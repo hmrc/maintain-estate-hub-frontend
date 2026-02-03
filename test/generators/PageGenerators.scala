@@ -23,4 +23,5 @@ trait PageGenerators {
 
   implicit lazy val arbitraryUTRPage: Arbitrary[UTRPage.type] =
     Arbitrary(UTRPage)
+
 }

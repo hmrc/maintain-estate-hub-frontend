@@ -31,58 +31,55 @@ import views.html.closure.AdministrationPeriodEndDateView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
-class AdministrationPeriodEndDateController @Inject()(
-                                                       override val messagesApi: MessagesApi,
-                                                       sessionRepository: SessionRepository,
-                                                       actions: Actions,
-                                                       formProvider: DateFormProvider,
-                                                       val controllerComponents: MessagesControllerComponents,
-                                                       view: AdministrationPeriodEndDateView,
-                                                       connector: EstatesConnector
-                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AdministrationPeriodEndDateController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  actions: Actions,
+  formProvider: DateFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: AdministrationPeriodEndDateView,
+  connector: EstatesConnector
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val prefix: String = "closure.administrationPeriodEndDate"
 
-  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    for {
+      startDate <- connector.getDateOfDeath(request.utr)
+    } yield {
+      val form = formProvider.withConfig(prefix, startDate)
 
-      for {
-        startDate <- connector.getDateOfDeath(request.utr)
-      } yield {
-        val form = formProvider.withConfig(prefix, startDate)
-
-        val preparedForm = request.userAnswers.get(AdministrationPeriodEndDatePage) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm))
+      val preparedForm = request.userAnswers.get(AdministrationPeriodEndDatePage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
       }
+
+      Ok(view(preparedForm))
+    }
   }
 
-  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
+  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    def render(startDate: LocalDate): Future[Result] = {
+      val form = formProvider.withConfig(prefix, startDate)
 
-      def render(startDate: LocalDate): Future[Result] = {
-        val form = formProvider.withConfig(prefix, startDate)
-
-        form.bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors))),
-
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
           date =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(AdministrationPeriodEndDatePage, date))
-              _ <- sessionRepository.set(updatedAnswers)
-              _ <- connector.close(request.utr, date)
+              _              <- sessionRepository.set(updatedAnswers)
+              _              <- connector.close(request.utr, date)
             } yield Redirect(controllers.closure.routes.ChangePersonalRepDetailsYesNoController.onPageLoad())
         )
-      }
+    }
 
-      for {
-        startDate <- connector.getDateOfDeath(request.utr)
-        result <- render(startDate)
-      } yield result
+    for {
+      startDate <- connector.getDateOfDeath(request.utr)
+      result    <- render(startDate)
+    } yield result
   }
+
 }

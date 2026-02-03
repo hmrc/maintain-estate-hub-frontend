@@ -37,10 +37,15 @@ class ClosedViewSpec extends ViewBehaviours {
 
       behave like pageWithSubHeading(applyView, s"This estate’s UTR: $fakeUtr")
 
-      behave like normalPageTitleWithCaption(applyView,
+      behave like normalPageTitleWithCaption(
+        applyView,
         "closed",
         fakeUtr,
-        "p1.beforeLink", "p1.link", "p1.afterLink", "p2", "p2.link"
+        "p1.beforeLink",
+        "p1.link",
+        "p1.afterLink",
+        "p2",
+        "p2.link"
       )
     }
 
@@ -56,11 +61,8 @@ class ClosedViewSpec extends ViewBehaviours {
 
       behave like pageWithSubHeading(applyView, s"This estate’s UTR: $fakeUtr")
 
-      behave like normalPageTitleWithCaption(applyView,
-        "closed",
-        fakeUtr,
-        "p1.beforeLink", "p1.link", "p1.afterLink"
-      )
+      behave like normalPageTitleWithCaption(applyView, "closed", fakeUtr, "p1.beforeLink", "p1.link", "p1.afterLink")
     }
   }
+
 }

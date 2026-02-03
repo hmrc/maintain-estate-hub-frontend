@@ -31,7 +31,9 @@ import views.html.closure.AdministrationPeriodEndDateNeededView
 class AdministrationPeriodEndDateNeededControllerSpec extends SpecBase with MockitoSugar {
 
   val utr: String = "1234567890"
-  lazy val administrationPeriodEndDateNeededRoute: String = routes.AdministrationPeriodEndDateNeededController.onPageLoad().url
+
+  lazy val administrationPeriodEndDateNeededRoute: String =
+    routes.AdministrationPeriodEndDateNeededController.onPageLoad().url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(UTRPage, utr).success.value
 
@@ -58,8 +60,12 @@ class AdministrationPeriodEndDateNeededControllerSpec extends SpecBase with Mock
     "do cleanup and redirect to WhatIsNextController for a POST" in {
 
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(WhatIsNextPage, CloseEstate).success.value
-        .set(HasAdministrationPeriodEndedYesNoPage, false).success.value
+        .set(WhatIsNextPage, CloseEstate)
+        .success
+        .value
+        .set(HasAdministrationPeriodEndedYesNoPage, false)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -79,4 +85,5 @@ class AdministrationPeriodEndDateNeededControllerSpec extends SpecBase with Mock
       application.stop()
     }
   }
+
 }

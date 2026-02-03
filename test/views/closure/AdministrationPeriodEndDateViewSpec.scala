@@ -26,8 +26,8 @@ import views.html.closure.AdministrationPeriodEndDateView
 
 class AdministrationPeriodEndDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  private val messageKeyPrefix = "closure.administrationPeriodEndDate"
-  private val trustStartDate = LocalDate.parse("2019-02-03")
+  private val messageKeyPrefix       = "closure.administrationPeriodEndDate"
+  private val trustStartDate         = LocalDate.parse("2019-02-03")
   override val form: Form[LocalDate] = new DateFormProvider().withConfig(messageKeyPrefix, trustStartDate)
 
   "DateLastAssetSharedOut View" must {
@@ -45,4 +45,5 @@ class AdministrationPeriodEndDateViewSpec extends QuestionViewBehaviours[LocalDa
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

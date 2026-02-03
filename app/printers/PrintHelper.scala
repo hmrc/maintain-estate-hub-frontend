@@ -21,18 +21,20 @@ import models.GetEstate
 import play.api.i18n.Messages
 import viewmodels.AnswerSection
 
-class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativePrinter,
-                            estateNamePrinter: EstateNamePrinter,
-                            administrationPeriodPrinter: AdministrationPeriodPrinter,
-                            deceasedPersonPrinter: DeceasedPersonPrinter){
+class PrintHelper @Inject() (
+  personalRepresentativePrinter: PersonalRepresentativePrinter,
+  estateNamePrinter: EstateNamePrinter,
+  administrationPeriodPrinter: AdministrationPeriodPrinter,
+  deceasedPersonPrinter: DeceasedPersonPrinter
+) {
 
   def estateName(getEstate: GetEstate)(implicit messages: Messages): Seq[AnswerSection] =
     estateNamePrinter.name(getEstate.correspondence).toList
 
-  def personalRepresentative(getEstate: GetEstate)(implicit messages: Messages) : Seq[AnswerSection] = {
+  def personalRepresentative(getEstate: GetEstate)(implicit messages: Messages): Seq[AnswerSection] = {
 
     val individual = getEstate.estate.entities.personalRepresentative.estatePerRepInd
-    val business = getEstate.estate.entities.personalRepresentative.estatePerRepOrg
+    val business   = getEstate.estate.entities.personalRepresentative.estatePerRepOrg
 
     val correspondenceAddress = getEstate.correspondence.address
 
@@ -45,8 +47,7 @@ class PrintHelper @Inject()(personalRepresentativePrinter: PersonalRepresentativ
   def administrationPeriod(getEstate: GetEstate)(implicit messages: Messages): Seq[AnswerSection] =
     administrationPeriodPrinter.period(getEstate.trustEndDate).toList
 
-  def deceasedPerson(getEstate: GetEstate)(implicit messages: Messages) : Seq[AnswerSection] = {
+  def deceasedPerson(getEstate: GetEstate)(implicit messages: Messages): Seq[AnswerSection] =
     deceasedPersonPrinter.deceasedPerson(getEstate.estate.entities.deceased).toList
-  }
 
 }

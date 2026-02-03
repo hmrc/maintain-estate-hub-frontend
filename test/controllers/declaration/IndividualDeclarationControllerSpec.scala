@@ -31,7 +31,7 @@ import views.html.declaration.IndividualDeclarationView
 
 class IndividualDeclarationControllerSpec extends SpecBase {
 
-  val formProvider = new IndividualDeclarationFormProvider()
+  val formProvider                      = new IndividualDeclarationFormProvider()
   val form: Form[IndividualDeclaration] = formProvider()
 
   lazy val onSubmit: Call = routes.IndividualDeclarationController.onSubmit()
@@ -82,9 +82,15 @@ class IndividualDeclarationControllerSpec extends SpecBase {
 
       val utr = "0987654321"
 
-      val enrolments = Enrolments(Set(Enrolment(
-        "HMRC-TERS-ORG", Seq(EnrolmentIdentifier("SAUTR", utr)), "Activated"
-      )))
+      val enrolments = Enrolments(
+        Set(
+          Enrolment(
+            "HMRC-TERS-ORG",
+            Seq(EnrolmentIdentifier("SAUTR", utr)),
+            "Activated"
+          )
+        )
+      )
 
       val application =
         applicationBuilderForUser(

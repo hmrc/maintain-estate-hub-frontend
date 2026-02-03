@@ -30,61 +30,54 @@ import views.html.ViewLastDeclaredAnswersYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ViewLastDeclaredAnswersYesNoController @Inject()(
-                                                        override val messagesApi: MessagesApi,
-                                                        actions: Actions,
-                                                        repository: SessionRepository,
-                                                        yesNoFormProvider: YesNoFormProvider,
-                                                        val controllerComponents: MessagesControllerComponents,
-                                                        view: ViewLastDeclaredAnswersYesNoView
-                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class ViewLastDeclaredAnswersYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  actions: Actions,
+  repository: SessionRepository,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: ViewLastDeclaredAnswersYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = yesNoFormProvider.withPrefix("viewLastDeclaredYesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(ViewLastDeclaredAnswersYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(ViewLastDeclaredAnswersYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, request.utr))
+    Ok(view(preparedForm, request.utr))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
-
-        form.bindFromRequest().fold(
-          (formWithErrors: Form[_]) =>
-            Future.successful(BadRequest(view(formWithErrors, request.utr))),
-
-          value => {
-            for {
-              updatedAnswers <- Future.fromTry(
-                request.userAnswers.set(ViewLastDeclaredAnswersYesNoPage, value)
-              )
-              _ <- repository.set(updatedAnswers)
-            } yield {
-              if (value) {
-                Redirect(controllers.print.routes.LastDeclaredAnswersController.onPageLoad())
-              } else {
-                Redirect(controllers.routes.WhatIsNextController.onPageLoad())
-              }
+  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, request.utr))),
+        value =>
+          for {
+            updatedAnswers <- Future.fromTry(
+                                request.userAnswers.set(ViewLastDeclaredAnswersYesNoPage, value)
+                              )
+            _              <- repository.set(updatedAnswers)
+          } yield
+            if (value) {
+              Redirect(controllers.print.routes.LastDeclaredAnswersController.onPageLoad())
+            } else {
+              Redirect(controllers.routes.WhatIsNextController.onPageLoad())
             }
-          }
-        )
+      )
   }
 
-  def checkForUTR(): Action[AnyContent] = actions.validateUTR {
-    implicit request =>
+  def checkForUTR(): Action[AnyContent] = actions.validateUTR { implicit request =>
+    val preparedForm = request.userAnswers.get(ViewLastDeclaredAnswersYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(ViewLastDeclaredAnswersYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, request.utr))
+    Ok(view(preparedForm, request.utr))
   }
 
 }

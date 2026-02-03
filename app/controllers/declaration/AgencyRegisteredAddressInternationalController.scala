@@ -32,45 +32,41 @@ import views.html.declaration.AgencyRegisteredAddressInternationalView
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AgencyRegisteredAddressInternationalController @Inject()(
-                                                                override val messagesApi: MessagesApi,
-                                                                sessionRepository: SessionRepository,
-                                                                actions: Actions,
-                                                                formProvider: InternationalAddressFormProvider,
-                                                                countryOptions: CountryOptionsNonUK,
-                                                                val controllerComponents: MessagesControllerComponents,
-                                                                view: AgencyRegisteredAddressInternationalView
-                                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AgencyRegisteredAddressInternationalController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  actions: Actions,
+  formProvider: InternationalAddressFormProvider,
+  countryOptions: CountryOptionsNonUK,
+  val controllerComponents: MessagesControllerComponents,
+  view: AgencyRegisteredAddressInternationalView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[InternationalAddress] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(AgencyRegisteredAddressInternationalPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(AgencyRegisteredAddressInternationalPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, countryOptions.options()))
+    Ok(view(preparedForm, countryOptions.options()))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options()))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, countryOptions.options()))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(
-              request.userAnswers
-                .set(AgencyRegisteredAddressInternationalPage, value)
-            )
-            _ <- sessionRepository.set(updatedAnswers)
+                                request.userAnswers
+                                  .set(AgencyRegisteredAddressInternationalPage, value)
+                              )
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(controllers.declaration.routes.AgentDeclarationController.onPageLoad())
-        }
       )
 
   }

@@ -24,7 +24,7 @@ import views.html.closure.ChangePersonalRepDetailsYesNoView
 
 class ChangePersonalRepDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "closure.changePersonalRepDetailsYesNo"
+  val messageKeyPrefix    = "closure.changePersonalRepDetailsYesNo"
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "ChangePersonalRepDetailsYesNo View" must {
@@ -42,4 +42,5 @@ class ChangePersonalRepDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

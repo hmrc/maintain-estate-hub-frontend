@@ -26,21 +26,22 @@ import play.api.mvc.{ActionRefiner, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RequireTvnActionImpl @Inject()(implicit val executionContext: ExecutionContext) extends RequireTvnAction {
+class RequireTvnActionImpl @Inject() (implicit val executionContext: ExecutionContext) extends RequireTvnAction {
 
-  override protected def refine[A](request: DataRequestWithUTR[A]): Future[Either[Result, TvnRequest[A]]] = {
+  override protected def refine[A](request: DataRequestWithUTR[A]): Future[Either[Result, TvnRequest[A]]] =
     Future.successful((for {
-        tvn <- request.userAnswers.get(TVNPage)
-        submissionDate <- request.userAnswers.get(SubmissionDatePage)
-      } yield {
-        val optionalCrn = request.userAnswers.get(AgentDeclarationPage).map(_.crn)
+      tvn            <- request.userAnswers.get(TVNPage)
+      submissionDate <- request.userAnswers.get(SubmissionDatePage)
+    } yield {
+      val optionalCrn = request.userAnswers.get(AgentDeclarationPage).map(_.crn)
 
-        Right(TvnRequest(request.request, request.userAnswers, request.user, request.utr, tvn, optionalCrn, submissionDate))
-      }
-    ).getOrElse {
+      Right(
+        TvnRequest(request.request, request.userAnswers, request.user, request.utr, tvn, optionalCrn, submissionDate)
+      )
+    }).getOrElse {
       Left(Redirect(routes.EstateStatusController.problemWithService()))
     })
-  }
+
 }
 
 @ImplementedBy(classOf[RequireTvnActionImpl])

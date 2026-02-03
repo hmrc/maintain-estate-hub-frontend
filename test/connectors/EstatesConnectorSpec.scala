@@ -36,13 +36,20 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.io.Source
 
-class EstatesConnectorSpec extends PlaySpec with Matchers
-  with OptionValues with Generators with SpecBase with WireMockHelper with ScalaFutures with Inside {
+class EstatesConnectorSpec
+    extends PlaySpec
+    with Matchers
+    with OptionValues
+    with Generators
+    with SpecBase
+    with WireMockHelper
+    with ScalaFutures
+    with Inside {
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
-  private def getEstateUrl(utr: String) : String = s"/estates/$utr"
-  private def getTransformedEstateUrl(utr: String) : String = s"/estates/$utr/transformed"
+  private def getEstateUrl(utr: String): String            = s"/estates/$utr"
+  private def getTransformedEstateUrl(utr: String): String = s"/estates/$utr/transformed"
 
   "Estates Connector" when {
 
@@ -54,9 +61,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -80,7 +88,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
             )
         )
 
-        val result  = Await.result(connector.getEstate(utr), Duration.Inf)
+        val result = Await.result(connector.getEstate(utr), Duration.Inf)
         result mustBe Processing
 
         application.stop()
@@ -94,9 +102,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -108,7 +117,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
             )
         )
 
-        val result  = Await.result(connector.getEstate(utr),Duration.Inf)
+        val result = Await.result(connector.getEstate(utr), Duration.Inf)
         result mustBe SorryThereHasBeenAProblem
 
         application.stop()
@@ -122,9 +131,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -136,7 +146,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
             )
         )
 
-        val result  = Await.result(connector.getEstate(utr),Duration.Inf)
+        val result = Await.result(connector.getEstate(utr), Duration.Inf)
         result mustBe UtrNotFound
 
         application.stop()
@@ -150,9 +160,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -164,7 +175,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
             )
         )
 
-        val result  = Await.result(connector.getEstate(utr), Duration.Inf)
+        val result = Await.result(connector.getEstate(utr), Duration.Inf)
         result mustBe EstatesServiceUnavailable
 
         application.stop()
@@ -172,16 +183,17 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
 
       "must return playback data inside a Processed estate" in {
 
-        val utr = "2000000000"
+        val utr     = "2000000000"
         val payload = Source.fromInputStream(getClass.getResourceAsStream("/display-estate.json")).mkString
 
         val application = applicationBuilder()
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -192,48 +204,54 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
 
         val processed = Await.result(connector.getEstate(utr), Duration.Inf)
 
-        inside(processed) {
-          case Processed(data, bundleNumber) =>
+        inside(processed) { case Processed(data, bundleNumber) =>
 
-            bundleNumber mustBe "1"
+          bundleNumber mustBe "1"
 
-            data.matchData.utr mustBe "2000000000"
+          data.matchData.utr mustBe "2000000000"
 
-            val correspondence = data.correspondence
+          val correspondence = data.correspondence
 
-            correspondence.abroadIndicator mustBe false
-            correspondence.name mustBe "Estates 02"
-            correspondence.address mustBe AddressType("Address line 1", "Town or city", None, None, Some("Z99 2YY"), "GB")
+          correspondence.abroadIndicator mustBe false
+          correspondence.name            mustBe "Estates 02"
+          correspondence.address         mustBe AddressType("Address line 1", "Town or city", None, None, Some("Z99 2YY"), "GB")
 
-            val declaration = data.declaration
+          val declaration = data.declaration
 
-            declaration.name mustBe NameType("Alister", Some("Stuart"), "Mc'Govern")
-            declaration.address mustBe AddressType("Address line 1", "Address line 2", Some("Address line 3"), Some("Town or city"), Some("Z99 2YY"), "GB")
+          declaration.name    mustBe NameType("Alister", Some("Stuart"), "Mc'Govern")
+          declaration.address mustBe AddressType(
+            "Address line 1",
+            "Address line 2",
+            Some("Address line 3"),
+            Some("Town or city"),
+            Some("Z99 2YY"),
+            "GB"
+          )
 
-            val personalRepInd = data.estate.entities.personalRepresentative.estatePerRepInd.get
+          val personalRepInd = data.estate.entities.personalRepresentative.estatePerRepInd.get
 
-            personalRepInd.lineNo.value mustBe "1"
-            personalRepInd.bpMatchStatus.value mustBe "01"
-            personalRepInd.entityStart mustBe LocalDate.parse("2017-02-28")
-            personalRepInd.name mustBe NameType("Alister", None, "Mc'Govern")
-            personalRepInd.dateOfBirth mustBe LocalDate.parse("1980-06-01")
-            personalRepInd.identification.nino.value mustBe "JS123456A"
-            personalRepInd.phoneNumber mustBe "078888888"
+          personalRepInd.lineNo.value              mustBe "1"
+          personalRepInd.bpMatchStatus.value       mustBe "01"
+          personalRepInd.entityStart               mustBe LocalDate.parse("2017-02-28")
+          personalRepInd.name                      mustBe NameType("Alister", None, "Mc'Govern")
+          personalRepInd.dateOfBirth               mustBe LocalDate.parse("1980-06-01")
+          personalRepInd.identification.nino.value mustBe "JS123456A"
+          personalRepInd.phoneNumber               mustBe "078888888"
 
-            data.estate.entities.personalRepresentative.estatePerRepOrg mustBe None
+          data.estate.entities.personalRepresentative.estatePerRepOrg mustBe None
 
-            val deceased = data.estate.entities.deceased
+          val deceased = data.estate.entities.deceased
 
-            deceased.lineNo mustBe "1"
-            deceased.bpMatchStatus.value mustBe "01"
-            deceased.entityStart mustBe LocalDate.parse("2017-02-28")
-            deceased.name mustBe NameType("Wilbert", None, "Jefferies")
-            deceased.dateOfDeath mustBe LocalDate.parse("2016-04-06")
-            deceased.identification.nino.value mustBe "JS123456A"
+          deceased.lineNo                    mustBe "1"
+          deceased.bpMatchStatus.value       mustBe "01"
+          deceased.entityStart               mustBe LocalDate.parse("2017-02-28")
+          deceased.name                      mustBe NameType("Wilbert", None, "Jefferies")
+          deceased.dateOfDeath               mustBe LocalDate.parse("2016-04-06")
+          deceased.identification.nino.value mustBe "JS123456A"
 
-            data.estate.administrationEndDate.value mustBe LocalDate.parse("2017-06-01")
+          data.estate.administrationEndDate.value mustBe LocalDate.parse("2017-06-01")
 
-            data.estate.periodTaxDues mustBe "01"
+          data.estate.periodTaxDues mustBe "01"
         }
 
         application.stop()
@@ -248,9 +266,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -274,7 +293,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
             )
         )
 
-        val result  = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
+        val result = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
         result mustBe Processing
 
         application.stop()
@@ -288,9 +307,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -302,7 +322,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
             )
         )
 
-        val result  = Await.result(connector.getTransformedEstate(utr),Duration.Inf)
+        val result = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
         result mustBe SorryThereHasBeenAProblem
 
         application.stop()
@@ -316,9 +336,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -330,7 +351,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
             )
         )
 
-        val result  = Await.result(connector.getTransformedEstate(utr),Duration.Inf)
+        val result = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
         result mustBe UtrNotFound
 
         application.stop()
@@ -344,9 +365,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -358,7 +380,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
             )
         )
 
-        val result  = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
+        val result = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
         result mustBe EstatesServiceUnavailable
 
         application.stop()
@@ -366,16 +388,17 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
 
       "must return playback data inside a Processed estate" in {
 
-        val utr = "2000000000"
+        val utr     = "2000000000"
         val payload = Source.fromInputStream(getClass.getResourceAsStream("/display-estate.json")).mkString
 
         val application = applicationBuilder()
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -386,48 +409,54 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
 
         val processed = Await.result(connector.getTransformedEstate(utr), Duration.Inf)
 
-        inside(processed) {
-          case Processed(data, bundleNumber) =>
+        inside(processed) { case Processed(data, bundleNumber) =>
 
-            bundleNumber mustBe "1"
+          bundleNumber mustBe "1"
 
-            data.matchData.utr mustBe "2000000000"
+          data.matchData.utr mustBe "2000000000"
 
-            val correspondence = data.correspondence
+          val correspondence = data.correspondence
 
-            correspondence.abroadIndicator mustBe false
-            correspondence.name mustBe "Estates 02"
-            correspondence.address mustBe AddressType("Address line 1", "Town or city", None, None, Some("Z99 2YY"), "GB")
+          correspondence.abroadIndicator mustBe false
+          correspondence.name            mustBe "Estates 02"
+          correspondence.address         mustBe AddressType("Address line 1", "Town or city", None, None, Some("Z99 2YY"), "GB")
 
-            val declaration = data.declaration
+          val declaration = data.declaration
 
-            declaration.name mustBe NameType("Alister", Some("Stuart"), "Mc'Govern")
-            declaration.address mustBe AddressType("Address line 1", "Address line 2", Some("Address line 3"), Some("Town or city"), Some("Z99 2YY"), "GB")
+          declaration.name    mustBe NameType("Alister", Some("Stuart"), "Mc'Govern")
+          declaration.address mustBe AddressType(
+            "Address line 1",
+            "Address line 2",
+            Some("Address line 3"),
+            Some("Town or city"),
+            Some("Z99 2YY"),
+            "GB"
+          )
 
-            val personalRepInd = data.estate.entities.personalRepresentative.estatePerRepInd.get
+          val personalRepInd = data.estate.entities.personalRepresentative.estatePerRepInd.get
 
-            personalRepInd.lineNo.value mustBe "1"
-            personalRepInd.bpMatchStatus.value mustBe "01"
-            personalRepInd.entityStart mustBe LocalDate.parse("2017-02-28")
-            personalRepInd.name mustBe NameType("Alister", None, "Mc'Govern")
-            personalRepInd.dateOfBirth mustBe LocalDate.parse("1980-06-01")
-            personalRepInd.identification.nino.value mustBe "JS123456A"
-            personalRepInd.phoneNumber mustBe "078888888"
+          personalRepInd.lineNo.value              mustBe "1"
+          personalRepInd.bpMatchStatus.value       mustBe "01"
+          personalRepInd.entityStart               mustBe LocalDate.parse("2017-02-28")
+          personalRepInd.name                      mustBe NameType("Alister", None, "Mc'Govern")
+          personalRepInd.dateOfBirth               mustBe LocalDate.parse("1980-06-01")
+          personalRepInd.identification.nino.value mustBe "JS123456A"
+          personalRepInd.phoneNumber               mustBe "078888888"
 
-            data.estate.entities.personalRepresentative.estatePerRepOrg mustBe None
+          data.estate.entities.personalRepresentative.estatePerRepOrg mustBe None
 
-            val deceased = data.estate.entities.deceased
+          val deceased = data.estate.entities.deceased
 
-            deceased.lineNo mustBe "1"
-            deceased.bpMatchStatus.value mustBe "01"
-            deceased.entityStart mustBe LocalDate.parse("2017-02-28")
-            deceased.name mustBe NameType("Wilbert", None, "Jefferies")
-            deceased.dateOfDeath mustBe LocalDate.parse("2016-04-06")
-            deceased.identification.nino.value mustBe "JS123456A"
+          deceased.lineNo                    mustBe "1"
+          deceased.bpMatchStatus.value       mustBe "01"
+          deceased.entityStart               mustBe LocalDate.parse("2017-02-28")
+          deceased.name                      mustBe NameType("Wilbert", None, "Jefferies")
+          deceased.dateOfDeath               mustBe LocalDate.parse("2016-04-06")
+          deceased.identification.nino.value mustBe "JS123456A"
 
-            data.estate.administrationEndDate.value mustBe LocalDate.parse("2017-06-01")
+          data.estate.administrationEndDate.value mustBe LocalDate.parse("2017-06-01")
 
-            data.estate.periodTaxDues mustBe "01"
+          data.estate.periodTaxDues mustBe "01"
         }
 
         application.stop()
@@ -436,8 +465,8 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
 
     "close" must {
 
-      def url(utr: String) = s"/estates/close/$utr"
-      val utr: String = "utr"
+      def url(utr: String)     = s"/estates/close/$utr"
+      val utr: String          = "utr"
       val closeDate: LocalDate = LocalDate.parse("2000-01-01")
 
       "Return OK when the request is successful" in {
@@ -446,9 +475,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -470,9 +500,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -500,9 +531,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -523,9 +555,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -545,7 +578,7 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
     "clear transformations" must {
 
       def url(utr: String) = s"/estates/$utr/clear-transformations"
-      val utr: String = "utr"
+      val utr: String      = "utr"
 
       "Return OK when the request is successful" in {
 
@@ -553,9 +586,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 
@@ -577,9 +611,10 @@ class EstatesConnectorSpec extends PlaySpec with Matchers
           .configure(
             Seq(
               "microservice.services.estates.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                   -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[EstatesConnector]
 

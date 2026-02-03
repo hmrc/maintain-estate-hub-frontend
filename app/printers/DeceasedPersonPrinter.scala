@@ -22,7 +22,7 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 import javax.inject.Inject
 
-class DeceasedPersonPrinter @Inject()(answerRowConverter: AnswerRowConverter) {
+class DeceasedPersonPrinter @Inject() (answerRowConverter: AnswerRowConverter) {
 
   import ImplicitConverters._
 
@@ -33,13 +33,14 @@ class DeceasedPersonPrinter @Inject()(answerRowConverter: AnswerRowConverter) {
     val prefix: String = "print.deceasedPerson"
 
     val addressQuestions: Seq[Option[AnswerRow]] = deceasedPerson.identification.address match {
-      case Some(address) => Seq(
-        bound.yesNoQuestion(data = true, s"$prefix.addressYesNo"),
-        bound.yesNoQuestion(AddressType.isUK(address), s"$prefix.addressUkYesNo"),
-        bound.addressQuestion(address, s"$prefix.address")
-      )
+      case Some(address)                                        =>
+        Seq(
+          bound.yesNoQuestion(data = true, s"$prefix.addressYesNo"),
+          bound.yesNoQuestion(AddressType.isUK(address), s"$prefix.addressUkYesNo"),
+          bound.addressQuestion(address, s"$prefix.address")
+        )
       case None if deceasedPerson.identification.nino.isDefined => Nil
-      case _ => Seq(bound.yesNoQuestion(data = false, s"$prefix.addressYesNo"))
+      case _                                                    => Seq(bound.yesNoQuestion(data = false, s"$prefix.addressYesNo"))
     }
 
     val questions: Seq[AnswerRow] = Seq(
@@ -53,11 +54,12 @@ class DeceasedPersonPrinter @Inject()(answerRowConverter: AnswerRowConverter) {
 
     questions match {
       case Nil => None
-      case _ => AnswerSection(
-        headingKey = Some(messages(prefix)),
-        rows = questions,
-        sectionKey = Some(messages(prefix))
-      ).toOption
+      case _   =>
+        AnswerSection(
+          headingKey = Some(messages(prefix)),
+          rows = questions,
+          sectionKey = Some(messages(prefix))
+        ).toOption
     }
   }
 

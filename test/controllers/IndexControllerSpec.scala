@@ -55,11 +55,16 @@ class IndexControllerSpec extends SpecBase {
       val application = applicationBuilderForUser(
         userAnswers = Some(emptyUserAnswers),
         user = FakeUser.organisation(
-          Enrolments(Set(Enrolment(
-            key = "HMRC-TERS-ORG",
-            identifiers = Seq(EnrolmentIdentifier(key = "SAUTR", value = utr)),
-            state = "Activated")
-          ))),
+          Enrolments(
+            Set(
+              Enrolment(
+                key = "HMRC-TERS-ORG",
+                identifiers = Seq(EnrolmentIdentifier(key = "SAUTR", value = utr)),
+                state = "Activated"
+              )
+            )
+          )
+        ),
         affinityGroup = AffinityGroup.Organisation
       ).build()
 
@@ -75,4 +80,5 @@ class IndexControllerSpec extends SpecBase {
     }
 
   }
+
 }

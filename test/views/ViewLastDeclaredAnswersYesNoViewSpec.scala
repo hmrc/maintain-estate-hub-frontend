@@ -24,8 +24,8 @@ import views.html.ViewLastDeclaredAnswersYesNoView
 
 class ViewLastDeclaredAnswersYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "viewLastDeclaredYesNo"
-  val utr = "1234567890"
+  val messageKeyPrefix    = "viewLastDeclaredYesNo"
+  val utr                 = "1234567890"
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "ViewLastDeclaredAnswersYesNo view" must {
@@ -48,4 +48,5 @@ class ViewLastDeclaredAnswersYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

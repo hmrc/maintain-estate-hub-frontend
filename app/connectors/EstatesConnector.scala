@@ -28,7 +28,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class EstatesConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) {
+class EstatesConnector @Inject() (http: HttpClientV2, config: FrontendAppConfig) {
 
   private def getEstateUrl(utr: String) = s"${config.estatesUrl}/estates/$utr"
 
@@ -43,21 +43,27 @@ class EstatesConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) 
   private def clearTransformationsUrl(utr: String) = s"${config.estatesUrl}/estates/$utr/clear-transformations"
 
   def getEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
-   val fullUrl = getEstateUrl(utr)
-    http.get(url"$fullUrl").execute[EstateResponse](EstateStatusReads.httpReads,ec)
+    val fullUrl = getEstateUrl(utr)
+    http.get(url"$fullUrl").execute[EstateResponse](EstateStatusReads.httpReads, ec)
   }
 
   def getTransformedEstate(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstateResponse] = {
     val fullUrl = getTransformedEstateUrl(utr)
-    http.get(url"$fullUrl").execute[EstateResponse](EstateStatusReads.httpReads,ec)
+    http.get(url"$fullUrl").execute[EstateResponse](EstateStatusReads.httpReads, ec)
   }
 
-  def declare(utr: String, payload: JsValue)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {
+  def declare(utr: String, payload: JsValue)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[VariationResponse] = {
     val fullUrl = declareUrl(utr)
     http.post(url"$fullUrl").withBody(payload).execute[VariationResponse](VariationResponse.httpReads, ec)
   }
 
-  def close(utr: String, closeDate: LocalDate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def close(
+    utr: String,
+    closeDate: LocalDate
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val fullUrl = closeUrl(utr)
     http.post(url"$fullUrl").withBody(Json.toJson(closeDate)).execute[HttpResponse]
   }
@@ -65,10 +71,13 @@ class EstatesConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) 
   def getDateOfDeath(utr: String)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[LocalDate] = {
     val fullUrl = getDateOfDeathUrl(utr)
 
-    http.get(url"$fullUrl").execute[JsValue].map(_.validate[LocalDate] match {
-      case JsSuccess(dateOfDeath, _) => dateOfDeath
-      case _ => config.minDate
-    })
+    http
+      .get(url"$fullUrl")
+      .execute[JsValue]
+      .map(_.validate[LocalDate] match {
+        case JsSuccess(dateOfDeath, _) => dateOfDeath
+        case _                         => config.minDate
+      })
   }
 
   def clearTransformations(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {

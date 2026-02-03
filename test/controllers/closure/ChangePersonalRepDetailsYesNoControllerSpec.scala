@@ -30,11 +30,11 @@ import views.html.closure.ChangePersonalRepDetailsYesNoView
 
 class ChangePersonalRepDetailsYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
-  private val form: Form[Boolean] = formProvider.withPrefix("closure.changePersonalRepDetailsYesNo")
+  private val formProvider            = new YesNoFormProvider()
+  private val form: Form[Boolean]     = formProvider.withPrefix("closure.changePersonalRepDetailsYesNo")
   private lazy val yesNoRoute: String = routes.ChangePersonalRepDetailsYesNoController.onPageLoad().url
-  private val utr: String = "utr"
-  private val validAnswer: Boolean = true
+  private val utr: String             = "utr"
+  private val validAnswer: Boolean    = true
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(UTRPage, utr).success.value
 
@@ -111,7 +111,9 @@ class ChangePersonalRepDetailsYesNoControllerSpec extends SpecBase {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.declaration.routes.AgencyRegisteredAddressUkYesNoController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.declaration.routes.AgencyRegisteredAddressUkYesNoController
+          .onPageLoad()
+          .url
 
         application.stop()
       }
@@ -131,7 +133,9 @@ class ChangePersonalRepDetailsYesNoControllerSpec extends SpecBase {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.declaration.routes.IndividualDeclarationController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.declaration.routes.IndividualDeclarationController
+          .onPageLoad()
+          .url
 
         application.stop()
       }
@@ -174,4 +178,5 @@ class ChangePersonalRepDetailsYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

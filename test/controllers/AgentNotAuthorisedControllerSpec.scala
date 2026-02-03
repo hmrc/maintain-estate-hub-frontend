@@ -85,4 +85,5 @@ class AgentNotAuthorisedControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

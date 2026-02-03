@@ -22,18 +22,19 @@ import viewmodels.AnswerSection
 
 import javax.inject.Inject
 
-class PersonalRepresentativePrinter @Inject()(answerRowConverter: AnswerRowConverter) {
+class PersonalRepresentativePrinter @Inject() (answerRowConverter: AnswerRowConverter) {
 
   import ImplicitConverters._
 
-  def individual(perRepInd: Option[EstatePerRepIndType], correspondenceAddress: AddressType)(implicit messages: Messages): Option[AnswerSection] = {
+  def individual(perRepInd: Option[EstatePerRepIndType], correspondenceAddress: AddressType)(implicit
+    messages: Messages
+  ): Option[AnswerSection] =
     perRepInd flatMap { ind =>
-
       val bound = answerRowConverter.bind(ind.name.displayName)
 
       val address = ind.identification.address match {
         case Some(x) => x
-        case None => correspondenceAddress
+        case None    => correspondenceAddress
       }
 
       val questions = Seq(
@@ -52,23 +53,24 @@ class PersonalRepresentativePrinter @Inject()(answerRowConverter: AnswerRowConve
 
       questions match {
         case Nil => None
-        case _ => AnswerSection(
-          headingKey = Some(messages("print.personalRepresentative")),
-          rows = questions,
-          sectionKey = Some(messages("print.personalRepresentative"))
-        ).toOption
+        case _   =>
+          AnswerSection(
+            headingKey = Some(messages("print.personalRepresentative")),
+            rows = questions,
+            sectionKey = Some(messages("print.personalRepresentative"))
+          ).toOption
       }
     }
-  }
 
-  def business(perRepOrg: Option[EstatePerRepOrgType], correspondenceAddress: AddressType)(implicit messages: Messages): Option[AnswerSection] = {
+  def business(perRepOrg: Option[EstatePerRepOrgType], correspondenceAddress: AddressType)(implicit
+    messages: Messages
+  ): Option[AnswerSection] =
     perRepOrg.flatMap { org =>
-
       val bound = answerRowConverter.bind(org.orgName)
 
       val address = org.identification.address match {
         case Some(x) => x
-        case None => correspondenceAddress
+        case None    => correspondenceAddress
       }
 
       val questions = Seq(
@@ -85,13 +87,13 @@ class PersonalRepresentativePrinter @Inject()(answerRowConverter: AnswerRowConve
 
       questions match {
         case Nil => None
-        case _ => AnswerSection(
-          headingKey = Some(messages("print.personalRepresentative")),
-          rows = questions,
-          sectionKey = Some(messages("print.personalRepresentative"))
-        ).toOption
+        case _   =>
+          AnswerSection(
+            headingKey = Some(messages("print.personalRepresentative")),
+            rows = questions,
+            sectionKey = Some(messages("print.personalRepresentative"))
+          ).toOption
       }
     }
-  }
 
 }

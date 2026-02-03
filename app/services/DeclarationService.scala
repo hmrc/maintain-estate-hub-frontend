@@ -25,10 +25,12 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclarationServiceImpl @Inject()(connector: EstatesConnector) extends DeclarationService {
+class DeclarationServiceImpl @Inject() (connector: EstatesConnector) extends DeclarationService {
 
-  override def declare(utr: String, declaration: IndividualDeclaration)
-                      (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {
+  override def declare(utr: String, declaration: IndividualDeclaration)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[VariationResponse] = {
 
     val payload = DeclarationForApi(
       declaration = Declaration(declaration.name),
@@ -39,18 +41,19 @@ class DeclarationServiceImpl @Inject()(connector: EstatesConnector) extends Decl
     connector.declare(utr, Json.toJson(payload))
   }
 
-  override def declare(agentRequest: AgentRequestWithAddress[_],
-                       declaration: AgentDeclaration)
-                      (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse] = {
+  override def declare(agentRequest: AgentRequestWithAddress[_], declaration: AgentDeclaration)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[VariationResponse] = {
 
     import models.Implicits._
 
-    val arn = agentRequest.user.agentReferenceNumber
-    val address = agentRequest.address
-    val utr = agentRequest.utr
+    val arn        = agentRequest.user.agentReferenceNumber
+    val address    = agentRequest.address
+    val utr        = agentRequest.utr
     val agencyName = declaration.agencyName
-    val tel = declaration.telephoneNumber
-    val crn = declaration.crn
+    val tel        = declaration.telephoneNumber
+    val crn        = declaration.crn
 
     val agentDetails = AgentDetails(arn, agencyName, address.convert, tel, crn)
 
@@ -62,15 +65,20 @@ class DeclarationServiceImpl @Inject()(connector: EstatesConnector) extends Decl
 
     connector.declare(utr, Json.toJson(payload))
   }
+
 }
 
 @ImplementedBy(classOf[DeclarationServiceImpl])
 trait DeclarationService {
 
-  def declare(utr: String, declaration: IndividualDeclaration)
-             (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse]
+  def declare(utr: String, declaration: IndividualDeclaration)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[VariationResponse]
 
-  def declare(agentRequest: AgentRequestWithAddress[_],
-              declaration: AgentDeclaration)
-             (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[VariationResponse]
+  def declare(agentRequest: AgentRequestWithAddress[_], declaration: AgentDeclaration)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[VariationResponse]
+
 }

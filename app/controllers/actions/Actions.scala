@@ -20,15 +20,15 @@ import com.google.inject.Inject
 import models.requests.{AgentRequestWithAddress, DataRequest, DataRequestWithUTR, OptionalDataRequest, TvnRequest}
 import play.api.mvc.{ActionBuilder, AnyContent}
 
-class Actions @Inject()(
-                         identify: IdentifierAction,
-                         getData: DataRetrievalAction,
-                         requireData: DataRequiredAction,
-                         getUTR: UTRRetrievalAction,
-                         verifyUtr: UTRAuthenticationAction,
-                         requireAgentAddress: RequireAgentAddressAction,
-                         getTvn: RequireTvnAction
-                       ) {
+class Actions @Inject() (
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  getUTR: UTRRetrievalAction,
+  verifyUtr: UTRAuthenticationAction,
+  requireAgentAddress: RequireAgentAddressAction,
+  getTvn: RequireTvnAction
+) {
 
   def authWithSession: ActionBuilder[OptionalDataRequest, AnyContent] =
     identify andThen getData
@@ -36,15 +36,16 @@ class Actions @Inject()(
   def authWithData: ActionBuilder[DataRequest, AnyContent] =
     authWithSession andThen requireData
 
-  def authenticatedForUtr : ActionBuilder[DataRequestWithUTR, AnyContent] =
+  def authenticatedForUtr: ActionBuilder[DataRequestWithUTR, AnyContent] =
     authWithData andThen getUTR
 
-  def validateUTR : ActionBuilder[DataRequestWithUTR, AnyContent] =
+  def validateUTR: ActionBuilder[DataRequestWithUTR, AnyContent] =
     authWithData andThen verifyUtr
 
-  def requireAgent : ActionBuilder[AgentRequestWithAddress, AnyContent] =
+  def requireAgent: ActionBuilder[AgentRequestWithAddress, AnyContent] =
     authenticatedForUtr andThen requireAgentAddress
 
   def requireTvn: ActionBuilder[TvnRequest, AnyContent] =
     authenticatedForUtr andThen getTvn
+
 }

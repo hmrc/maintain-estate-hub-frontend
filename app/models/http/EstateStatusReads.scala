@@ -38,44 +38,47 @@ case object ServerError extends EstateResponse
 object EstateStatusReads extends Logging {
 
   implicit object StatusReads extends Reads[EstateStatus] {
-    override def reads(json: JsValue): JsResult[EstateStatus] = {
-      json("responseHeader")("status") match {
-        case JsString("Processed") => validate(json)
-        case JsString("In Processing") => JsSuccess(Processing)
-        case JsString("Pending Closure") => JsSuccess(Closed)
-        case JsString("Closed") => JsSuccess(Closed)
-        case JsString("Suspended") => JsSuccess(SorryThereHasBeenAProblem)
-        case JsString("Parked") => JsSuccess(SorryThereHasBeenAProblem)
-        case JsString("Obsoleted") => JsSuccess(SorryThereHasBeenAProblem)
-        case _ => JsError("Unexpected Status")
-      }
-    }
 
-    private def validate(json: JsValue): JsResult[EstateStatus] = {
+    override def reads(json: JsValue): JsResult[EstateStatus] =
+      json("responseHeader")("status") match {
+        case JsString("Processed")       => validate(json)
+        case JsString("In Processing")   => JsSuccess(Processing)
+        case JsString("Pending Closure") => JsSuccess(Closed)
+        case JsString("Closed")          => JsSuccess(Closed)
+        case JsString("Suspended")       => JsSuccess(SorryThereHasBeenAProblem)
+        case JsString("Parked")          => JsSuccess(SorryThereHasBeenAProblem)
+        case JsString("Obsoleted")       => JsSuccess(SorryThereHasBeenAProblem)
+        case _                           => JsError("Unexpected Status")
+      }
+
+    private def validate(json: JsValue): JsResult[EstateStatus] =
       json("getEstate").validate[GetEstate] match {
         case JsSuccess(estate, _) =>
           val formBundle = json("responseHeader")("formBundleNo").as[String]
           JsSuccess(Processed(estate, formBundle))
-        case JsError(errors) => JsError(s"Validating as GetEstate failed due to $errors")
+        case JsError(errors)      => JsError(s"Validating as GetEstate failed due to $errors")
       }
-    }
+
   }
 
   implicit def httpReads(implicit hc: HeaderCarrier): HttpReads[EstateResponse] =
     (method: String, url: String, response: HttpResponse) => {
-      logger.info(s"[Session ID: ${Session.id(hc)}] response status received from estates status api: ${response.status}")
+      logger.info(
+        s"[Session ID: ${Session.id(hc)}] response status received from estates status api: ${response.status}"
+      )
 
       response.status match {
-        case OK =>
+        case OK                  =>
           response.json.as[EstateStatus]
-        case NO_CONTENT =>
+        case NO_CONTENT          =>
           SorryThereHasBeenAProblem
-        case NOT_FOUND =>
+        case NOT_FOUND           =>
           UtrNotFound
         case SERVICE_UNAVAILABLE =>
           EstatesServiceUnavailable
-        case _ =>
+        case _                   =>
           ServerError
       }
     }
+
 }

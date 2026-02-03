@@ -32,22 +32,24 @@ trait EstatesAuthConnector {
   def authorisedForUtr(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstatesAuthResponse]
 }
 
-class EstatesAuthConnectorImpl @Inject()(http: HttpClientV2, config: FrontendAppConfig)
-  extends EstatesAuthConnector {
+class EstatesAuthConnectorImpl @Inject() (http: HttpClientV2, config: FrontendAppConfig) extends EstatesAuthConnector {
 
   val baseUrl: String = config.estatesAuthUrl + "/estates-auth"
 
   override def agentIsAuthorised(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstatesAuthResponse] = {
     val fullUrl = s"$baseUrl/agent-authorised"
-    http.get(url"$fullUrl").execute[EstatesAuthResponse].recoverWith {
-      case _ => Future.successful(AuthInternalServerError)
+    http.get(url"$fullUrl").execute[EstatesAuthResponse].recoverWith { case _ =>
+      Future.successful(AuthInternalServerError)
     }
   }
 
-  override def authorisedForUtr(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstatesAuthResponse] = {
+  override def authorisedForUtr(
+    utr: String
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[EstatesAuthResponse] = {
     val fullUrl = s"$baseUrl/authorised/$utr"
-    http.get(url"$fullUrl").execute[EstatesAuthResponse].recoverWith {
-      case _ => Future.successful(AuthInternalServerError)
+    http.get(url"$fullUrl").execute[EstatesAuthResponse].recoverWith { case _ =>
+      Future.successful(AuthInternalServerError)
     }
   }
+
 }

@@ -35,54 +35,52 @@ import views.html.declaration.{AgentDeclarationView, IndividualDeclarationView}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IndividualDeclarationController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 repository: SessionRepository,
-                                                 actions: Actions,
-                                                 formProvider: IndividualDeclarationFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 individualView: IndividualDeclarationView,
-                                                 agentView: AgentDeclarationView,
-                                                 service: DeclarationService,
-                                                 appConfig: FrontendAppConfig
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class IndividualDeclarationController @Inject() (
+  override val messagesApi: MessagesApi,
+  repository: SessionRepository,
+  actions: Actions,
+  formProvider: IndividualDeclarationFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  individualView: IndividualDeclarationView,
+  agentView: AgentDeclarationView,
+  service: DeclarationService,
+  appConfig: FrontendAppConfig
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[IndividualDeclaration] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(IndividualDeclarationPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(IndividualDeclarationPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(individualView(preparedForm, appConfig.declarationEmailEnabled))
+    Ok(individualView(preparedForm, appConfig.declarationEmailEnabled))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) => {
-          Future.successful(BadRequest(individualView(formWithErrors, appConfig.declarationEmailEnabled)))
-        },
+  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) =>
+          Future.successful(BadRequest(individualView(formWithErrors, appConfig.declarationEmailEnabled))),
         declaration =>
-            service.declare(request.utr, declaration) flatMap {
-              case TVN(tvn) =>
-                for {
-                  updatedAnswers <- Future.fromTry(
-                    request.userAnswers
-                      .set(IndividualDeclarationPage, declaration)
-                      .flatMap(_.set(SubmissionDatePage, LocalDateTime.now))
-                      .flatMap(_.set(TVNPage, tvn))
-                  )
-                  _ <- repository.set(updatedAnswers)
-                } yield Redirect(controllers.confirmation.routes.ConfirmationController.onPageLoad())
-              case _ =>
-                Future.successful(Redirect(controllers.declaration.routes.ProblemDeclaringController.onPageLoad()))
+          service.declare(request.utr, declaration) flatMap {
+            case TVN(tvn) =>
+              for {
+                updatedAnswers <- Future.fromTry(
+                                    request.userAnswers
+                                      .set(IndividualDeclarationPage, declaration)
+                                      .flatMap(_.set(SubmissionDatePage, LocalDateTime.now))
+                                      .flatMap(_.set(TVNPage, tvn))
+                                  )
+                _              <- repository.set(updatedAnswers)
+              } yield Redirect(controllers.confirmation.routes.ConfirmationController.onPageLoad())
+            case _        =>
+              Future.successful(Redirect(controllers.declaration.routes.ProblemDeclaringController.onPageLoad()))
           }
-
       )
   }
+
 }

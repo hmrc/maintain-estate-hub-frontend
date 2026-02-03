@@ -23,9 +23,9 @@ import views.html.confirmation.ConfirmationView
 class ConfirmationViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "confirmationPage"
-  val tvn = "XC TVN 000 000 4912"
+  val tvn              = "XC TVN 000 000 4912"
 
-  private def confirmationPage(view: HtmlFormat.Appendable) : Unit = {
+  private def confirmationPage(view: HtmlFormat.Appendable): Unit =
 
     "assert content" in {
       val doc = asDocument(view)
@@ -38,34 +38,39 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       assertContainsTextForId(doc, "print-declared", "Print or save a declared copy of the estate’s declaration")
 
-      assertContainsText(doc, "Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact Adam.")
+      assertContainsText(
+        doc,
+        "Keep a note of your reference in case you need to contact HMRC. If there is a problem with the declaration, we will contact Adam."
+      )
     }
 
-  }
-
-  private def confirmationPageForAgent(view: HtmlFormat.Appendable) : Unit = {
+  private def confirmationPageForAgent(view: HtmlFormat.Appendable): Unit =
     "display return to agent overview link" in {
 
-      val doc = asDocument(view)
+      val doc               = asDocument(view)
       val agentOverviewLink = doc.getElementById("agent-overview")
       assertAttributeValueForElement(agentOverviewLink, "href", frontendAppConfig.agentOverviewUrl)
       assertContainsTextForId(doc, "agent-overview", "return to register and manage an estate for a client")
     }
 
-  }
-
-  private def closingConfirmationPage(view: HtmlFormat.Appendable) : Unit = {
+  private def closingConfirmationPage(view: HtmlFormat.Appendable): Unit =
     "display paragraphs relevant to closing the estate" in {
 
       val doc = asDocument(view)
-      assertContainsText(doc, "Your request to close this estate will be processed and access to its online register will be removed.")
+      assertContainsText(
+        doc,
+        "Your request to close this estate will be processed and access to its online register will be removed."
+      )
       assertContainsText(doc, "If this has been done in error, you can")
 
       val estatesHelplineLink = doc.getElementById("helpline")
       assertAttributeValueForElement(estatesHelplineLink, "href", frontendAppConfig.estatesHelplineUrl)
-      assertContainsTextForId(doc, "helpline", "contact the deceased estate helpline to reopen the records (opens in a new tab)")
+      assertContainsTextForId(
+        doc,
+        "helpline",
+        "contact the deceased estate helpline to reopen the records (opens in a new tab)"
+      )
     }
-  }
 
   "Confirmation view for an agent" must {
     val view = viewFor[ConfirmationView](Some(emptyUserAnswers))

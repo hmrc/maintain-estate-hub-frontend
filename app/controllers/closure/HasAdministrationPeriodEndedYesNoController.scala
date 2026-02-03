@@ -29,47 +29,42 @@ import views.html.closure.HasAdministrationPeriodEndedYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class HasAdministrationPeriodEndedYesNoController @Inject()(
-                                                             override val messagesApi: MessagesApi,
-                                                             sessionRepository: SessionRepository,
-                                                             actions: Actions,
-                                                             yesNoFormProvider: YesNoFormProvider,
-                                                             val controllerComponents: MessagesControllerComponents,
-                                                             view: HasAdministrationPeriodEndedYesNoView
-                                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class HasAdministrationPeriodEndedYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  actions: Actions,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: HasAdministrationPeriodEndedYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = yesNoFormProvider.withPrefix("closure.hasAdministrationPeriodEndedYesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.authenticatedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(HasAdministrationPeriodEndedYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(HasAdministrationPeriodEndedYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.authenticatedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HasAdministrationPeriodEndedYesNoPage, value))
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield {
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield
             if (value) {
               Redirect(controllers.closure.routes.AdministrationPeriodEndDateController.onPageLoad())
             } else {
               Redirect(controllers.closure.routes.AdministrationPeriodEndDateNeededController.onPageLoad())
             }
-          }
-        }
       )
 
   }

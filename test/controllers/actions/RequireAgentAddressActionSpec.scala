@@ -32,8 +32,10 @@ import scala.concurrent.Future
 class RequireAgentAddressActionSpec extends SpecBase with MockitoSugar with ScalaFutures with EitherValues {
 
   class Harness() extends RequireAgentAddressActionImpl() {
+
     def callRefine[A](request: DataRequestWithUTR[A]): Future[Either[Result, AgentRequestWithAddress[A]]] =
       refine(request)
+
   }
 
   "Require Agent Address Action" when {
@@ -44,7 +46,7 @@ class RequireAgentAddressActionSpec extends SpecBase with MockitoSugar with Scal
 
         val action = new Harness()
 
-        val user = AgentUser("id", Enrolments(Set()), "arn")
+        val user    = AgentUser("id", Enrolments(Set()), "arn")
         val request = DataRequestWithUTR(fakeRequest, emptyUserAnswers, user, "utr")
 
         val futureResult = action.callRefine(request)
@@ -63,7 +65,7 @@ class RequireAgentAddressActionSpec extends SpecBase with MockitoSugar with Scal
 
         val userAnswers = emptyUserAnswers
 
-        val user = OrganisationUser("id", Enrolments(Set()))
+        val user    = OrganisationUser("id", Enrolments(Set()))
         val request = DataRequestWithUTR(fakeRequest, userAnswers, user, "utr")
 
         val futureResult = action.callRefine(request)
@@ -81,9 +83,11 @@ class RequireAgentAddressActionSpec extends SpecBase with MockitoSugar with Scal
         val action = new Harness()
 
         val userAnswers = emptyUserAnswers
-          .set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ")).success.value
+          .set(AgencyRegisteredAddressPage, UKAddress("line1", "line2", postcode = "NE981ZZ"))
+          .success
+          .value
 
-        val user = AgentUser("id", Enrolments(Set()), "arn")
+        val user    = AgentUser("id", Enrolments(Set()), "arn")
         val request = DataRequestWithUTR(fakeRequest, userAnswers, user, "utr")
 
         val futureResult = action.callRefine(request)
@@ -92,4 +96,5 @@ class RequireAgentAddressActionSpec extends SpecBase with MockitoSugar with Scal
       }
     }
   }
+
 }

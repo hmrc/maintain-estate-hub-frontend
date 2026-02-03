@@ -20,11 +20,13 @@ import java.time.LocalDate
 
 import play.api.libs.json._
 
-case class GetEstate(matchData: MatchData,
-                     correspondence: Correspondence,
-                     declaration: Declaration,
-                     estate: Estate,
-                     trustEndDate: Option[LocalDate]) {
+case class GetEstate(
+  matchData: MatchData,
+  correspondence: Correspondence,
+  declaration: Declaration,
+  estate: Estate,
+  trustEndDate: Option[LocalDate]
+) {
 
   def isClosing: Boolean = trustEndDate.isDefined
 }
@@ -39,25 +41,19 @@ object MatchData {
   implicit val matchDataFormat: Format[MatchData] = Json.format[MatchData]
 }
 
-case class Correspondence(abroadIndicator: Boolean,
-                          name: String,
-                          address: AddressType,
-                          phoneNumber: String)
+case class Correspondence(abroadIndicator: Boolean, name: String, address: AddressType, phoneNumber: String)
 
 object Correspondence {
-  implicit val correspondenceFormat : Format[Correspondence] = Json.format[Correspondence]
+  implicit val correspondenceFormat: Format[Correspondence] = Json.format[Correspondence]
 }
 
-case class Declaration(name: NameType,
-                       address: AddressType)
+case class Declaration(name: NameType, address: AddressType)
 
 object Declaration {
   implicit val declarationFormat: Format[Declaration] = Json.format[Declaration]
 }
 
-case class Estate(entities: EntitiesType,
-                  administrationEndDate: Option[LocalDate],
-                  periodTaxDues: String)
+case class Estate(entities: EntitiesType, administrationEndDate: Option[LocalDate], periodTaxDues: String)
 
 object Estate {
   implicit val estateFormat: Format[Estate] = Json.format[Estate]

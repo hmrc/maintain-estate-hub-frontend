@@ -30,36 +30,35 @@ import views.html.UTRView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UTRController @Inject()(
-                               override val messagesApi: MessagesApi,
-                               sessionRepository: SessionRepository,
-                               actions: Actions,
-                               formProvider: UTRFormProvider,
-                               val controllerComponents: MessagesControllerComponents,
-                               view: UTRView
-                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class UTRController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  actions: Actions,
+  formProvider: UTRFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: UTRView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = actions.authWithSession.async {
-    implicit request =>
-      Future.successful(Ok(view(form)))
+  def onPageLoad(): Action[AnyContent] = actions.authWithSession.async { implicit request =>
+    Future.successful(Ok(view(form)))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.authWithSession.async {
-    implicit request =>
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-        utr => {
+  def onSubmit(): Action[AnyContent] = actions.authWithSession.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        utr =>
           for {
-            _ <- sessionRepository.resetCache(request.user.internalId)
+            _                 <- sessionRepository.resetCache(request.user.internalId)
             newSessionWithUtr <- Future.fromTry {
-              UserAnswers.startNewSession(request.user.internalId).set(UTRPage, utr)
-            }
-            _ <- sessionRepository.set(newSessionWithUtr)
+                                   UserAnswers.startNewSession(request.user.internalId).set(UTRPage, utr)
+                                 }
+            _                 <- sessionRepository.set(newSessionWithUtr)
           } yield Redirect(controllers.routes.EstateStatusController.checkStatus())
-        }
       )
   }
 

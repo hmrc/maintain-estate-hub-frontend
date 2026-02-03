@@ -32,43 +32,41 @@ import views.html.confirmation.ConfirmationView
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ConfirmationController @Inject()(
-                                        override implicit val messagesApi: MessagesApi,
-                                        actions: Actions,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        confirmationView: ConfirmationView,
-                                        estatesConnector: EstatesConnector
-                                      )(implicit ec: ExecutionContext
-) extends FrontendBaseController with I18nSupport with Logging {
+class ConfirmationController @Inject() (
+  override val messagesApi: MessagesApi,
+  actions: Actions,
+  val controllerComponents: MessagesControllerComponents,
+  confirmationView: ConfirmationView,
+  estatesConnector: EstatesConnector
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  private def personalRepName(personalRepresentative: PersonalRepresentativeType)
-                             (implicit request: RequestHeader): String = {
+  private def personalRepName(
+    personalRepresentative: PersonalRepresentativeType
+  )(implicit request: RequestHeader): String =
     personalRepresentative match {
       case PersonalRepresentativeType(Some(EstatePerRepIndType(name, _, _, _, _, _, _, _)), None) =>
         name.displayName
-      case PersonalRepresentativeType(None, Some(EstatePerRepOrgType(name, _, _, _, _, _, _))) =>
+      case PersonalRepresentativeType(None, Some(EstatePerRepOrgType(name, _, _, _, _, _, _)))    =>
         name
-      case _ =>
-        messagesApi("confirmationPage.personalRepresentative.default")(request.lang)
+      case _                                                                                      =>
+        messagesApi("confirmationPage.personalRepresentative.default")(request.lang(messagesApi))
+    }
+
+  def onPageLoad(): Action[AnyContent] = actions.requireTvn.async { implicit request =>
+    val isAgent = request.user.affinityGroup == Agent
+
+    estatesConnector.getTransformedEstate(request.utr).map {
+      case Processed(estate, _) =>
+        val name = personalRepName(estate.estate.entities.personalRepresentative)
+        Ok(confirmationView(name, request.tvn, isAgent, estate.isClosing))
+      case _                    =>
+        logger.warn(s"[[Session ID: ${Session.id(hc)}] unable to render confirmation")
+        Redirect(controllers.routes.EstateStatusController.problemWithService())
+    } recover { case e =>
+      logger.error(s"[Session ID: ${Session.id(hc)}] unable to render confirmation due to ${e.getMessage}")
+      Redirect(controllers.routes.EstateStatusController.problemWithService())
     }
   }
 
-  def onPageLoad(): Action[AnyContent] = actions.requireTvn.async {
-    implicit request =>
-
-      val isAgent = request.user.affinityGroup == Agent
-
-      estatesConnector.getTransformedEstate(request.utr) map {
-        case Processed(estate, _) =>
-          val name = personalRepName(estate.estate.entities.personalRepresentative)
-          Ok(confirmationView(name, request.tvn, isAgent, estate.isClosing))
-        case _ =>
-          logger.warn(s"[[Session ID: ${Session.id(hc)}] unable to render confirmation")
-          Redirect(controllers.routes.EstateStatusController.problemWithService())
-      } recover {
-        case e =>
-          logger.error(s"[Session ID: ${Session.id(hc)}] unable to render confirmation due to ${e.getMessage}")
-          Redirect(controllers.routes.EstateStatusController.problemWithService())
-      }
-  }
 }

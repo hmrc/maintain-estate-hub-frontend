@@ -92,4 +92,5 @@ class DeclaredAnswersViewSpec extends ViewBehaviours {
       doc.text() must include("Final declared copy of the estate’s registration")
     }
   }
+
 }

@@ -32,10 +32,8 @@ class WhatIsNextSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyCh
 
       val gen = Gen.oneOf(WhatIsNext.values.toSeq)
 
-      forAll(gen) {
-        whatIsNext =>
-
-          JsString(whatIsNext.toString).validate[WhatIsNext].asOpt.value mustEqual whatIsNext
+      forAll(gen) { whatIsNext =>
+        JsString(whatIsNext.toString).validate[WhatIsNext].asOpt.value mustEqual whatIsNext
       }
     }
 
@@ -43,10 +41,8 @@ class WhatIsNextSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyCh
 
       val gen = arbitrary[String] suchThat (!WhatIsNext.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[WhatIsNext] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[WhatIsNext] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,11 +50,10 @@ class WhatIsNextSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyCh
 
       val gen = Gen.oneOf(WhatIsNext.values.toSeq)
 
-      forAll(gen) {
-        whatIsNext =>
-
-          Json.toJson(whatIsNext) mustEqual JsString(whatIsNext.toString)
+      forAll(gen) { whatIsNext =>
+        Json.toJson(whatIsNext) mustEqual JsString(whatIsNext.toString)
       }
     }
   }
+
 }

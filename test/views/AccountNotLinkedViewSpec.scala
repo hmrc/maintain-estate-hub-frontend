@@ -35,13 +35,10 @@ class AccountNotLinkedViewSpec extends ViewBehaviours {
 
     behave like pageWithSubHeading(applyView, s"This estate’s UTR: $fakeUtr")
 
-    behave like normalPageTitleWithCaption(applyView,
-      "accountNotLinked",
-      fakeUtr,
-      "p1", "p2", "p2.link"
-    )
+    behave like normalPageTitleWithCaption(applyView, "accountNotLinked", fakeUtr, "p1", "p2", "p2.link")
 
     behave like pageWithSignOutButton(applyView)
 
   }
+
 }

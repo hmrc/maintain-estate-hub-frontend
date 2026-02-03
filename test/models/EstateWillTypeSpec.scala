@@ -43,12 +43,12 @@ class EstateWillTypeSpec extends SpecBase {
 
       val deceasedPerson = Json.parse(json).validate[EstateWillType].get
 
-      deceasedPerson.identification mustBe IdentificationType(None, None, None)
-      deceasedPerson.lineNo mustBe "1"
+      deceasedPerson.identification    mustBe IdentificationType(None, None, None)
+      deceasedPerson.lineNo            mustBe "1"
       deceasedPerson.bpMatchStatus.get mustBe "01"
-      deceasedPerson.entityStart mustBe LocalDate.parse("2017-02-28")
-      deceasedPerson.name mustBe NameType("Wilbert", None, "Jefferies")
-      deceasedPerson.dateOfDeath mustBe LocalDate.parse("2016-04-06")
+      deceasedPerson.entityStart       mustBe LocalDate.parse("2017-02-28")
+      deceasedPerson.name              mustBe NameType("Wilbert", None, "Jefferies")
+      deceasedPerson.dateOfDeath       mustBe LocalDate.parse("2016-04-06")
     }
 
     "read json with identification" in {
@@ -73,13 +73,14 @@ class EstateWillTypeSpec extends SpecBase {
 
       val deceasedPerson = Json.parse(json).validate[EstateWillType].get
 
-      deceasedPerson.identification mustBe IdentificationType(Some("AA000000A"), None, None)
-      deceasedPerson.lineNo mustBe "1"
+      deceasedPerson.identification    mustBe IdentificationType(Some("AA000000A"), None, None)
+      deceasedPerson.lineNo            mustBe "1"
       deceasedPerson.bpMatchStatus.get mustBe "01"
-      deceasedPerson.entityStart mustBe LocalDate.parse("2017-02-28")
-      deceasedPerson.name mustBe NameType("Wilbert", None, "Jefferies")
-      deceasedPerson.dateOfDeath mustBe LocalDate.parse("2016-04-06")
-      deceasedPerson.dateOfBirth.get mustBe LocalDate.parse("1996-04-06")
+      deceasedPerson.entityStart       mustBe LocalDate.parse("2017-02-28")
+      deceasedPerson.name              mustBe NameType("Wilbert", None, "Jefferies")
+      deceasedPerson.dateOfDeath       mustBe LocalDate.parse("2016-04-06")
+      deceasedPerson.dateOfBirth.get   mustBe LocalDate.parse("1996-04-06")
     }
   }
+
 }

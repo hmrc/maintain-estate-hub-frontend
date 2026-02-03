@@ -27,54 +27,64 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import java.time.LocalDate
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration,
-                                   contactFrontendConfig: ContactFrontendConfig,
-                                   servicesConfig: ServicesConfig) {
+class FrontendAppConfig @Inject() (
+  configuration: Configuration,
+  contactFrontendConfig: ContactFrontendConfig,
+  servicesConfig: ServicesConfig
+) {
 
-  final val ENGLISH = "en"
-  final val WELSH = "cy"
+  final val ENGLISH         = "en"
+  final val WELSH           = "cy"
   final val UK_COUNTRY_CODE = "GB"
 
-  val betaFeedbackUrl = s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
+  val betaFeedbackUrl =
+    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
   lazy val agentsSubscriptionsUrl: String = configuration.get[String]("urls.agentSubscriptions")
-  lazy val agentServicesUrl = s"$agentsSubscriptionsUrl?continue=$loginContinueUrl"
+  lazy val agentServicesUrl               = s"$agentsSubscriptionsUrl?continue=$loginContinueUrl"
 
-  lazy val estatesHelplineUrl: String = configuration.get[String]("urls.estatesHelpline")
+  lazy val estatesHelplineUrl: String        = configuration.get[String]("urls.estatesHelpline")
   lazy val registerEstateGuidanceUrl: String = configuration.get[String]("urls.registerEstateGuidance")
 
-  lazy val authUrl: String = servicesConfig.baseUrl("auth")
-  lazy val loginUrl: String = configuration.get[String]("urls.login")
+  lazy val authUrl: String          = servicesConfig.baseUrl("auth")
+  lazy val loginUrl: String         = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String = configuration.get[String]("urls.logout")
+  lazy val logoutUrl: String        = configuration.get[String]("urls.logout")
 
   lazy val logoutAudit: Boolean =
     configuration.get[Boolean]("microservice.services.features.auditing.logout")
 
   lazy val countdownLength: Int = configuration.get[Int]("timeout.countdown")
-  lazy val timeoutLength: Int = configuration.get[Int]("timeout.length")
+  lazy val timeoutLength: Int   = configuration.get[Int]("timeout.length")
 
-  def redirectToLoginUrl: String = {
+  def redirectToLoginUrl: String =
     s"$loginUrl?continue=$loginContinueUrl"
-  }
 
   lazy val agentOverviewUrl: String = configuration.get[String]("urls.agentOverview")
 
-  lazy val estatesStoreUrl: String = configuration.get[Service]("microservice.services.estates-store").baseUrl + "/estates-store"
+  lazy val estatesStoreUrl: String =
+    configuration.get[Service]("microservice.services.estates-store").baseUrl + "/estates-store"
 
-  lazy val enrolmentStoreProxyUrl: String = configuration.get[Service]("microservice.services.enrolment-store-proxy").baseUrl
+  lazy val enrolmentStoreProxyUrl: String =
+    configuration.get[Service]("microservice.services.enrolment-store-proxy").baseUrl
 
-  lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
+  lazy val locationCanonicalList: String   = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = configuration.get[String]("location.canonical.list.allCY")
 
-  lazy val estatesUrl: String = configuration.get[Service]("microservice.services.estates").baseUrl
+  lazy val estatesUrl: String     = configuration.get[Service]("microservice.services.estates").baseUrl
   lazy val estatesAuthUrl: String = configuration.get[Service]("microservice.services.estates-auth").baseUrl
 
-  lazy val declarationEmailEnabled: Boolean = configuration.get[Boolean]("microservice.services.features.declaration.email.enabled")
-  lazy val primaryEnrolmentCheckEnabled: Boolean = configuration.get[Boolean]("microservice.services.features.primaryEnrolmentCheck.enabled")
+  lazy val declarationEmailEnabled: Boolean =
+    configuration.get[Boolean]("microservice.services.features.declaration.email.enabled")
 
-  def addNewPersonalRepUrl(utr: String): String = configuration.get[String]("urls.maintainPersonalRep") + s"/$utr/add-new-personal-rep"
-  def amendExistingPersonalRepUrl(utr: String): String = configuration.get[String]("urls.maintainPersonalRep") + s"/$utr/amend-existing-personal-rep"
+  lazy val primaryEnrolmentCheckEnabled: Boolean =
+    configuration.get[Boolean]("microservice.services.features.primaryEnrolmentCheck.enabled")
+
+  def addNewPersonalRepUrl(utr: String): String =
+    configuration.get[String]("urls.maintainPersonalRep") + s"/$utr/add-new-personal-rep"
+
+  def amendExistingPersonalRepUrl(utr: String): String =
+    configuration.get[String]("urls.maintainPersonalRep") + s"/$utr/amend-existing-personal-rep"
 
   def verifyIdentityForAnEstateUrl(utr: String) =
     s"${configuration.get[String]("urls.startVerifyIdentity")}/$utr"
@@ -90,13 +100,14 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
   def routeToSwitchLanguage: String => Call =
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
-  private val minDay: Int = configuration.get[Int]("dates.minimum.day")
-  private val minMonth: Int = configuration.get[Int]("dates.minimum.month")
-  private val minYear: Int = configuration.get[Int]("dates.minimum.year")
+  private val minDay: Int     = configuration.get[Int]("dates.minimum.day")
+  private val minMonth: Int   = configuration.get[Int]("dates.minimum.month")
+  private val minYear: Int    = configuration.get[Int]("dates.minimum.year")
   lazy val minDate: LocalDate = LocalDate.of(minYear, minMonth, minDay)
 
   val cachettlInSeconds: Long = configuration.get[Long]("mongodb.timeToLiveInSeconds")
 
-  val dropIndexes: Boolean = configuration.getOptional[Boolean]("microservice.services.features.mongo.dropIndexes").getOrElse(false)
+  val dropIndexes: Boolean =
+    configuration.getOptional[Boolean]("microservice.services.features.mongo.dropIndexes").getOrElse(false)
 
 }
