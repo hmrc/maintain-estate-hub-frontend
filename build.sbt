@@ -1,6 +1,6 @@
 import scoverage.ScoverageKeys
 
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "2.13.18"
 ThisBuild / majorVersion := 0
 
 lazy val microservice = Project("maintain-estate-hub-frontend", file("."))
