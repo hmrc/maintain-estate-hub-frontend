@@ -15,6 +15,7 @@
  *@
 
 @import utils.InputOption
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
 
 @this(
 govukSelect: GovukSelect
@@ -52,3 +53,4 @@ selectAttribute: Map[String, String] = Map.empty
  errorMessage = field.error.map(err => ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(err.message, err.args: _*))))
  )
 )
+.asAccessibleAutocomplete())
