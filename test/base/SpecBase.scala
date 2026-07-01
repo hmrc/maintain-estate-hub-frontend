@@ -32,7 +32,8 @@ import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.AffinityGroup
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Mocked with ScalaFutures {
 
@@ -86,5 +87,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues with Moc
     val fakeIdentifierAction = injector.instanceOf[FakeOrganisationIdentifierAction]
     applicationBuilderInterface(userAnswers, fakeIdentifierAction, utr)
   }
+
+  def await[T](futureResult: Future[T]): T = Await.result(futureResult, 1.seconds)
 
 }

@@ -1,5 +1,3 @@
-
-
 ThisBuild / scalaVersion := "2.13.18"
 ThisBuild / majorVersion := 0
 
