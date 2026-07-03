@@ -1,0 +1,40 @@
+$govuk-include-default-font-face: false;
+
+@import "lib/govuk-frontend/dist/govuk/base";
+@import "lib/govuk-frontend/dist/govuk/core/typography";
+@import "lib/govuk-frontend/dist/govuk/core/links";
+
+$govuk-global-styles: true;
+
+// ----------------
+// Hide the back link when body does not have .js-enabled
+body:not(.js-enabled) {
+    .govuk-back-link {
+        display: none;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+}
+
+@media print {
+  .print-hidden, .header-wrapper, .service-info, .report-error  {
+    display: none !important;
+  }
+}
+
+p {
+    @extend .govuk-body;
+}
+
+a {
+    @extend .govuk-link;
+}
+
+h2 {
+    @extend .govuk-heading-m;
+}
+
+h3 {
+    @extend .govuk-heading-s;
+}
