@@ -51,6 +51,11 @@ class FrontendAppConfig @Inject() (
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   lazy val logoutUrl: String        = configuration.get[String]("urls.logout")
 
+  lazy val basGatewayBaseUrl: String   = servicesConfig.getString("bas-gateway.host")
+  lazy val feedbackFrontendUrl: String = configuration.get[String]("feedback-frontend.url")
+  lazy val timeOutUrl: String          = configuration.get[String]("urls.timeOut")
+  lazy val logout: String              = s"$basGatewayBaseUrl$logoutUrl"
+
   lazy val logoutAudit: Boolean =
     configuration.get[Boolean]("microservice.services.features.auditing.logout")
 
