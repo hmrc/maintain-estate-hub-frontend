@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import config.FrontendAppConfig
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{never, verify}
 import org.scalatestplus.mockito.MockitoSugar
@@ -28,8 +29,9 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import java.net.URLEncoder
 
 class LogoutControllerSpec extends SpecBase with MockitoSugar {
-
+  val config: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
   "LogoutController" when {
+    val continueUrl = URLEncoder.encode(s"${frontendAppConfig.feedbackFrontendUrl}", "UTF-8")
 
     "auditing enabled" must {
       "redirect to feedback and audit" in {
@@ -89,6 +91,9 @@ class LogoutControllerSpec extends SpecBase with MockitoSugar {
         application.stop()
 
       }
+    }
+    "load the feedback-frontend url with the useServiceNavigation parameter" in {
+      config.feedbackFrontendUrl mustBe "http://localhost:9514/feedback/estates?useServiceNavigation"
     }
   }
 

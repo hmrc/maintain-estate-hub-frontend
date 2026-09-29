@@ -39,10 +39,8 @@ class LanguageSwitchControllerSpec extends SpecBase {
   private lazy val contactConfig         = injector.instanceOf[ContactFrontendConfig]
   private lazy val servicesConfig        = injector.instanceOf[ServicesConfig]
 
-  def frontendAppConfig(languageToggleEnabled: Boolean = true): FrontendAppConfig =
-    new FrontendAppConfig(config, contactConfig, servicesConfig) {
-      override lazy val languageTranslationEnabled: Boolean = languageToggleEnabled
-    }
+  private def testFrontendAppConfig: FrontendAppConfig =
+    new FrontendAppConfig(config, contactConfig, servicesConfig)
 
   "LanguageSwitch Controller" when {
 
@@ -52,7 +50,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
         "switch to English" in {
 
           val application = new GuiceApplicationBuilder()
-            .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
+            .overrides(bind[FrontendAppConfig].toInstance(testFrontendAppConfig))
             .build()
 
           val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
@@ -75,7 +73,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
         "switch to Welsh" in {
 
           val application = new GuiceApplicationBuilder()
-            .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
+            .overrides(bind[FrontendAppConfig].toInstance(testFrontendAppConfig))
             .build()
 
           val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
@@ -99,7 +97,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
       "default to English" in {
 
         val application = new GuiceApplicationBuilder()
-          .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig(false)))
+          .overrides(bind[FrontendAppConfig].toInstance(testFrontendAppConfig))
           .build()
 
         val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
@@ -122,7 +120,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
       "redirect to login continue url" in {
 
         val application = new GuiceApplicationBuilder()
-          .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
+          .overrides(bind[FrontendAppConfig].toInstance(testFrontendAppConfig))
           .build()
 
         val request = FakeRequest(GET, switchLanguageRoute(welsh))
@@ -131,7 +129,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual frontendAppConfig().loginContinueUrl
+        redirectLocation(result).value mustEqual testFrontendAppConfig.loginContinueUrl
 
         application.stop()
       }

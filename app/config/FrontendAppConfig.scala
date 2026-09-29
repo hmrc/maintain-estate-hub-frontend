@@ -49,7 +49,7 @@ class FrontendAppConfig @Inject() (
   lazy val authUrl: String          = servicesConfig.baseUrl("auth")
   lazy val loginUrl: String         = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String        = configuration.get[String]("urls.logout")
+  lazy val logoutUrl: String        = s"${configuration.get[String]("urls.logout")}?useServiceNavigation"
 
   lazy val basGatewayBaseUrl: String   = servicesConfig.getString("bas-gateway.host")
   lazy val feedbackFrontendUrl: String = configuration.get[String]("feedback-frontend.url")
@@ -93,9 +93,6 @@ class FrontendAppConfig @Inject() (
 
   def verifyIdentityForAnEstateUrl(utr: String) =
     s"${configuration.get[String]("urls.startVerifyIdentity")}/$utr"
-
-  lazy val languageTranslationEnabled: Boolean =
-    configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(ENGLISH),
