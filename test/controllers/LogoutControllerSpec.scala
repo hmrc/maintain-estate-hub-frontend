@@ -30,6 +30,7 @@ import java.net.URLEncoder
 
 class LogoutControllerSpec extends SpecBase with MockitoSugar {
   val config: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+
   "LogoutController" when {
     val continueUrl = URLEncoder.encode(s"${frontendAppConfig.feedbackFrontendUrl}", "UTF-8")
 
@@ -51,7 +52,7 @@ class LogoutControllerSpec extends SpecBase with MockitoSugar {
 
         val continueUrl = URLEncoder.encode(s"${frontendAppConfig.feedbackFrontendUrl}", "UTF-8")
 
-        val expectedUrl = s"${frontendAppConfig.logout}?continue=$continueUrl"
+        val expectedUrl = s"${frontendAppConfig.logout}&continue=$continueUrl"
 
         redirectLocation(result).value mustBe expectedUrl
 
@@ -81,7 +82,7 @@ class LogoutControllerSpec extends SpecBase with MockitoSugar {
 
         val continueUrl = URLEncoder.encode(s"${frontendAppConfig.feedbackFrontendUrl}", "UTF-8")
 
-        val expectedUrl = s"${frontendAppConfig.logout}?continue=$continueUrl"
+        val expectedUrl = s"${frontendAppConfig.logout}&continue=$continueUrl"
 
         redirectLocation(result).value mustBe expectedUrl
 
