@@ -52,7 +52,7 @@ class SessionTimeoutControllerSpec extends SpecBase {
         status(res) mustEqual SEE_OTHER
 
         val continueUrl = URLEncoder.encode(s"${frontendAppConfig.timeOutUrl}", "UTF-8")
-        val expectedUrl = s"${frontendAppConfig.logout}&continue=$continueUrl"
+        val expectedUrl = s"${frontendAppConfig.logout}?continue=$continueUrl"
 
         redirectLocation(res).value mustEqual expectedUrl
       }

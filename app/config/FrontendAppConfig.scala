@@ -37,9 +37,6 @@ class FrontendAppConfig @Inject() (
   final val WELSH           = "cy"
   final val UK_COUNTRY_CODE = "GB"
 
-  val betaFeedbackUrl =
-    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
-
   lazy val agentsSubscriptionsUrl: String = configuration.get[String]("urls.agentSubscriptions")
   lazy val agentServicesUrl               = s"$agentsSubscriptionsUrl?continue=$loginContinueUrl"
 
@@ -49,7 +46,7 @@ class FrontendAppConfig @Inject() (
   lazy val authUrl: String          = servicesConfig.baseUrl("auth")
   lazy val loginUrl: String         = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String        = s"${configuration.get[String]("urls.logout")}?useServiceNavigation"
+  lazy val logoutUrl: String        = configuration.get[String]("urls.logout")
 
   lazy val basGatewayBaseUrl: String   = servicesConfig.getString("bas-gateway.host")
   lazy val feedbackFrontendUrl: String = s"${configuration.get[String]("feedback-frontend.url")}?useServiceNavigation"

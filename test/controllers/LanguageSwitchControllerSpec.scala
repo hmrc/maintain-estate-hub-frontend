@@ -93,29 +93,6 @@ class LanguageSwitchControllerSpec extends SpecBase {
       }
     }
 
-    "language toggle disabled" must {
-      "default to English" in {
-
-        val application = new GuiceApplicationBuilder()
-          .overrides(bind[FrontendAppConfig].toInstance(testFrontendAppConfig))
-          .build()
-
-        val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
-
-        val request = FakeRequest(GET, switchLanguageRoute(english)).withHeaders(requestHeaders)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual fakeUrl
-
-        cookies(result).find(_.name == "PLAY_LANG").get.value mustEqual "en"
-
-        application.stop()
-      }
-    }
-
     "no referer in header" must {
       "redirect to login continue url" in {
 

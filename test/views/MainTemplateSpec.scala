@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package views.html
+package views
 
 import play.twirl.api.Html
-import views.ViewSpecBase
+import views.html.MainTemplate
 
 import scala.jdk.CollectionConverters._
 
