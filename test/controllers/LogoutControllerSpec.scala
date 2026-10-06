@@ -90,6 +90,9 @@ class LogoutControllerSpec extends SpecBase with MockitoSugar {
 
       }
     }
+    "load the feedback-frontend url with the useServiceNavigation parameter" in {
+      frontendAppConfig.feedbackFrontendUrl mustBe "http://localhost:9514/feedback/estates?useServiceNavigation"
+    }
   }
 
 }
