@@ -36,11 +36,10 @@ class LanguageSwitchControllerSpec extends SpecBase {
   private val fakeUrl: String = "fakeUrl"
 
   private lazy val config: Configuration = injector.instanceOf[Configuration]
-  private lazy val contactConfig         = injector.instanceOf[ContactFrontendConfig]
   private lazy val servicesConfig        = injector.instanceOf[ServicesConfig]
 
   private def testFrontendAppConfig: FrontendAppConfig =
-    new FrontendAppConfig(config, contactConfig, servicesConfig)
+    new FrontendAppConfig(config, servicesConfig)
 
   "LanguageSwitch Controller" when {
 
